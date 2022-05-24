@@ -1,12 +1,12 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>Lista de usuarios</title>
+<title>Lista de Roles</title>
 @endsection
 
 @section('subcontent')
 <div class="intro-y flex items-center mt-8">
-  <h2 class="text-lg font-medium mr-auto">Lista de usuarios</h2>
+  <h2 class="text-lg font-medium mr-auto">Lista de Roles</h2>
 </div>
 <div class="intro-y col-span-12 lg:col-span-6 mt-5">
   <div class="intro-y box">
@@ -18,17 +18,17 @@
               <tr>
                 <th class="whitespace-nowrap">#</th>
                 <th class="whitespace-nowrap">Nombres</th>
-                <th class="whitespace-nowrap">Correo</th>
-                <th class="whitespace-nowrap">Activo</th>
+                <th class="whitespace-nowrap">Descripción</th>
+                <th class="whitespace-nowrap">Nivel de acceso</th>
               </tr>
             </thead>
             <tbody>
-              @foreach ($users as $user)
+              @foreach ($roles as $role)
               <tr>
                 <td>{{ ++$i }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->active ? 'Si' : 'No' }}</td>
+                <td>{{ $role->name }}</td>
+                <td>{{ $role->description }}</td>
+                <td>{{ $role->level }}</td>
               </tr>
               @endforeach
             </tbody>

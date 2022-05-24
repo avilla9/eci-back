@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
-class UserController extends Controller {
+class RoleController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $users = User::latest()->paginate(5);
+        $roles = Role::latest()->paginate(5);
 
-        return view('pages/users/list', compact('users'))
+        return view('pages/roles/list', compact('roles'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -24,6 +24,7 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
+        //
     }
 
     /**
@@ -33,40 +34,35 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
-        $request->merge(['active' => 1]);
-
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'gender' => 'required',
-            'role' => 'required',
+            'description' => 'required',
+            'level' => 'required',
         ]);
 
-        User::create($request->all());
+        Role::create($request->all());
 
-        return redirect()->route('crear-usuarios')
-            ->with('success', 'Usuario creado satisfactoriamente.');
+        return redirect()->route('create-role')
+            ->with('success', 'Rol creado satisfactoriamente.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user) {
+    public function show(Role $role) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user) {
+    public function edit(Role $role) {
         //
     }
 
@@ -74,20 +70,20 @@ class UserController extends Controller {
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user) {
+    public function update(Request $request, Role $role) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user) {
+    public function destroy(Role $role) {
         //
     }
 }

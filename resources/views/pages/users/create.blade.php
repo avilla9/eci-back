@@ -50,11 +50,22 @@
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">Correo</label>
-              <input id="regular-form-1" type="text" class="form-control" name="email" placeholder="Correo">
+              <input id="regular-form-1" type="email" class="form-control" name="email" placeholder="Correo">
             </div>
             <div class="mt-3">
               <label for="regular-form-4" class="form-label">Password</label>
               <input id="regular-form-4" name="password" type="password" class="form-control" placeholder="Password">
+            </div>
+          </div>
+          <div class="mt-3">
+            <label>Rol del usuario</label>
+            <div class="mt-2">
+              <select data-placeholder="Seleccione un rol para el usuario" class="tom-select w-full">
+                <option disabled selected>Seleccione un rol para el usuario</option>
+                @foreach ($roles as $role)
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+              </select>
             </div>
           </div>
           <div class="sm:ml-20 sm:pl-5 mt-5">

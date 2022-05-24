@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -42,6 +43,19 @@ Route::middleware('auth')->group(function () {
             Route::post('/store', 'store')->name('user.store');
         });
     });
+
+    Route::prefix('/roles')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/crear', 'roleCreate')->name('create-role');
+        });
+
+        Route::controller(RoleController::class)->group(function () {
+            Route::get('/lista', 'index')->name('role-list');
+            Route::post('/store', 'store')->name('role.store');
+        });
+    });
+
+
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');

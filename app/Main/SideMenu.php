@@ -46,7 +46,7 @@ class SideMenu {
                 'icon' => 'users',
                 'title' => 'Usuarios',
                 'sub_menu' => [
-                    'create' => [
+                    'create-user' => [
                         'icon' => '',
                         'route_name' => 'crear-usuarios',
                         'params' => [
@@ -54,7 +54,7 @@ class SideMenu {
                         ],
                         'title' => 'Crear usuarios'
                     ],
-                    'upload' => [
+                    'upload-user' => [
                         'icon' => '',
                         'route_name' => 'subir-usuarios',
                         'params' => [
@@ -62,7 +62,7 @@ class SideMenu {
                         ],
                         'title' => 'Subir usuarios'
                     ],
-                    'list' => [
+                    'list-user' => [
                         'icon' => '',
                         'route_name' => 'lista-de-usuarios',
                         'params' => [
@@ -73,6 +73,30 @@ class SideMenu {
                 ]
             ],
             /* End Users */
+            /* Roles */
+            'roles' => [
+                'icon' => 'settings',
+                'title' => 'Roles',
+                'sub_menu' => [
+                    'create-role' => [
+                        'icon' => '',
+                        'route_name' => 'create-role',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Crear rol'
+                    ],
+                    'list-role' => [
+                        'icon' => '',
+                        'route_name' => 'role-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Lista de roles'
+                    ],
+                ]
+            ],
+            /* End Roles */
             'menu-layout' => [
                 'icon' => 'box',
                 'title' => 'Menu Layout',

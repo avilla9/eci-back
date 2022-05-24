@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 
 class PageController extends Controller {
 
@@ -29,13 +30,18 @@ class PageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function userCreate() {
-        return view('pages/users/create', [
-            // Specify the base layout.
-            // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
-            // The default value is 'side-menu'
+        $roles = Role::all();
+        return view('pages/users/create', compact('roles'));
+    }
 
-            // 'layout' => 'side-menu'
-        ]);
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function roleCreate() {
+        return view('pages/roles/create', []);
     }
 
     /**
