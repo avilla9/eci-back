@@ -22,6 +22,8 @@ import "@left4code/tw-starter/dist/js/tab";
  | Import 3rd party library JS files.
  |
  */
+
+import "./jquery";
 import "./chart";
 import "./highlight";
 import "./feather";

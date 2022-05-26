@@ -17,7 +17,7 @@ class User extends Authenticatable {
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'gender', 'active'
+        'name', 'email', 'password', 'gender', 'active', 'role_id',
     ];
 
     /**
@@ -50,7 +50,7 @@ class User extends Authenticatable {
      *
      * @var array
      */
-    public function getPhotoUrlAttribute() {
+    public function getPhotoAttribute() {
         if ($this->foto !== null) {
             return url('media/user/' . $this->id . '/' . $this->foto);
         } else {

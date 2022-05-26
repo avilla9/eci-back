@@ -5,7 +5,114 @@
 @endsection
 
 @section('subcontent')
-<div class="intro-y flex items-center mt-8">
+<div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+  <h2 class="text-lg font-medium mr-auto">Lista de usuarios</h2>
+  <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+    <button class="btn btn-primary shadow-md mr-2">Añadir nuevo usuario</button>
+    <div class="dropdown ml-auto sm:ml-0">
+      <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+        <span class="w-5 h-5 flex items-center justify-center">
+          <i class="w-4 h-4" data-feather="plus"></i>
+        </span>
+      </button>
+      <div class="dropdown-menu w-40">
+        <ul class="dropdown-content">
+          <li>
+            <a href="" class="dropdown-item">
+              <i data-feather="file-plus" class="w-4 h-4 mr-2"></i> New Category
+            </a>
+          </li>
+          <li>
+            <a href="" class="dropdown-item">
+              <i data-feather="users" class="w-4 h-4 mr-2"></i> New Group
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- BEGIN: HTML Table Data -->
+<div class="intro-y box p-5 mt-5">
+  <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
+    <form id="tabulator-html-filter-form" class="xl:flex sm:mr-auto">
+      <div class="sm:flex items-center sm:mr-4">
+        <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Campo</label>
+        <select id="tabulator-html-filter-field" class="form-select w-full sm:w-32 2xl:w-full mt-2 sm:mt-0 sm:w-auto">
+          <option value="name">Nombre</option>
+          <option value="rol">Rol</option>
+          <option value="email">Correo</option>
+        </select>
+      </div>
+      <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
+        <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Type</label>
+        <select id="tabulator-html-filter-type" class="form-select w-full mt-2 sm:mt-0 sm:w-auto">
+          <option value="like" selected>like</option>
+          <option value="=">=</option>
+          <option value="<">&lt;</option>
+          <option value="<=">&lt;=</option>
+          <option value=">">></option>
+          <option value=">=">>=</option>
+          <option value="!=">!=</option>
+        </select>
+      </div>
+      <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
+        <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Valor</label>
+        <input id="tabulator-html-filter-value" type="text" class="form-control sm:w-40 2xl:w-full mt-2 sm:mt-0"
+          placeholder="Buscar...">
+      </div>
+      <div class="mt-2 xl:mt-0">
+        <button id="tabulator-html-filter-go" type="button" class="btn btn-primary w-full sm:w-16">
+          Buscar
+        </button>
+        <button id="tabulator-html-filter-reset" type="button"
+          class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Reiniciar</button>
+      </div>
+    </form>
+    <div class="flex mt-5 sm:mt-0">
+      <button id="tabulator-print" class="btn btn-outline-secondary w-1/2 sm:w-auto mr-2">
+        <i data-feather="printer" class="w-4 h-4 mr-2"></i> Imprimir
+      </button>
+      <div class="dropdown w-1/2 sm:w-auto">
+        <button class="dropdown-toggle btn btn-outline-secondary w-full sm:w-auto" aria-expanded="false"
+          data-tw-toggle="dropdown">
+          <i data-feather="file-text" class="w-4 h-4 mr-2"></i> Exportar <i data-feather="chevron-down"
+            class="w-4 h-4 ml-auto sm:ml-2"></i>
+        </button>
+        <div class="dropdown-menu w-40">
+          <ul class="dropdown-content">
+            <li>
+              <a id="tabulator-export-csv" href="javascript:;" class="dropdown-item">
+                <i data-feather="file-text" class="w-4 h-4 mr-2"></i> Exportar CSV
+              </a>
+            </li>
+            <li>
+              <a id="tabulator-export-json" href="javascript:;" class="dropdown-item">
+                <i data-feather="file-text" class="w-4 h-4 mr-2"></i> Exportar JSON
+              </a>
+            </li>
+            <li>
+              <a id="tabulator-export-xlsx" href="javascript:;" class="dropdown-item">
+                <i data-feather="file-text" class="w-4 h-4 mr-2"></i> Exportar XLSX
+              </a>
+            </li>
+            <li>
+              <a id="tabulator-export-html" href="javascript:;" class="dropdown-item">
+                <i data-feather="file-text" class="w-4 h-4 mr-2"></i> Exportar HTML
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-x-auto scrollbar-hidden">
+    <div id="user-tabulator" class="mt-5 table-report table-report--tabulator"></div>
+  </div>
+</div>
+<!-- END: HTML Table Data -->
+
+<!-- <div class="intro-y flex items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Lista de usuarios</h2>
 </div>
 <div class="intro-y col-span-12 lg:col-span-6 mt-5">
@@ -17,9 +124,10 @@
             <thead class="table-dark">
               <tr>
                 <th class="whitespace-nowrap">#</th>
-                <th class="whitespace-nowrap">Nombres</th>
-                <th class="whitespace-nowrap">Correo</th>
-                <th class="whitespace-nowrap">Activo</th>
+                <th class="whitespace-nowrap text-center">Nombres</th>
+                <th class="whitespace-nowrap text-center">Correo</th>
+                <th class="whitespace-nowrap text-center">Activo</th>
+                <th class="whitespace-nowrap text-center" colspan="3">Opciones</th>
               </tr>
             </thead>
             <tbody>
@@ -28,14 +136,97 @@
                 <td>{{ ++$i }}</td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
-                <td>{{ $user->active ? 'Si' : 'No' }}</td>
-              </tr>
-              @endforeach
+                <td class="text-center">{{ $user->active ? 'Si' : 'No' }}</td>
+                <td class="text-center">
+                  <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#view-{{$user->id}}"
+                    class="btn btn-primary">
+                    <i data-feather="eye" class="w-4 h-4"></i>
+                  </a>
+                </td>
+                <td class="text-center">
+                  <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#edit-{{$user->id}}"
+                    class="btn btn-warning">
+                    <i data-feather="edit" class="w-4 h-4"></i>
+                  </a>
+                </td>
+                <td class="text-center">
+                  <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-{{$user->id}}"
+                    class="btn btn-danger">
+                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                  </a>
+                </td>
+              </tr> -->
+<!-- BEGIN: Modal View -->
+<!-- <div id="view-{{$user->id}}" class="modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <a data-tw-dismiss="modal" href="javascript:;">
+                      <i data-feather="x" class="w-8 h-8 text-slate-400"></i>
+                    </a>
+                    <div class="modal-body p-0">
+                      <div class="p-5 text-center">
+                        <div class="text-3xl mt-5">Información del usuario</div>
+                        <div class="text-slate-500 mt-2">
+
+                        </div>
+                      </div>
+                      <div class="px-5 pb-8 text-center">
+                        <button type="button" data-tw-dismiss="modal"
+                          class="btn btn-outline-primary w-24 mr-1">Cerrar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+<!-- END: Modal View -->
+<!-- BEGIN: Modal Edit -->
+<!-- <div id="edit-{{$user->id}}" class="modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <a data-tw-dismiss="modal" href="javascript:;">
+                      <i data-feather="x" class="w-8 h-8 text-slate-400"></i>
+                    </a>
+                    <div class="modal-body p-0">
+                      <div class="p-5 text-center">
+                        <i data-feather="check-circle" class="w-16 h-16 text-success mx-auto mt-3"></i>
+                        <div class="text-3xl mt-5">Modal Example</div>
+                        <div class="text-slate-500 mt-2">Modal with close button</div>
+                      </div>
+                      <div class="px-5 pb-8 text-center">
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+<!-- END: Modal Edit -->
+<!-- BEGIN: Modal Delete -->
+<!-- <div id="delete-{{$user->id}}" class="modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body p-0">
+                      <div class="p-5 text-center">
+                        <i data-feather="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
+                        <div class="text-3xl mt-5">¿Está seguro?</div>
+                        <div class="text-slate-500 mt-2">¿Desea proceder con la eliminación?<br>Este proceso no puede
+                          revertirse.</div>
+                      </div>
+                      <div class="px-5 pb-8 text-center">
+                        <button type="button" data-tw-dismiss="modal"
+                          class="btn btn-outline-secondary w-24 mr-1">Cancelar</button>
+                        <button type="button" class="btn btn-danger w-24">Eliminar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+<!-- END: Modal Delete -->
+<!-- @endforeach
             </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
-</div>
+</div> -->
 @endsection

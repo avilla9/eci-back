@@ -41,7 +41,7 @@ class UserController extends Controller {
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'gender' => 'required',
-            'role' => 'required',
+            'role_id' => 'required|not_in:0',
         ]);
 
         User::create($request->all());
@@ -89,5 +89,42 @@ class UserController extends Controller {
      */
     public function destroy(User $user) {
         //
+    }
+
+    /* API */
+
+    public function getAllUsers(Request $request) {
+
+        $users = User::select(
+            'users.active',
+            'users.created_at',
+            'users.deleted_at',
+            'users.email',
+            'users.email_verified_at',
+            'users.gender',
+            'users.id',
+            'users.name',
+            'users.photo',
+            'users.role_id',
+            'roles.name as role_name',
+            'roles.description as role_description',
+        )->join(
+            'roles',
+            'users.role_id',
+            '=',
+            'roles.id'
+        )->get();
+        return json_encode($users);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request) {
+        User::where('id', $request->id)->delete();
+        return true;
     }
 }

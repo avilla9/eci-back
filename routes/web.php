@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::controller(PageController::class)->group(function () {
             Route::get('/crear', 'roleCreate')->name('create-role');
         });
-
+        
         Route::controller(RoleController::class)->group(function () {
             Route::get('/lista', 'index')->name('role-list');
             Route::post('/store', 'store')->name('role.store');

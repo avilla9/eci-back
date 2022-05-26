@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +19,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('/users')->group(function () {
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');
+        Route::post('/delete', 'delete')->name('delete-users');
+    });
+});
+
+Route::prefix('/roles')->group(function () {
+    Route::controller(RoleController::class)->group(function () {
+        Route::get('/all-roles', 'getAllRoles')->name('all-roles');
+    });
 });
