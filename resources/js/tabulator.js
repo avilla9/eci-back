@@ -35,11 +35,26 @@ import "./jquery";
 
                 // For HTML table
                 {
+                    title: "DNI",
+                    minWidth: 100,
+                    responsive: 0,
+                    field: "dni",
+                    vertAlign: "left",
+                    print: false,
+                    download: false,
+                    formatter(cell, formatterParams) {
+                        return `<div>
+                            <div class="font-medium whitespace-nowrap">${cell.getData().dni
+                            }</div>
+                        </div>`;
+                    },
+                },
+                {
                     title: "Nombre completo",
                     minWidth: 200,
                     responsive: 0,
                     field: "name",
-                    vertAlign: "middle",
+                    vertAlign: "right",
                     print: false,
                     download: false,
                     formatter(cell, formatterParams) {
@@ -51,9 +66,9 @@ import "./jquery";
                 },
                 {
                     title: "Email",
-                    minWidth: 200,
+                    minWidth: 250,
                     field: "email",
-                    hozAlign: "center",
+                    hozAlign: "right",
                     vertAlign: "middle",
                     print: false,
                     download: false,
@@ -68,7 +83,7 @@ import "./jquery";
                     title: "Rol",
                     minWidth: 200,
                     field: "role_name",
-                    hozAlign: "center",
+                    hozAlign: "right",
                     vertAlign: "middle",
                     print: false,
                     download: false,
@@ -81,7 +96,7 @@ import "./jquery";
                 },
                 {
                     title: "Estatus",
-                    minWidth: 200,
+                    minWidth: 100,
                     field: "active",
                     hozAlign: "center",
                     vertAlign: "middle",
@@ -400,60 +415,30 @@ import "./jquery";
                 },
 
                 // For print format
-                /* {
-                    title: "PRODUCT NAME",
+                {
+                    title: "Nombre",
                     field: "name",
+                    hozAlign: "center",
                     visible: false,
                     print: true,
                     download: true,
                 },
                 {
-                    title: "CATEGORY",
-                    field: "category",
+                    title: "Descripción",
+                    field: "description",
+                    hozAlign: "center",
                     visible: false,
                     print: true,
                     download: true,
                 },
                 {
-                    title: "Estatus",
-                    field: "status",
+                    title: "Nivel",
+                    field: "level",
+                    hozAlign: "center",
                     visible: false,
                     print: true,
                     download: true,
-                    formatterPrint(cell) {
-                        return cell.getValue() ? "Active" : "Inactive";
-                    },
                 },
-                {
-                    title: "IMAGE 1",
-                    field: "images",
-                    visible: false,
-                    print: true,
-                    download: true,
-                    formatterPrint(cell) {
-                        return cell.getValue()[0];
-                    },
-                },
-                {
-                    title: "IMAGE 2",
-                    field: "images",
-                    visible: false,
-                    print: true,
-                    download: true,
-                    formatterPrint(cell) {
-                        return cell.getValue()[1];
-                    },
-                },
-                {
-                    title: "IMAGE 3",
-                    field: "images",
-                    visible: false,
-                    print: true,
-                    download: true,
-                    formatterPrint(cell) {
-                        return cell.getValue()[2];
-                    },
-                }, */
             ],
             renderComplete() {
                 feather.replace({

@@ -62,6 +62,14 @@ class SideMenu {
                         ],
                         'title' => 'Subir usuarios'
                     ],
+                    'delete-user' => [
+                        'icon' => '',
+                        'route_name' => 'eliminar-usuarios',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Eliminar usuarios'
+                    ],
                     'list-user' => [
                         'icon' => '',
                         'route_name' => 'lista-de-usuarios',

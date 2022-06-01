@@ -12,12 +12,10 @@
   <div class="intro-y col-span-12 lg:col-span-12">
     <!-- BEGIN: Single File Upload -->
     <div class="intro-y box">
-      <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-        <h2 class="font-medium text-base mr-auto">Single File Upload</h2>
-      </div>
       <div id="single-file-upload" class="p-5">
         <div class="preview">
-          <form data-single="true" action="/file-upload" class="dropzone">
+          <form data-single="true" action="{{route('file-import')}}" method="POST" enctype="multipart/form-data" class="dropzone">
+            @csrf
             <div class="fallback">
               <input name="file" type="file" />
             </div>
@@ -28,9 +26,6 @@
               </div>
             </div>
           </form>
-        </div>
-        <div class="sm:ml-6 sm:pl-5 mt-5">
-          <button class="btn btn-primary">Subir Usuarios</button>
         </div>
       </div>
     </div>

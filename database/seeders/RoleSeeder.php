@@ -16,29 +16,29 @@ class RoleSeeder extends Seeder {
     // Default credentials
     Role::insert([
       [
-        'name' => 'Administrador',
+        'name' => 'Super Usuario',
         'description' => 'Administrador del sito web',
         'level' => 1,
       ],
       [
-        'name' => 'Operador',
-        'description' => 'Operador del sito web',
-        'level' => 1,
+        'name' => 'Agente Veterano',
+        'description' => 'Usuario de rango Agente veterano',
+        'level' => 11,
       ],
       [
         'name' => 'Delegado',
         'description' => 'Usuario de rango Delegado',
-        'level' => 2,
+        'level' => 12,
       ],
       [
         'name' => 'Agente',
         'description' => 'Usuario de rango Agente',
-        'level' => 3,
+        'level' => 13,
       ],
       [
-        'name' => 'En formación',
+        'name' => 'Agente En Formación',
         'description' => 'Usuario de rando En formación',
-        'level' => 4,
+        'level' => 14,
       ],
     ]);
   }

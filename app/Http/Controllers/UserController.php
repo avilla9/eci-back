@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DeleteUsersImport;
+use App\Imports\UsersImport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller {
     /**
@@ -96,6 +99,7 @@ class UserController extends Controller {
     public function getAllUsers(Request $request) {
 
         $users = User::select(
+            'users.dni',
             'users.active',
             'users.created_at',
             'users.deleted_at',
@@ -113,7 +117,7 @@ class UserController extends Controller {
             'users.role_id',
             '=',
             'roles.id'
-        )->get();
+        )->latest()->get();
         return json_encode($users);
     }
 
@@ -126,5 +130,15 @@ class UserController extends Controller {
     public function delete(Request $request) {
         User::where('id', $request->id)->delete();
         return true;
+    }
+
+    public function fileImport(Request $request) {
+        Excel::import(new UsersImport, $request->file('file')->store('files'));
+        return redirect()->back();
+    }
+
+    public function deleteImport(Request $request) {
+        Excel::import(new DeleteUsersImport, $request->file('file')->store('files'));
+        return redirect()->back();
     }
 }

@@ -36,11 +36,14 @@ Route::middleware('auth')->group(function () {
         Route::controller(PageController::class)->group(function () {
             Route::get('/crear', 'userCreate')->name('crear-usuarios');
             Route::get('/subir', 'userUpload')->name('subir-usuarios');
+            Route::get('/eliminar', 'deleteUserUpload')->name('eliminar-usuarios');
         });
 
         Route::controller(UserController::class)->group(function () {
             Route::get('/lista', 'index')->name('lista-de-usuarios');
             Route::post('/store', 'store')->name('user.store');
+            Route::post('/users-import', 'fileImport')->name('file-import');
+            Route::post('/users-delete', 'deleteImport')->name('file-delete');
         });
     });
 
