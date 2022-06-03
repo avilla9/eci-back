@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Group;
+use App\Models\Quartile;
 use App\Models\Role;
 
 class PageController extends Controller {
@@ -31,7 +33,11 @@ class PageController extends Controller {
      */
     public function userCreate() {
         $roles = Role::all();
-        return view('pages/users/create', compact('roles'));
+        $groups = Group::all();
+        $quartiles = Quartile::all();
+        return view('pages/users/create', compact([
+            'roles', 'groups', 'quartiles'
+        ]));
     }
 
     /**

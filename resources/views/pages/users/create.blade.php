@@ -72,6 +72,30 @@
               </select>
             </div>
           </div>
+
+          <div class="mt-3">
+            <label>Grupo del usuario</label>
+            <div class="mt-2">
+              <select data-placeholder="Seleccione un rol para el usuario" name="group_id" class="tom-select w-full">
+                <option disabled selected>Seleccione un grupo para el usuario</option>
+                @foreach ($groups as $group)
+                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <label>Cuartil del usuario</label>
+            <div class="mt-2">
+              <select data-placeholder="Seleccione un rol para el usuario" name="quartile_id" class="tom-select w-full">
+                <option disabled selected>Seleccione un cuartil para el usuario</option>
+                @foreach ($quartiles as $quartile)
+                <option value="{{ $quartile->id }}">{{ $quartile->name }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
           <div class="sm:ml-20 sm:pl-5 mt-5">
             <button type="submit" class="btn btn-primary">Crear Usuario</button>
           </div>
