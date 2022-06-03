@@ -124,6 +124,9 @@ import "./jquery";
                     formatter(cell, formatterParams) {
                         let a =
                             $(`<div class="flex lg:justify-center items-center">
+                            <a data-tw-target="#superlarge-modal-size-preview" data-tw-toggle="modal" class="view flex items-center mr-3" href="javascript:;">
+                                <i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver
+                            </a>
                             <a class="edit flex items-center mr-3" href="javascript:;">
                                 <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
                             </a>
@@ -131,6 +134,25 @@ import "./jquery";
                                 <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
                             </a>
                         </div>`);
+                        $(a)
+                            .find(".view")
+                            .on("click", function () {
+                                let data = cell.getData();
+                                console.log(data.dni);
+                                $('#table-content').innerHTML = '';
+                                let table = '<table class="table"><tbody>';
+                                table += `<tr><th>DNI</th><td>${cell.getData().dni}</td></tr>`;
+                                table += `<tr><th>Activo</th><td>${cell.getData().active == 1 ? 'Si' : 'No'}</td></tr>`;
+                                table += `<tr><th>Nombre</th><td>${cell.getData().name}</td></tr>`;
+                                table += `<tr><th>DNI</th><td>${cell.getData().dni}</td></tr>`;
+                                table += `<tr><th>Email</th><td>${cell.getData().email}</td></tr>`;
+                                table += `<tr><th>Sexo</th><td>${cell.getData().gender == 'm' ? 'Masculino' : 'femenino'}</td></tr>`;
+                                table += `<tr><th>Rol</th><td>${cell.getData().role_name}</td></tr>`;
+                                table += `</tbody></table>`;
+                                console.log(table);
+                                $('#table-content').append(table);
+                            });
+
                         $(a)
                             .find(".edit")
                             .on("click", function () {

@@ -2845,6 +2845,9 @@ select{
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
+.mt-5{
+    margin-top: 1.25rem;
+}
 .mt-1{
     margin-top: 0.25rem;
 }
@@ -2871,9 +2874,6 @@ select{
 }
 .mt-10{
     margin-top: 2.5rem;
-}
-.mt-5{
-    margin-top: 1.25rem;
 }
 .mt-8{
     margin-top: 2rem;

@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration {
             $table->integer('active')->default(1);
             $table->softDeletes();
             $table->rememberToken();
+            $table->float('secicoins')->nullable();
             $table->integer('role_id');
             $table->integer('group_id')->nullable();
             $table->integer('quartile_id')->nullable();

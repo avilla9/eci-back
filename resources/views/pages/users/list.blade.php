@@ -110,6 +110,20 @@
     <div id="user-tabulator" class="mt-5 table-report table-report--tabulator"></div>
   </div>
 </div>
+
+<div id="superlarge-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-body p-10 text-center">
+        <table class="table">
+          <tbody id="table-content">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- END: HTML Table Data -->
 
 <!-- <div class="intro-y flex items-center mt-8">

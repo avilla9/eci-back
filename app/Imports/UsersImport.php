@@ -47,7 +47,6 @@ class UsersImport implements
             $quartile = NULL;
         }
 
-
         if (strlen($row['group'])) {
             $group = validateGroup([
                 'quartile' => $quartile,
@@ -66,6 +65,7 @@ class UsersImport implements
             'territorial' => $row['territorial'],
             'password' => Hash::make($row['password']),
             'active' => 1,
+            'secicoins' => $row['secicoins'],
             'delegation_code' => $delegation,
             'quartile_id' => $quartile,
             'group_id' => $group,
