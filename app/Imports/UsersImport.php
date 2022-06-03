@@ -3,21 +3,28 @@
 namespace App\Imports;
 
 use App\Models\Delegation;
+use App\Models\Group;
+use App\Models\Quartile;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
 class UsersImport implements
     ToModel,
     WithHeadingRow,
-    SkipsOnFailure {
+    SkipsOnFailure,
+    WithValidation {
 
-    use SkipsFailures;
+    use Importable, SkipsErrors, SkipsFailures;
 
     /**
      * @param array $row
@@ -31,27 +38,53 @@ class UsersImport implements
         ]);
 
         $role = validateRole([
-            'name' => ucwords(strtolower($row['role'])),
-            'level' => $row['role_level']
+            'name' => ucwords(strtolower($row['role']))
         ]);
 
-        $user = validateUser([
-            'email' => $row['email'],
-        ]);
-
-        if ($user) {
-            return new User([
-                'dni' => strval($row['dni']),
-                'name' => $row['name'],
-                'gender' => $row['gender'],
-                'role_id' => $role,
-                'email' => $row['email'],
-                'territorial' => $row['territorial'],
-                'password' => Hash::make($row['password']),
-                'active' => 1,
-                'delegation_code' => $delegation,
-            ]);
+        if (strlen($row['quartile'])) {
+            $quartile = validateQuartile($row['quartile']);
+        } else {
+            $quartile = NULL;
         }
+
+
+        if (strlen($row['group'])) {
+            $group = validateGroup([
+                'quartile' => $quartile,
+                'group' => $row['group'],
+            ]);
+        } else {
+            $group = NULL;
+        }
+
+        return new User([
+            'dni' => strval($row['dni']),
+            'name' => $row['name'],
+            'gender' => $row['gender'],
+            'role_id' => $role,
+            'email' => $row['email'],
+            'territorial' => $row['territorial'],
+            'password' => Hash::make($row['password']),
+            'active' => 1,
+            'delegation_code' => $delegation,
+            'quartile_id' => $quartile,
+            'group_id' => $group,
+        ]);
+    }
+
+    public function rules(): array {
+        return [
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+        ];
+    }
+
+    public function customValidationMessages() {
+        return [
+            'email.required' => 'El campo email es requerido',
+            'email.email' => 'El valor ingresado no corresponde a un formato de email válido',
+            'email.unique' => 'El email ingresado ya se encuentra asignado a otro usuario',
+        ];
     }
 }
 
@@ -72,8 +105,7 @@ function validateRole($data) {
     $role = Role::where('name', '=', $data['name'])->first();
     if (is_null($role)) {
         $id = DB::table('roles')->insertGetId([
-            'name' => $data['name'],
-            'level' => $data['level']
+            'name' => $data['name']
         ]);
         return Role::where('id', '=', $id)->first()->id;
     } else {
@@ -81,11 +113,27 @@ function validateRole($data) {
     }
 }
 
-function validateUser($data) {
-    $user = User::where('email', '=', $data['email'])->first();
-    if (is_null($user)) {
-        return  true;
+function validateQuartile($data) {
+    $quartile = Quartile::where('name', '=', $data)->first();
+    if (is_null($quartile)) {
+        $id = DB::table('quartiles')->insertGetId([
+            'name' => $data
+        ]);
+        return $id;
     } else {
-        return false;
+        return $quartile->id;
+    }
+}
+
+function validateGroup($data) {
+    $group = Group::where('name', '=', $data['group'])->first();
+    if (is_null($group)) {
+        $id = DB::table('groups')->insertGetId([
+            'name' => $data['group'],
+            'quartile_id' => $data['quartile'],
+        ]);
+        return $id;
+    } else {
+        return $group->id;
     }
 }

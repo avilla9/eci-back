@@ -32,6 +32,10 @@
         <div id="input" class="p-5">
           <div class="preview">
             <div>
+              <label for="regular-form-1" class="form-label">DNI</label>
+              <input id="regular-form-1" name="dni" type="number" class="form-control" placeholder="DNI">
+            </div>
+            <div>
               <label for="regular-form-1" class="form-label">Nombre completo</label>
               <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Nombres">
             </div>

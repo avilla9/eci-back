@@ -6,6 +6,7 @@ use App\Imports\DeleteUsersImport;
 use App\Imports\UsersImport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller {
@@ -40,6 +41,7 @@ class UserController extends Controller {
         $request->merge(['active' => 1]);
 
         $request->validate([
+            'dni' => 'required',
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
@@ -133,8 +135,29 @@ class UserController extends Controller {
     }
 
     public function fileImport(Request $request) {
-        Excel::import(new UsersImport, $request->file('file')->store('files'));
-        return redirect()->back();
+        $import = new UsersImport;
+        Excel::import($import, $request->file('file')->store('files'));
+
+        $errors = [];
+        foreach ($import->failures() as $failure) {
+            $errors[] = [
+                'row' => $failure->row(),
+                'attribute' => $failure->attribute(),
+                'errors' => $failure->errors(),
+                'values' => $failure->values(),
+            ];
+        }
+        if (count($errors) > 0) {
+            return $errors; /* redirect()->route('subir-usuarios')
+                ->with('errors', $errors)
+                ->send(); */
+            /* return view('pages/users/upload') */
+        } else {
+            return 'Usuarios insertados correctamente';
+        }
+
+        /* return view('pages/users/upload', $errors); */
+        /* return redirect()->back()->with('errors', $errors); */
     }
 
     public function deleteImport(Request $request) {

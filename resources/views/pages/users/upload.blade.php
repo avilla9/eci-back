@@ -5,6 +5,17 @@
 @endsection
 
 @section('subcontent')
+<div id="alert"></div>
+@if(count($errors)>0)
+<div class="alert alert-danger">
+  <strong>Whoops!</strong> There were some problems with your input.<br><br>
+</div>
+@endif
+@if ($message = Session::get('success'))
+<div class="alert alert-success">
+  <p>{{ $message }}</p>
+</div>
+@endif
 <div class="intro-y flex items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Subir usuarios a partir de archivos</h2>
 </div>
@@ -14,7 +25,8 @@
     <div class="intro-y box">
       <div id="single-file-upload" class="p-5">
         <div class="preview">
-          <form data-single="true" action="{{route('file-import')}}" method="POST" enctype="multipart/form-data" class="dropzone">
+          <form data-single="true" action="{{route('file-import')}}" method="POST" enctype="multipart/form-data"
+            class="dropzone">
             @csrf
             <div class="fallback">
               <input name="file" type="file" />
@@ -29,6 +41,7 @@
         </div>
       </div>
     </div>
+    <div id="upload-users"></div>
     <!-- END: Single File Upload -->
   </div>
 </div>

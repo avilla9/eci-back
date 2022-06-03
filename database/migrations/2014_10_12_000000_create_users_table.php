@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration {
@@ -19,14 +20,17 @@ class CreateUsersTable extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('photo')->nullable();
-            $table->string('gender');
+            $table->string('gender')->nullable();
             $table->integer('active')->default(1);
             $table->softDeletes();
             $table->rememberToken();
             $table->integer('role_id');
-            $table->string('delegation_code');
-            $table->string('territorial', 25);
-            $table->timestamps();
+            $table->integer('group_id')->nullable();
+            $table->integer('quartile_id')->nullable();
+            $table->string('delegation_code')->nullable();
+            $table->string('territorial', 25)->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

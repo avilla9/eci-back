@@ -51,13 +51,7 @@ class PageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function userUpload() {
-        return view('pages/users/upload', [
-            // Specify the base layout.
-            // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
-            // The default value is 'side-menu'
-
-            // 'layout' => 'side-menu'
-        ]);
+        return view('pages/users/upload', []);
     }
 
     /**
