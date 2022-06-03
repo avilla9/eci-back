@@ -150,6 +150,8 @@ import "./jquery";
                                 }).then(function (response) {
                                     if (response) {
                                         console.log(response);
+                                        cell.getRow().delete();
+                                        table.redraw(true);
                                     } else {
                                         throw "Error en la llamada Ajax";
                                     }

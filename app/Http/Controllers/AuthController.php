@@ -5,16 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Request\LoginRequest;
 use App\Http\Controllers\Controller;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller {
     /**
      * Show specified view.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function loginView()
-    {
+    public function loginView() {
         return view('login.main', [
             'layout' => 'login'
         ]);
@@ -26,8 +24,7 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request)
-    {
+    public function login(LoginRequest $request) {
         if (!\Auth::attempt([
             'email' => $request->email,
             'password' => $request->password
@@ -42,8 +39,7 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function logout()
-    {
+    public function logout() {
         \Auth::logout();
         return redirect('login');
     }
