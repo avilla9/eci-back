@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Delegation;
 use App\Models\Group;
 use App\Models\Quartile;
 use App\Models\Role;
+use App\Models\User;
 
 class PageController extends Controller {
 
@@ -16,13 +18,14 @@ class PageController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function userList() {
-        return view('pages/users/list', [
-            // Specify the base layout.
-            // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
-            // The default value is 'side-menu'
-
-            // 'layout' => 'side-menu'
-        ]);
+        $users = User::all();
+        $roles = Role::all();
+        $groups = Group::all();
+        $quartiles = Quartile::all();
+        $delegations = Delegation::all();
+        return view('pages/users/list', compact([
+            'users', 'roles', 'groups', 'quartiles', 'delegations'
+        ]));
     }
 
     /**
@@ -35,8 +38,9 @@ class PageController extends Controller {
         $roles = Role::all();
         $groups = Group::all();
         $quartiles = Quartile::all();
+        $delegations = Delegation::all();
         return view('pages/users/create', compact([
-            'roles', 'groups', 'quartiles'
+            'roles', 'groups', 'quartiles', 'delegations',
         ]));
     }
 

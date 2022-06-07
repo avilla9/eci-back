@@ -5,7 +5,7 @@
 @endsection
 
 @section('subcontent')
-<div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+<div class="intro-y flex flex-col sm:flex-row items-center mt-8" id="users-list">
   <h2 class="text-lg font-medium mr-auto">Lista de usuarios</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
     <button class="btn btn-primary shadow-md mr-2">Añadir nuevo usuario</button>
@@ -47,7 +47,7 @@
       <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
         <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Type</label>
         <select id="tabulator-html-filter-type" class="form-select w-full mt-2 sm:mt-0 sm:w-auto">
-          <option value="like" selected>like</option>
+          <option value="like">like</option>
           <option value="=">=</option>
           <option value="<">&lt;</option>
           <option value="<=">&lt;=</option>
@@ -114,133 +114,145 @@
 <div id="superlarge-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-body p-10 text-center">
+      <div class="modal-body text-center">
+        <h2 class="p-5 font-medium text-base mr-auto">Información detallada del usuario</h2>
         <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <th class="whitespace-nowrap">Campo</th>
+              <th class="whitespace-nowrap">Dato</th>
+            </tr>
+          </thead>
           <tbody id="table-content">
           </tbody>
         </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="edit-user" class="modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h2 class="p-5 font-medium text-base mr-auto">Editar información del usuario</h2>
+        <div id="editable">
+          <form id="SubmitForm">
+            @csrf
+            <!-- BEGIN: Input -->
+            <div class="intro-y box">
+              <div id="input" class="p-5">
+                <div class="preview">
+                  <div>
+                    <label for="regular-form-1" class="form-label">DNI</label>
+                    <input id="dni" name="dni" type="number" class="form-control" placeholder="DNI">
+                  </div>
+                  <div>
+                    <label for="regular-form-1" class="form-label">Nombre completo</label>
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Nombres">
+                  </div>
+                  <div class="mt-3">
+                    <label>Género</label>
+                    <div class="flex flex-col sm:flex-row mt-2">
+                      <div class="form-check mr-2">
+                        <input id="male" class="form-check-input" type="radio" name="gender" value="m">
+                        <label class="form-check-label" for="radio-switch-4">Masculino</label>
+                      </div>
+                      <div class="form-check mr-2 mt-2 sm:mt-0">
+                        <input id="female" class="form-check-input" type="radio" name="gender" value="f">
+                        <label class="form-check-label" for="radio-switch-5">Femenino</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <label for="regular-form-1" class="form-label">Correo</label>
+                    <input id="email" type="email" class="form-control" name="email" placeholder="Correo">
+                  </div>
+                  <div class="mt-3">
+                    <label for="regular-form-1" class="form-label">Territorial</label>
+                    <input id="territorial" type="text" class="form-control" name="territorial"
+                      placeholder="Territorial">
+                  </div>
+                  <div class="mt-3">
+                    <label for="regular-form-1" class="form-label">SECI Coins</label>
+                    <input id="secicoins" type="number" class="form-control" name="secicoins" placeholder="SECI Coins">
+                  </div>
+                  <div class="mt-3">
+                    <label for="regular-form-4" class="form-label">Password</label>
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password">
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <label>Rol del usuario</label>
+                  <div class="mt-2">
+                    <select data-placeholder="Seleccione un rol para el usuario" name="role_id" id="role_id"
+                      class="tom-select w-full">
+                      <option disabled>Seleccione un rol para el usuario</option>
+                      @foreach ($roles as $role)
+                      <option value="{{ $role->id }}">{{ $role->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <label>Delegación</label>
+                  <div class="mt-2">
+                    <select data-placeholder="Seleccione una delegación para el usuario" name="delegation_id"
+                      id="delegation_id" class="tom-select w-full">
+                      <option disabled>Seleccione una delegación para el usuario</option>
+                      @foreach ($delegations as $delegation)
+                      <option value="{{ $delegation->id }}">
+                        {{ $delegation->code }} - {{ $delegation->name }}
+                      </option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <label>Grupo del usuario</label>
+                  <div class="mt-2">
+                    <select data-placeholder="Seleccione un rol para el usuario" name="group_id" id="group_id"
+                      class="tom-select w-full">
+                      <option disabled>Seleccione un grupo para el usuario</option>
+                      @foreach ($groups as $group)
+                      <option value="{{ $group->id }}">{{ $group->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <label>Cuartil del usuario</label>
+                  <div class="mt-2">
+                    <select data-placeholder="Seleccione un rol para el usuario" name="quartile_id" id="quartile_id"
+                      class="tom-select w-full">
+                      <option disabled>Seleccione un cuartil para el usuario</option>
+                      @foreach ($quartiles as $quartile)
+                      <option value="{{ $quartile->id }}">{{ $quartile->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" data-tw-dismiss="modal"
+                    class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
+                  <button type="submit" class="btn btn-primary">Actualizar
+                    Usuario</button>
+                </div>
+              </div>
+            </div>
+            <!-- END: Input -->
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- END: HTML Table Data -->
-
-<!-- <div class="intro-y flex items-center mt-8">
-  <h2 class="text-lg font-medium mr-auto">Lista de usuarios</h2>
-</div>
-<div class="intro-y col-span-12 lg:col-span-6 mt-5">
-  <div class="intro-y box">
-    <div class="p-5" id="head-options-table">
-      <div class="preview">
-        <div class="overflow-x-auto">
-          <table class="table table-hover">
-            <thead class="table-dark">
-              <tr>
-                <th class="whitespace-nowrap">#</th>
-                <th class="whitespace-nowrap text-center">Nombres</th>
-                <th class="whitespace-nowrap text-center">Correo</th>
-                <th class="whitespace-nowrap text-center">Activo</th>
-                <th class="whitespace-nowrap text-center" colspan="3">Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($users as $user)
-              <tr>
-                <td>{{ ++$i }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td class="text-center">{{ $user->active ? 'Si' : 'No' }}</td>
-                <td class="text-center">
-                  <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#view-{{$user->id}}"
-                    class="btn btn-primary">
-                    <i data-feather="eye" class="w-4 h-4"></i>
-                  </a>
-                </td>
-                <td class="text-center">
-                  <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#edit-{{$user->id}}"
-                    class="btn btn-warning">
-                    <i data-feather="edit" class="w-4 h-4"></i>
-                  </a>
-                </td>
-                <td class="text-center">
-                  <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-{{$user->id}}"
-                    class="btn btn-danger">
-                    <i data-feather="trash-2" class="w-4 h-4"></i>
-                  </a>
-                </td>
-              </tr> -->
-<!-- BEGIN: Modal View -->
-<!-- <div id="view-{{$user->id}}" class="modal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <a data-tw-dismiss="modal" href="javascript:;">
-                      <i data-feather="x" class="w-8 h-8 text-slate-400"></i>
-                    </a>
-                    <div class="modal-body p-0">
-                      <div class="p-5 text-center">
-                        <div class="text-3xl mt-5">Información del usuario</div>
-                        <div class="text-slate-500 mt-2">
-
-                        </div>
-                      </div>
-                      <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal"
-                          class="btn btn-outline-primary w-24 mr-1">Cerrar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-<!-- END: Modal View -->
-<!-- BEGIN: Modal Edit -->
-<!-- <div id="edit-{{$user->id}}" class="modal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <a data-tw-dismiss="modal" href="javascript:;">
-                      <i data-feather="x" class="w-8 h-8 text-slate-400"></i>
-                    </a>
-                    <div class="modal-body p-0">
-                      <div class="p-5 text-center">
-                        <i data-feather="check-circle" class="w-16 h-16 text-success mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Modal Example</div>
-                        <div class="text-slate-500 mt-2">Modal with close button</div>
-                      </div>
-                      <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-<!-- END: Modal Edit -->
-<!-- BEGIN: Modal Delete -->
-<!-- <div id="delete-{{$user->id}}" class="modal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-body p-0">
-                      <div class="p-5 text-center">
-                        <i data-feather="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">¿Está seguro?</div>
-                        <div class="text-slate-500 mt-2">¿Desea proceder con la eliminación?<br>Este proceso no puede
-                          revertirse.</div>
-                      </div>
-                      <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal"
-                          class="btn btn-outline-secondary w-24 mr-1">Cancelar</button>
-                        <button type="button" class="btn btn-danger w-24">Eliminar</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
-<!-- END: Modal Delete -->
-<!-- @endforeach
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
 @endsection

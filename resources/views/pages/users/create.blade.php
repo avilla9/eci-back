@@ -57,6 +57,10 @@
               <input id="regular-form-1" type="email" class="form-control" name="email" placeholder="Correo">
             </div>
             <div class="mt-3">
+              <label for="regular-form-1" class="form-label">Territorial</label>
+              <input id="regular-form-1" type="text" class="form-control" name="territorial" placeholder="Territorial">
+            </div>
+            <div class="mt-3">
               <label for="regular-form-1" class="form-label">SECI Coins</label>
               <input id="regular-form-1" type="number" class="form-control" name="secicoins" placeholder="SECI Coins">
             </div>
@@ -72,6 +76,20 @@
                 <option disabled selected>Seleccione un rol para el usuario</option>
                 @foreach ($roles as $role)
                 <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <label>Delegación</label>
+            <div class="mt-2">
+              <select data-placeholder="Seleccione una delegación para el usuario" name="delegation_id" class="tom-select w-full">
+                <option disabled selected>Seleccione una delegación para el usuario</option>
+                @foreach ($delegations as $delegation)
+                <option value="{{ $delegation->id }}">
+                  {{ $delegation->code }} - {{ $delegation->name }}
+                </option>
                 @endforeach
               </select>
             </div>

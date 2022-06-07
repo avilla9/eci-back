@@ -6,6 +6,7 @@ use App\Imports\DeleteUsersImport;
 use App\Imports\UsersImport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -46,8 +47,14 @@ class UserController extends Controller {
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'gender' => 'required',
+            'territorial' => 'required',
             'role_id' => 'required|not_in:0',
+            'delegation_id' => 'required|not_in:0',
+            'quartile_id' => 'required|not_in:0',
+            'group_id' => 'required|not_in:0',
         ]);
+
+        $request->merge(['password' => Hash::make($request->password)]);
 
         User::create($request->all());
 
@@ -82,8 +89,39 @@ class UserController extends Controller {
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user) {
-        //
+    public function update(Request $request) {
+        $validator = Validator($request->all(), [
+            'dni' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'gender' => 'required',
+            'territorial' => 'required',
+            'role_id' => 'required|not_in:0',
+            'delegation_id' => 'required|not_in:0',
+            'quartile_id' => 'required|not_in:0',
+            'group_id' => 'required|not_in:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        } else {
+            $request->merge(['password' => Hash::make($request->password)]);
+            $user = User::where('dni', $request->id);
+            $user->dni = $request->dni;
+            $user->name = $request->name;
+            $user->gender = $request->gender;
+            $user->email = $request->email;
+            $user->territorial = $request->territorial;
+            $user->secicoins = $request->secicoins;
+            $user->password = $request->password;
+            $user->role_id = $request->role_id;
+            $user->delegation_id = $request->delegation_id;
+            $user->group_id = $request->group_id;
+            $user->quartile_id = $request->quartile_id;
+            $user->save();
+            return 'ok';
+        }
     }
 
     /**
@@ -110,16 +148,45 @@ class UserController extends Controller {
             'users.gender',
             'users.id',
             'users.name',
-            'users.photo',
+            'users.secicoins',
+            'users.territorial as territorial',
             'users.role_id',
             'roles.name as role_name',
             'roles.description as role_description',
-        )->join(
-            'roles',
-            'users.role_id',
-            '=',
-            'roles.id'
-        )->latest()->get();
+            'quartiles.name as quartile',
+            'quartiles.id as quartile_id',
+            'groups.name as group',
+            'groups.id as group_id',
+            'delegations.code as delegation_code',
+            'delegations.name as delegation_name',
+            'delegations.id as delegation_id',
+        )
+            ->join(
+                'roles',
+                'users.role_id',
+                '=',
+                'roles.id'
+            )
+            ->join(
+                'quartiles',
+                'quartiles.id',
+                '=',
+                'users.quartile_id'
+            )
+            ->join(
+                'groups',
+                'groups.id',
+                '=',
+                'users.group_id'
+            )
+            ->join(
+                'delegations',
+                'delegations.code',
+                '=',
+                'users.delegation_code'
+            )
+            ->latest()
+            ->get();
         return json_encode($users);
     }
 
