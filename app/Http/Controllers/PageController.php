@@ -80,6 +80,20 @@ class PageController extends Controller {
         ]);
     }
 
+    public function storieCreate() {
+        return view('pages/stories/create');
+    }
+
+    public function storieList() {
+        return view('pages/stories/list');
+    }
+
+    public function filesUp() {
+        return view('pages/files/upload');
+    }
+
+    /* GENERIC COMPONENT BELOW */
+
     /**
      * Show specified view.
      *

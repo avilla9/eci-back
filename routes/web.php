@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
@@ -32,6 +33,17 @@ Route::middleware('loggedin')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');
 
+    Route::prefix('/file')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/up', 'filesUp')->name('file.up');
+        });
+
+        Route::controller(FileController::class)->group(function () {
+            Route::post('/store', 'store')->name('file.store');
+            Route::post('/upload', 'upload')->name('file.upload');
+        });
+    });
+
     Route::prefix('/usuarios')->group(function () {
         Route::controller(PageController::class)->group(function () {
             Route::get('/lista', 'userList')->name('lista-de-usuarios');
@@ -52,11 +64,22 @@ Route::middleware('auth')->group(function () {
         Route::controller(PageController::class)->group(function () {
             Route::get('/crear', 'roleCreate')->name('create-role');
         });
-        
+
         Route::controller(RoleController::class)->group(function () {
             Route::get('/lista', 'index')->name('role-list');
             Route::post('/store', 'store')->name('role.store');
         });
+    });
+
+    Route::prefix('/stories')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/crear', 'storieCreate')->name('create-storie');
+            Route::get('/lista', 'storieList')->name('stories-list');
+        });
+
+        /* Route::controller(StoryController::class)->group(function () {
+            Route::post('/store', 'store')->name('role.store');
+        }); */
     });
 
 

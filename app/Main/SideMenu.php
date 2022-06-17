@@ -41,7 +41,6 @@ class SideMenu {
                     ]
                 ]
             ],
-            /* Users */
             'usuarios' => [
                 'icon' => 'users',
                 'title' => 'Usuarios',
@@ -80,8 +79,6 @@ class SideMenu {
                     ],
                 ]
             ],
-            /* End Users */
-            /* Roles */
             'roles' => [
                 'icon' => 'settings',
                 'title' => 'Roles',
@@ -104,7 +101,42 @@ class SideMenu {
                     ],
                 ]
             ],
-            /* End Roles */
+            'filemanager' => [
+                'icon' => 'hard-drive',
+                'title' => 'Archivos',
+                'sub_menu' => [
+                    'upload' => [
+                        'title' => 'Subir archivo',
+                        'icon' => '',
+                        'route_name' => 'file.up',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ],
+            ],
+            'stories' => [
+                'icon' => 'clock',
+                'title' => 'Stories',
+                'sub_menu' => [
+                    'create-storie' => [
+                        'icon' => '',
+                        'route_name' => 'create-storie',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Crear Storie'
+                    ],
+                    'list-stories' => [
+                        'icon' => '',
+                        'route_name' => 'stories-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Lista de Stories'
+                    ],
+                ]
+            ],
             'menu-layout' => [
                 'icon' => 'box',
                 'title' => 'Menu Layout',
