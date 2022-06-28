@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Delegation;
+use App\Models\File;
 use App\Models\Group;
 use App\Models\Quartile;
 use App\Models\Role;
@@ -81,11 +82,51 @@ class PageController extends Controller {
     }
 
     public function storieCreate() {
-        return view('pages/stories/create');
+        $groups = Group::all();
+        $quartiles = Quartile::all();
+        $delegations = Delegation::all();
+        $roles = Role::all();
+        $users = User::all();
+        $files = File::all();
+
+        $filters = [];
+        count($groups) > 0 ? $filters['groups'] = [
+            'name' => 'Grupos',
+            'data' => $groups
+        ] : true;
+        count($quartiles) > 0 ? $filters['quartiles'] = [
+            'name' => 'Cuartiles',
+            'data' => $quartiles
+        ] : true;
+        count($delegations) > 0 ? $filters['delegations'] = [
+            'name' => 'Delegaciones',
+            'data' => $delegations
+        ] : true;
+        count($roles) > 0 ? $filters['roles'] = [
+            'name' => 'Roles',
+            'data' => $roles
+        ] : true;
+        count($users) > 0 ? $filters['users'] = [
+            'name' => 'Usuarios',
+            'data' => $users
+        ] : true;
+
+        return view('pages/stories/create', [
+            'filters' => $filters,
+            'files' => $files,
+        ]);
     }
 
     public function storieList() {
         return view('pages/stories/list');
+    }
+
+    public function filesList() {
+        $files = File::all();
+
+        return view('pages/files/list', [
+            'files' => $files,
+        ]);
     }
 
     public function filesUp() {

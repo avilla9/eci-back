@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -31,5 +32,11 @@ Route::prefix('/users')->group(function () {
 Route::prefix('/roles')->group(function () {
     Route::controller(RoleController::class)->group(function () {
         Route::get('/all-roles', 'getAllRoles')->name('all-roles');
+    });
+});
+
+Route::prefix('/stories')->group(function () {
+    Route::controller(StoryController::class)->group(function () {
+        Route::get('/', 'show')->name('all.stories');
     });
 });

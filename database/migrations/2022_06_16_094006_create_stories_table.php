@@ -13,6 +13,8 @@ class CreateStoriesTable extends Migration {
     public function up() {
         Schema::create('stories', function (Blueprint $table) {
             $table->id();
+            $table->integer('filter_code')->nullable();
+            $table->integer('file_id')->nullable();
             $table->string('link')->nullable();
             $table->string('button_name')->nullable();
             $table->boolean('active')->default(true);

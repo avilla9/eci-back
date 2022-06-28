@@ -10,27 +10,31 @@
 </div>
 <div class="grid grid-cols-12 gap-6 mt-5">
   <div class="intro-y col-span-12 lg:col-span-12">
-    <form action="{{ route('file.store') }}" method="POST">
-      @csrf
-      <div class="intro-y box">
-        <div id="single-file-upload" class="p-5">
-          <div class="preview">
-            <form data-single="true" action="{{route('file.upload')}}" method="POST" enctype="multipart/form-data"
-              class="dropzone">
-              <div class="fallback">
-                <input name="file" type="file" />
-              </div>
-              <div class="dz-message" data-dz-message>
-                <div class="text-lg font-medium">Arrastra el archivo hasta acá o haz click para subir uno.</div>
-                <div class="text-slate-500">
-                  Seleccione imágenes
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+    @if(session()->get('message'))
+      <div class="alert alert-success mb-3">
+        {{ session()->get('message') }}
       </div>
-      <div id="upload-users"></div>
+    @endif
+    <form action="{{ route('file.store') }}" method="post" enctype="multipart/form-data">
+      @csrf
+      <div>
+        <label class="form-label">Título</label>
+        <input type="text" name="title" class="form-control" placeholder="Título">
+      </div>
+      <div class="mt-3">
+        <label class="form-label">Descripción</label>
+        <input type="text" name="overview" class="form-control" placeholder="Descripción">
+      </div>
+
+      <div class="form-group mt-3">
+        <input type="file" name="file" class="form-control"
+          accept=".jpg,.jpeg,.bmp,.png,.gif,.doc,.docx,.csv,.rtf,.xlsx,.xls,.txt,.pdf,.zip">
+      </div>
+
+      <button class="btn btn-primary mt-5">Guardar</button>
+    </form>
+    {{-- <form action="{{ route('file.store') }}" method="POST">
+      @csrf
       <div class="form-group row">
         <label for="title" class="col-sm-4 col-form-label text-md-right">{{ __('Title') }}</label>
         <div class="col-md-6">
@@ -43,6 +47,7 @@
           @endif
         </div>
       </div>
+
       <div class="form-group row">
         <label for="overview" class="col-sm-4 col-form-label text-md-right">{{ __('Overview') }}</label>
         <div class="col-md-6">
@@ -56,6 +61,20 @@
           @endif
         </div>
       </div>
+
+      <div class="form-group row">
+        <label for="media" class="col-sm-4 col-form-label text-md-right">{{ __('Media') }}</label>
+        <div class="col-md-6">
+          <input id="media" type="file" name="media"
+            class="form-control{{ $errors->has('media') ? ' is-invalid' : '' }}" name="media" value="{{ old('media') }}"
+            required autofocus />
+          @if ($errors->has('media'))
+          <span class="invalid-feedback" role="alert">
+            <strong>{{ $errors->first('media') }}</strong>
+          </span>
+          @endif
+        </div>
+      </div>
       <div class="form-group row mb-0">
         <div class="col-md-8 offset-md-4">
           <button type="submit" class="btn btn-primary">
@@ -63,7 +82,7 @@
           </button>
         </div>
       </div>
-    </form>
+    </form> --}}
   </div>
 </div>
 @endsection

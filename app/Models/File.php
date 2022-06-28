@@ -10,8 +10,14 @@ class File extends Model {
     use SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'title',
         'overview',
+        'media_name',
+        'media_type',
+        'media_path',
+        'media_size',
+        'media_path',
     ];
 
     public function user() {

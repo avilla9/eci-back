@@ -113,6 +113,14 @@ class SideMenu {
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'list' => [
+                        'title' => 'Ver archivos',
+                        'icon' => '',
+                        'route_name' => 'file.list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
                 ],
             ],
             'stories' => [

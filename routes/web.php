@@ -7,6 +7,7 @@ use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/file')->group(function () {
         Route::controller(PageController::class)->group(function () {
             Route::get('/up', 'filesUp')->name('file.up');
+            Route::get('/list', 'filesList')->name('file.list');
         });
 
         Route::controller(FileController::class)->group(function () {
@@ -77,9 +79,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/lista', 'storieList')->name('stories-list');
         });
 
-        /* Route::controller(StoryController::class)->group(function () {
-            Route::post('/store', 'store')->name('role.store');
-        }); */
+        Route::controller(StoryController::class)->group(function () {
+            Route::post('/store', 'store')->name('story.store');
+        });
     });
 
 
