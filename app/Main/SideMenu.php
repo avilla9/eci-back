@@ -123,6 +123,28 @@ class SideMenu {
                     ],
                 ],
             ],
+            'campaign' => [
+                'icon' => 'flag',
+                'title' => 'Campañas',
+                'sub_menu' => [
+                    'create-campaign' => [
+                        'icon' => '',
+                        'route_name' => 'campaign-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Crear campaña'
+                    ],
+                    'list-campaigns' => [
+                        'icon' => '',
+                        'route_name' => 'campaign-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Lista de campañas'
+                    ],
+                ]
+            ],
             'stories' => [
                 'icon' => 'clock',
                 'title' => 'Stories',

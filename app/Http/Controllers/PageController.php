@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campaign;
 use App\Models\Delegation;
 use App\Models\File;
 use App\Models\Group;
+use App\Models\Page;
 use App\Models\Quartile;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller {
 
@@ -119,6 +122,23 @@ class PageController extends Controller {
 
     public function storieList() {
         return view('pages/stories/list');
+    }
+
+    public function campaignCreate() {
+        $pages = DB::table('pages')
+            ->where('title', 'Campaña')
+            ->orWhere('title', 'Adopción')
+            ->get();
+
+        return view('pages/campaigns/create', compact(['pages']));
+    }
+    public function campaignList() {
+        $campaigns = DB::table('campaigns')
+            ->select('campaigns.id as id', 'campaigns.title as title', 'campaigns.description as description', 'campaigns.created_at as created_at', 'pages.id as page_id', 'pages.title as page_title')
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('pages/campaigns/list', compact(['campaigns']));
     }
 
     public function filesList() {

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
@@ -70,6 +71,19 @@ Route::middleware('auth')->group(function () {
         Route::controller(RoleController::class)->group(function () {
             Route::get('/lista', 'index')->name('role-list');
             Route::post('/store', 'store')->name('role.store');
+        });
+    });
+
+    Route::prefix('/campañas')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/crear', 'campaignCreate')->name('campaign-create');
+            Route::get('/lista', 'campaignList')->name('campaign-list');
+        });
+
+        Route::controller(CampaignController::class)->group(function () {
+            Route::post('/store', 'store')->name('campaign.store');
+            Route::put('/update', 'update')->name('campaign.update');
+            Route::post('/delete', 'delete')->name('campaign.delete');
         });
     });
 
