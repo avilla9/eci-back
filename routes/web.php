@@ -7,6 +7,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\ProductivityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
@@ -98,7 +99,17 @@ Route::middleware('auth')->group(function () {
         });
     });
 
+    Route::prefix('/produccion')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/lista', 'productionData')->name('production-list');
+        });
 
+        Route::controller(ProductivityController::class)->group(function () {
+            Route::get('/campaign', 'campaign')->name('production.campaign');
+            Route::post('/create', 'create')->name('production.create');
+            Route::post('/import', 'fileImport')->name('production.import');
+        });
+    });
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');

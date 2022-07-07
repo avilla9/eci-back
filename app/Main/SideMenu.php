@@ -145,6 +145,20 @@ class SideMenu {
                     ],
                 ]
             ],
+            'production' => [
+                'icon' => 'settings',
+                'title' => 'Datos de producción',
+                'sub_menu' => [
+                    'list-production' => [
+                        'icon' => '',
+                        'route_name' => 'production-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Gestión de datos'
+                    ],
+                ]
+            ],
             'stories' => [
                 'icon' => 'clock',
                 'title' => 'Stories',

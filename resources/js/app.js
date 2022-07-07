@@ -6,7 +6,6 @@
  | Import Midone built-in components.
  |
  */
-import "./bootstrap";
 import "@left4code/tw-starter/dist/js/svg-loader";
 import "@left4code/tw-starter/dist/js/accordion";
 import "@left4code/tw-starter/dist/js/alert";
@@ -23,7 +22,9 @@ import "@left4code/tw-starter/dist/js/tab";
  |
  */
 
-import "./jquery";
+import $ from 'jquery';
+window.$ = window.jQuery = $;
+import "./bootstrap";
 import "./chart";
 import "./highlight";
 import "./feather";
@@ -59,5 +60,3 @@ import "./mobile-menu";
 import "./side-menu-tooltip";
 import "./dark-mode-switcher";
 import "./custom-script";
-
-window.$ = window.jQuery = require('./jquery');

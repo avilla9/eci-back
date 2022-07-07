@@ -43,7 +43,7 @@
           <div class="mt-3">
             <label>Página de la campaña</label>
             <div class="mt-2">
-              <select data-placeholder="Seleccione un rol para el usuario" name="page_id" class="tom-select w-full">
+              <select data-placeholder="Seleccione una página para ubicar la campaña" name="page_id" class="tom-select w-full">
                 <option disabled selected>Seleccione una página para ubicar la campaña</option>
                 @foreach ($pages as $page)
                 <option value="{{ $page->id }}">{{ $page->title }}</option>

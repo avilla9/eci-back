@@ -18,6 +18,7 @@ class CreateProductivitiesTable extends Migration {
             $table->float('bonus')->nullable();
             $table->float('incentive')->nullable();
             $table->integer('user_id')->nullable();
+            $table->integer('campaign_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

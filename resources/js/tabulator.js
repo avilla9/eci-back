@@ -1,7 +1,6 @@
 import xlsx from "xlsx";
 import feather from "feather-icons";
 import Tabulator from "tabulator-tables";
-import "./jquery";
 
 (function () {
   "use strict";

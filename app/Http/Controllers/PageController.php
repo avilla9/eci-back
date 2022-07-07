@@ -32,6 +32,55 @@ class PageController extends Controller {
         ]));
     }
 
+    public function productionData() {
+        $users = User::select(
+            'users.id as id',
+            'users.dni as dni',
+            'users.name as name',
+        )
+            ->join(
+                'roles',
+                'users.role_id',
+                '=',
+                'roles.id'
+            )
+            ->join(
+                'quartiles',
+                'quartiles.id',
+                '=',
+                'users.quartile_id'
+            )
+            ->join(
+                'groups',
+                'groups.id',
+                '=',
+                'users.group_id'
+            )
+            ->join(
+                'delegations',
+                'delegations.code',
+                '=',
+                'users.delegation_code'
+            )
+            ->where('users.active', 1)
+            ->orderBy('name', 'desc')
+            ->get();
+            
+        $campaigns = DB::table('campaigns')
+            ->select(
+                'campaigns.id as id',
+                'campaigns.title as title',
+                'campaigns.description as description',
+                'campaigns.created_at as created_at',
+                'pages.id as page_id',
+                'pages.title as page_title',
+            )
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('pages/production/list', compact(['campaigns', 'users']));
+    }
+
     /**
      * Show specified view.
      *

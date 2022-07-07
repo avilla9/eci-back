@@ -67,6 +67,48 @@ import Dropzone from "dropzone";
             });
         });
     }
+
+    $('#automatic-modal #auto_campaign_id').on('change', function () {
+        console.log($(this).val());
+        $('#import-campaign').removeClass('hidden');
+        Dropzone.autoDiscover = false;
+        $(".dropzone").each(function () {
+            let options = {
+                accept: (file, done) => {
+                    console.log("Uploaded");
+                    done();
+                },
+                success: function (file, response) {
+                    console.log(response);
+                }
+            };
+
+            if ($(this).data("single")) {
+                options.maxFiles = 1;
+            }
+
+            if ($(this).data("file-types")) {
+                options.accept = (file, done) => {
+                    if (
+                        $(this).data("file-types").split("|").indexOf(file.type) ===
+                        -1
+                    ) {
+                        alert("Error! Files of this type are not accepted");
+                        done("Error! Files of this type are not accepted");
+                    } else {
+                        console.log("Uploaded");
+                        done();
+                    }
+                };
+            }
+
+            let dz = new Dropzone(this, options);
+
+            dz.on("maxfilesexceeded", (file) => {
+                alert("No more files please!");
+            });
+        });
+    });
     /* // Dropzone
     Dropzone.autoDiscover = false;
     $(".dropzone").each(function () {
