@@ -6,7 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
-
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,6 +17,27 @@ use App\Http\Controllers\UserController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+/* Route::group(['middleware' => ['cors']], function () {
+    Route::middleware('auth:api')->get('/token/revoke', function (Request $request) {
+        DB::table('oauth_access_tokens')
+            ->where('user_id', $request->user()->id)
+            ->update([
+                'revoked' => true
+            ]);
+        return response()->json('DONE');
+    });
+}); */
+
+Route::get('/token/revoke', function (Request $request) {
+    return $request->all();
+    /* DB::table('oauth_access_tokens')
+        ->where('user_id', $request->user()->id)
+        ->update([
+            'revoked' => true
+        ]);
+    return response()->json('DONE'); */
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

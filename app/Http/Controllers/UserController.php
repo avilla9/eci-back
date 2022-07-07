@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\DeleteUsersImport;
 use App\Imports\UsersImport;
+use App\Models\Delegation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,6 +41,8 @@ class UserController extends Controller {
     public function store(Request $request) {
 
         $request->merge(['active' => 1]);
+        $delegation = Delegation::where('id', $request->delegation_id)->first()->code;
+        $request->merge(['delegation_code' => $delegation]);
 
         $request->validate([
             'dni' => 'required',
