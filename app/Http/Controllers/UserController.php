@@ -24,6 +24,10 @@ class UserController extends Controller {
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
+    public function getUserData(Request $request) {
+        return User::where('id', $request->id)->first();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

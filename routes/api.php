@@ -29,14 +29,13 @@ use Illuminate\Support\Facades\DB;
     });
 }); */
 
-Route::get('/token/revoke', function (Request $request) {
-    return $request->all();
-    /* DB::table('oauth_access_tokens')
-        ->where('user_id', $request->user()->id)
+Route::post('/token/revoke', function (Request $request) {
+    DB::table('oauth_access_tokens')
+        ->where('user_id', $request->id)
         ->update([
             'revoked' => true
         ]);
-    return response()->json('DONE'); */
+    return response()->json('DONE');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -47,6 +46,7 @@ Route::prefix('/users')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');
         Route::post('/delete', 'delete')->name('delete-users');
+        Route::post('/data', 'getUserData');
     });
 });
 
