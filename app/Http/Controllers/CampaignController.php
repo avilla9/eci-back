@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\Page;
+use App\Models\Productivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,37 +29,26 @@ class CampaignController extends Controller {
     }
 
     public function update(Request $request) {
-        /* $validator = Validator($request->all(), [
-            'dni' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'gender' => 'required',
-            'territorial' => 'required',
-            'role_id' => 'required|not_in:0',
-            'delegation_id' => 'required|not_in:0',
-            'quartile_id' => 'required|not_in:0',
-            'group_id' => 'required|not_in:0',
-        ]);
+    }
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 404);
-        } else {
-            $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('dni', $request->id);
-            $user->dni = $request->dni;
-            $user->name = $request->name;
-            $user->gender = $request->gender;
-            $user->email = $request->email;
-            $user->territorial = $request->territorial;
-            $user->secicoins = $request->secicoins;
-            $user->password = $request->password;
-            $user->role_id = $request->role_id;
-            $user->delegation_id = $request->delegation_id;
-            $user->group_id = $request->group_id;
-            $user->quartile_id = $request->quartile_id;
-            $user->save();
-            return 'ok';
-        } */
+    public function campaignList(Request $request) {
+        $page_id = Page::where('title', $request->page_name)->first()->id;
+
+        $campaigns = DB::table('campaigns as camp')
+            ->select(
+                'camp.id as campaign_title',
+                'camp.title as campaign_title',
+                'prod.*'
+            )
+            ->join('productivities as prod', 'prod.campaign_id', '=', 'camp.id')
+            ->join('pages as pag', 'pag.id', '=', 'camp.page_id')
+            ->where([
+                ['prod.user_id', '=', $request->user_id],
+                ['camp.page_id', '=', $page_id]
+            ])
+            ->orderBy('camp.created_at', 'desc')
+            ->get();
+
+        return $campaigns;
     }
 }

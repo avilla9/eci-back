@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CampaignController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -17,17 +18,6 @@ use Illuminate\Support\Facades\DB;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-/* Route::group(['middleware' => ['cors']], function () {
-    Route::middleware('auth:api')->get('/token/revoke', function (Request $request) {
-        DB::table('oauth_access_tokens')
-            ->where('user_id', $request->user()->id)
-            ->update([
-                'revoked' => true
-            ]);
-        return response()->json('DONE');
-    });
-}); */
 
 Route::post('/token/revoke', function (Request $request) {
     DB::table('oauth_access_tokens')
@@ -47,6 +37,12 @@ Route::prefix('/users')->group(function () {
         Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');
         Route::post('/delete', 'delete')->name('delete-users');
         Route::post('/data', 'getUserData');
+    });
+});
+
+Route::prefix('/campaign')->group(function () {
+    Route::controller(CampaignController::class)->group(function () {
+        Route::post('/list', 'campaignList');
     });
 });
 
