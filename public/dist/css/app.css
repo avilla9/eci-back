@@ -2848,6 +2848,12 @@ select{
 .mt-5{
     margin-top: 1.25rem;
 }
+.mb-2{
+    margin-bottom: 0.5rem;
+}
+.mr-1{
+    margin-right: 0.25rem;
+}
 .mt-1{
     margin-top: 0.25rem;
 }
@@ -2856,9 +2862,6 @@ select{
 }
 .mr-3{
     margin-right: 0.75rem;
-}
-.mr-1{
-    margin-right: 0.25rem;
 }
 .-ml-5{
     margin-left: -1.25rem;
@@ -2898,9 +2901,6 @@ select{
 }
 .-mt-10{
     margin-top: -2.5rem;
-}
-.mb-2{
-    margin-bottom: 0.5rem;
 }
 .ml-auto{
     margin-left: auto;
@@ -3088,11 +3088,11 @@ select{
 .hidden{
     display: none;
 }
-.h-1{
-    height: 0.25rem;
-}
 .h-4{
     height: 1rem;
+}
+.h-1{
+    height: 0.25rem;
 }
 .h-10{
     height: 2.5rem;
@@ -3160,11 +3160,14 @@ select{
 .min-h-screen{
     min-height: 100vh;
 }
-.w-1{
-    width: 0.25rem;
+.w-full{
+    width: 100%;
 }
 .w-4{
     width: 1rem;
+}
+.w-1{
+    width: 0.25rem;
 }
 .w-10{
     width: 2.5rem;
@@ -3174,9 +3177,6 @@ select{
 }
 .w-1\/2{
     width: 50%;
-}
-.w-full{
-    width: 100%;
 }
 .w-5{
     width: 1.25rem;
@@ -3933,6 +3933,10 @@ select{
 .leading-none{
     line-height: 1;
 }
+.text-danger{
+    --tw-text-opacity: 1;
+    color: rgb(var(--color-danger) / var(--tw-text-opacity));
+}
 .text-gray-600{
     --tw-text-opacity: 1;
     color: rgb(75 85 99 / var(--tw-text-opacity));
@@ -3940,10 +3944,6 @@ select{
 .text-success{
     --tw-text-opacity: 1;
     color: rgb(var(--color-success) / var(--tw-text-opacity));
-}
-.text-danger{
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-danger) / var(--tw-text-opacity));
 }
 .text-slate-500{
     --tw-text-opacity: 1;

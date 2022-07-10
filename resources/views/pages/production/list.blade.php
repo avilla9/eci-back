@@ -61,6 +61,7 @@
             <th class="text-center">%</th>
             <th class="text-center">Primas</th>
             <th class="text-center">Incentivos</th>
+            <th class="text-center">Opciones</th>
           </tr>
         </thead>
         <tbody id="suscribed-list">
@@ -71,7 +72,14 @@
             <td>{{$campaign->page_title}}</td>
             <td>{{$campaign->created_at}}</td>
             <td><button campaign_id="{{$campaign->id}}" class="delete flex items-center text-danger">
-                <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-trash-2 w-4 h-4 mr-1">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg> Eliminar
               </button></td>
           </tr>
           @endforeach --}}
@@ -168,8 +176,8 @@
         <div class="intro-y box">
           <div id="single-file-upload" class="p-5">
             <div class="preview">
-              <form id="import-campaign" data-single="true" method="POST" action="{{route('production.import')}}" enctype="multipart/form-data"
-                class="dropzone hidden">
+              <form id="import-campaign" data-single="true" method="POST" action="{{route('production.import')}}"
+                enctype="multipart/form-data" class="dropzone hidden">
                 @csrf
                 <div class="fallback">
                   <input name="file" type="file" />
@@ -201,7 +209,7 @@
       type: "GET",
       url: "{{route('production.campaign')}}",
       data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
+        "_token": "{{ csrf_token() }}",
         id: $(this).val(),
       },
       success: function success(data) {
@@ -212,7 +220,7 @@
           let printData = '';
           for (let i = 0; i < data.length; i++) {
             const item = data[i];
-            let tr = '<tr>'
+            let tr = '<tr id="' + item.id + '">'
               + '<td class="text-right">'
               + item.dni
               + '</td>'
@@ -234,7 +242,7 @@
               + '<td class="text-right">'
               + item.incentive
               + '</td>'
-              + '</tr>';
+              + '<td><button campaign_id="' + item.id + '" class="delete flex items-center text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 w-4 h-4 mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Eliminar</button></td></tr>';
             printData += tr;
           }
           $('#suscribed-list').html(printData);
@@ -255,7 +263,7 @@
     e.preventDefault();
 
     let data = {
-      "_token": $('meta[name="csrf-token"]').attr('content'),
+      "_token": "{{ csrf_token() }}",
       policy_objective: $('#policy_objective').val().length ? parseFloat($('#policy_objective').val()) : 0,
       policy_raised: $('#policy_raised').val().length ? parseFloat($('#policy_raised').val()) : 0,
       bonus: $('#bonus').val().length ? parseFloat($('#bonus').val()) : 0,
@@ -294,7 +302,7 @@
             type: "GET",
             url: "{{route('production.campaign')}}",
             data: {
-              "_token": $('meta[name="csrf-token"]').attr('content'),
+              "_token": "{{ csrf_token() }}",
               id: parseInt($('#campaign').val()),
             },
             success: function success(data) {
@@ -306,7 +314,7 @@
                 let printData = '';
                 for (let i = 0; i < data.length; i++) {
                   const item = data[i];
-                  let tr = '<tr>'
+                  let tr = '<tr id="' + item.id + '">'
                     + '<td class="text-right">'
                     + item.dni
                     + '</td>'
@@ -328,7 +336,7 @@
                     + '<td class="text-right">'
                     + item.incentive
                     + '</td>'
-                    + '</tr>';
+                    + '<td><button campaign_id="' + item.id + '" class="delete flex items-center text-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 w-4 h-4 mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Eliminar</button></td></tr>';
                   printData += tr;
                 }
                 $('#suscribed-list').html(printData);
@@ -349,7 +357,35 @@
         },
       });
     }
-
   });
+
+  $(document).on('click', '.delete', function (e) {
+    console.log('delete', $(this).attr('campaign_id'));
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "{{route('production.delete')}}",
+      data: {
+        "_token": $('meta[name="csrf-token"]').attr('content'),
+        id: $(this).attr('campaign_id'),
+      },
+      success: function success(data) {
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-success show mb-2');
+        $('#alert').html('Dato eliminado con éxito');
+        $('tr#' + data).remove();
+      },
+      error: function error(_error) {
+        console.log('error', _error);
+  
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-danger show mb-2');
+        $('#alert').html('Ha ocurrido un error al eliminar el dato');
+      }
+    });
+  });
+
 </script>
 @endsection

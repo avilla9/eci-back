@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/campaign', 'campaign')->name('production.campaign');
             Route::post('/create', 'create')->name('production.create');
             Route::post('/import', 'fileImport')->name('production.import');
+            Route::post('/delete', 'delete')->name('production.delete');
         });
     });
 

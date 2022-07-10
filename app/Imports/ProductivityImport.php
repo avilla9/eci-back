@@ -27,6 +27,10 @@ class ProductivityImport implements
 
   use Importable, SkipsErrors, SkipsFailures;
 
+  public function  __construct($campaign_id) {
+    $this->campaign_id = $campaign_id;
+  }
+
   /**
    * @param array $row
    *
@@ -57,18 +61,39 @@ class ProductivityImport implements
       $group = NULL;
     } */
 
-    $user = DB::table('users')
+    $user_id = DB::table('users')
       ->where('dni', $row['dni'])
-      ->first();
+      ->first()->id;
 
-    return new Productivity([
-      'user_id' => $user->id,
-      'policy_objective' => $row['poliza_objetivo'],
-      'policy_raised' => $row['poliza_venta'],
-      'bonus' => $row['primas'],
-      'incentive' => $row['incentivos'],
-      'campaign_id' => 2,
-    ]);
+    $exists = DB::table('productivities')
+      ->where([
+        ['user_id', $user_id],
+        ['campaign_id', $this->campaign_id]
+      ])
+      ->count() > 0;
+
+    if ($exists) {
+      DB::table('productivities')
+        ->where([
+          ['user_id', $user_id],
+          ['campaign_id', $this->campaign_id]
+        ])
+        ->update([
+          'policy_objective' => $row['poliza_objetivo'],
+          'policy_raised' => $row['poliza_venta'],
+          'bonus' => $row['primas'],
+          'incentive' => $row['incentivos'],
+        ]);
+    } else {
+      return new Productivity([
+        'user_id' => $user_id,
+        'policy_objective' => $row['poliza_objetivo'],
+        'policy_raised' => $row['poliza_venta'],
+        'bonus' => $row['primas'],
+        'incentive' => $row['incentivos'],
+        'campaign_id' => $this->campaign_id,
+      ]);
+    }
   }
 
   /* public function rules(): array {
