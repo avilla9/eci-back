@@ -181,7 +181,7 @@ class SideMenu {
                     ],
                 ]
             ],
-            'menu-layout' => [
+            /* 'menu-layout' => [
                 'icon' => 'box',
                 'title' => 'Menu Layout',
                 'sub_menu' => [
@@ -774,7 +774,7 @@ class SideMenu {
                         'title' => 'Image Zoom'
                     ]
                 ]
-            ]
+            ] */
         ];
     }
 }
