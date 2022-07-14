@@ -159,6 +159,7 @@ class SideMenu {
                     ],
                 ]
             ],
+            'devider',
             'stories' => [
                 'icon' => 'clock',
                 'title' => 'Stories',
@@ -181,6 +182,29 @@ class SideMenu {
                     ],
                 ]
             ],
+            'home' => [
+                'icon' => 'home',
+                'title' => 'Home',
+                'sub_menu' => [
+                    'home-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'home-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'homes-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'homes-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
+            'devider',
             'menu-layout' => [
                 'icon' => 'box',
                 'title' => 'Menu Layout',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampaignController;
@@ -96,6 +97,18 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(StoryController::class)->group(function () {
             Route::post('/store', 'store')->name('story.store');
+        });
+    });
+
+    Route::prefix('/posts')->group(function () {
+        Route::prefix('/home')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'homeCreate')->name('home-create');
+                Route::get('/lista', 'homeList')->name('homes-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'homeCreate')->name('home.create');
+            });
         });
     });
 
