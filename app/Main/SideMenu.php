@@ -226,6 +226,28 @@ class SideMenu {
                     ],
                 ]
             ],
+            'adoption-content' => [
+                'icon' => 'globe',
+                'title' => 'Adopción',
+                'sub_menu' => [
+                    'content-adoption-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'content-adoption-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'content-adoptions-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'content-adoption-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
             /* 'menu-layout' => [
                 'icon' => 'box',
                 'title' => 'Menu Layout',

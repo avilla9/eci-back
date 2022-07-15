@@ -182,6 +182,32 @@ class PageController extends Controller {
         ]);
     }
 
+    public function contentAdoptionCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Adopción');
+        $data['sections'] = $sections;
+        $data['campaigns'] = DB::table('campaigns')
+            ->select(
+                'campaigns.id as id',
+                'campaigns.title as title',
+                'campaigns.description as description',
+                'campaigns.created_at as created_at',
+                'pages.id as page_id',
+                'pages.title as page_title',
+            )
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->where('pages.title', 'Campaña')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('pages/content/adoption/create', $data);
+    }
+
+    public function contentAdoptionList() {
+        return view('pages/content/adoption/list', [
+            'articles'  => articlesByPage('Adopción')
+        ]);
+    }
+
     public function campaignCreate() {
         $pages = DB::table('pages')
             ->where('title', 'Campaña')
