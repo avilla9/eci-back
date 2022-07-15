@@ -122,6 +122,15 @@ Route::middleware('auth')->group(function () {
                 Route::post('/create', 'campaignCreate')->name('campaign.create');
             });
         });
+        Route::prefix('/adoption')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentadoptionCreate')->name('content-adoption-create');
+                Route::get('/lista', 'contentadoptionList')->name('content-adoption-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'adoptionCreate')->name('adoption.create');
+            });
+        });
     });
 
     Route::prefix('/produccion')->group(function () {
