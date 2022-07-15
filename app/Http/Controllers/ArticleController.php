@@ -102,21 +102,10 @@ class ArticleController extends Controller {
 		}
 
 		return $data;
+	}
 
-		/* return DB::table('articles')
-			->select('articles.*')
-			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
-			->where('articles.active', 1)
-			->whereIn('articles.section_id', $sectionsId)
-			->orWhere(function ($query) use ($sectionsId) {
-				$query->where([
-					['articles.unrestricted', 1],
-					['articles.section_id', $sectionsId],
-					['articles.active', 1],
-				]);
-			})
-			->orWhere('accesses.user_id', $user_id)
-			->orderBy('articles.created_at', 'asc')
-			->get(); */
+	public function delete(Request $request) {
+		Article::where('id', $request->id)->delete();
+		return $request->id;
 	}
 }

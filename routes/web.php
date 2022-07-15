@@ -101,6 +101,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('/posts')->group(function () {
+        Route::controller(ArticleController::class)->group(function () {
+            Route::post('/delete', 'delete')->name('article.delete');
+        });
         Route::prefix('/home')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'homeCreate')->name('home-create');

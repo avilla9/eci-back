@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use App\Models\Campaign;
 use App\Models\Delegation;
 use App\Models\File;
@@ -150,7 +151,9 @@ class PageController extends Controller {
     }
 
     public function homeList() {
-        return view('pages/content/home/list');
+        return view('pages/content/home/list', [
+            'articles'  => articlesByPage('Home')
+        ]);
     }
 
     public function campaignCreate() {
@@ -852,5 +855,16 @@ function sectionParameters($pageName) {
         ->select('sections.*')
         ->join('sections', 'sections.page_id', '=', 'pages.id')
         ->where('pages.title', $pageName)
+        ->get();
+}
+
+function articlesByPage($pageName) {
+    return DB::table('articles')
+        ->select('articles.*', 'sections.title as section_title')
+        ->join('sections', 'sections.id', '=', 'articles.section_id')
+        ->join('pages', 'pages.id', '=', 'sections.page_id')
+        ->where('pages.title', $pageName)
+        ->orderBy('sections.title', 'asc')
+        ->orderBy('articles.id', 'desc')
         ->get();
 }
