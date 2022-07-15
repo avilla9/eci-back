@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use App\Models\Campaign;
 use App\Models\Delegation;
 use App\Models\File;
@@ -65,7 +66,7 @@ class PageController extends Controller {
             ->where('users.active', 1)
             ->orderBy('name', 'desc')
             ->get();
-            
+
         $campaigns = DB::table('campaigns')
             ->select(
                 'campaigns.id as id',
@@ -134,43 +135,51 @@ class PageController extends Controller {
     }
 
     public function storieCreate() {
-        $groups = Group::all();
-        $quartiles = Quartile::all();
-        $delegations = Delegation::all();
-        $roles = Role::all();
-        $users = User::all();
-        $files = File::all();
-
-        $filters = [];
-        count($groups) > 0 ? $filters['groups'] = [
-            'name' => 'Grupos',
-            'data' => $groups
-        ] : true;
-        count($quartiles) > 0 ? $filters['quartiles'] = [
-            'name' => 'Cuartiles',
-            'data' => $quartiles
-        ] : true;
-        count($delegations) > 0 ? $filters['delegations'] = [
-            'name' => 'Delegaciones',
-            'data' => $delegations
-        ] : true;
-        count($roles) > 0 ? $filters['roles'] = [
-            'name' => 'Roles',
-            'data' => $roles
-        ] : true;
-        count($users) > 0 ? $filters['users'] = [
-            'name' => 'Usuarios',
-            'data' => $users
-        ] : true;
-
-        return view('pages/stories/create', [
-            'filters' => $filters,
-            'files' => $files,
-        ]);
+        $data = contentParameters();
+        return view('pages/stories/create', $data);
     }
 
     public function storieList() {
         return view('pages/stories/list');
+    }
+
+    public function homeCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Home');
+        $data['sections'] = $sections;
+        return view('pages/content/home/create', $data);
+    }
+
+    public function homeList() {
+        return view('pages/content/home/list', [
+            'articles'  => articlesByPage('Home')
+        ]);
+    }
+
+    public function contentCampaignCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Campaña');
+        $data['sections'] = $sections;
+        $data['campaigns'] = DB::table('campaigns')
+            ->select(
+                'campaigns.id as id',
+                'campaigns.title as title',
+                'campaigns.description as description',
+                'campaigns.created_at as created_at',
+                'pages.id as page_id',
+                'pages.title as page_title',
+            )
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->where('pages.title', 'Campaña')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('pages/content/campaign/create', $data);
+    }
+
+    public function contentCampaignList() {
+        return view('pages/content/campaign/list', [
+            'articles'  => articlesByPage('Campaña')
+        ]);
     }
 
     public function campaignCreate() {
@@ -191,7 +200,7 @@ class PageController extends Controller {
     }
 
     public function filesList() {
-        $files = File::all();
+        $files = File::where('media_type', 'like', '%image%')->latest()->get();
 
         return view('pages/files/list', [
             'files' => $files,
@@ -829,4 +838,59 @@ class PageController extends Controller {
     public function imageZoom() {
         return view('pages/image-zoom');
     }
+}
+
+function contentParameters() {
+    $groups = Group::all();
+    $quartiles = Quartile::all();
+    $delegations = Delegation::all();
+    $roles = Role::all();
+    $users = User::all();
+    $files = File::where('media_type', 'like', '%image%')->latest()->get();
+
+    $filters = [];
+    count($groups) > 0 ? $filters['groups'] = [
+        'name' => 'Grupos',
+        'data' => $groups
+    ] : true;
+    count($quartiles) > 0 ? $filters['quartiles'] = [
+        'name' => 'Cuartiles',
+        'data' => $quartiles
+    ] : true;
+    count($delegations) > 0 ? $filters['delegations'] = [
+        'name' => 'Delegaciones',
+        'data' => $delegations
+    ] : true;
+    count($roles) > 0 ? $filters['roles'] = [
+        'name' => 'Roles',
+        'data' => $roles
+    ] : true;
+    count($users) > 0 ? $filters['users'] = [
+        'name' => 'Usuarios',
+        'data' => $users
+    ] : true;
+
+    return [
+        'filters' => $filters,
+        'files' => $files,
+    ];
+}
+
+function sectionParameters($pageName) {
+    return DB::table('pages')
+        ->select('sections.*')
+        ->join('sections', 'sections.page_id', '=', 'pages.id')
+        ->where('pages.title', $pageName)
+        ->get();
+}
+
+function articlesByPage($pageName) {
+    return DB::table('articles')
+        ->select('articles.*', 'sections.title as section_title')
+        ->join('sections', 'sections.id', '=', 'articles.section_id')
+        ->join('pages', 'pages.id', '=', 'sections.page_id')
+        ->where('pages.title', $pageName)
+        ->orderBy('sections.title', 'asc')
+        ->orderBy('articles.id', 'desc')
+        ->get();
 }

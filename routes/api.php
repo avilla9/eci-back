@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CampaignController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('/posts')->group(function () {
+    Route::controller(ArticleController::class)->group(function () {
+        Route::post('/list', 'list')->name('posts.list');
+    });
+});
+
 Route::prefix('/users')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');
@@ -43,6 +50,7 @@ Route::prefix('/users')->group(function () {
 Route::prefix('/campaign')->group(function () {
     Route::controller(CampaignController::class)->group(function () {
         Route::post('/list', 'campaignList');
+        Route::post('/data', 'campaignData');
     });
 });
 
