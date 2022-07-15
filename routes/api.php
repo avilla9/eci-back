@@ -50,6 +50,7 @@ Route::prefix('/users')->group(function () {
 Route::prefix('/campaign')->group(function () {
     Route::controller(CampaignController::class)->group(function () {
         Route::post('/list', 'campaignList');
+        Route::post('/data', 'campaignData');
     });
 });
 

@@ -204,6 +204,28 @@ class SideMenu {
                     ],
                 ]
             ],
+            'campaign-content' => [
+                'icon' => 'plus-square',
+                'title' => 'Campañas',
+                'sub_menu' => [
+                    'content-campaign-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'content-campaign-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'content-campaigns-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'content-campaign-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
             'devider',
             'menu-layout' => [
                 'icon' => 'box',

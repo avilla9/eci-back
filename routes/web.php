@@ -113,6 +113,15 @@ Route::middleware('auth')->group(function () {
                 Route::post('/create', 'homeCreate')->name('home.create');
             });
         });
+        Route::prefix('/campaign')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentCampaignCreate')->name('content-campaign-create');
+                Route::get('/lista', 'contentCampaignList')->name('content-campaign-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'campaignCreate')->name('campaign.create');
+            });
+        });
     });
 
     Route::prefix('/produccion')->group(function () {
