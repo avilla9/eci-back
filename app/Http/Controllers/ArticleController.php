@@ -23,22 +23,22 @@ class ArticleController extends Controller {
 			'unrestricted' => $request->grant_all,
 			'file_id' => $request->image,
 			'section_id' => $request->section,
-		];
-
-		$filters = [
 			'post_type' => $request->post_type,
-			'groups' => count($request->groups) > 0 ? $request->groups : [0],
-			'quartiles' => count($request->quartiles) > 0 ? $request->quartiles : [0],
-			'delegations' => count($request->delegations) > 0 ? $request->delegations : [0],
-			'roles' => count($request->roles) > 0 ? $request->roles : [0],
-			'users' => count($request->users) > 0 ? $request->users : [0],
 		];
 
 		$articleid = DB::table('articles')->insertGetId($data);
-		
+
 		if ($data['unrestricted']) {
 			return $articleid;
 		} else {
+			$filters = [
+				'groups' => count($request->groups) > 0 ? $request->groups : [0],
+				'quartiles' => count($request->quartiles) > 0 ? $request->quartiles : [0],
+				'delegations' => count($request->delegations) > 0 ? $request->delegations : [0],
+				'roles' => count($request->roles) > 0 ? $request->roles : [0],
+				'users' => count($request->users) > 0 ? $request->users : [0],
+			];
+
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -58,5 +58,64 @@ class ArticleController extends Controller {
 					]);
 			}
 		}
+	}
+
+	public function list(Request $request) {
+		$user_id = $request->user_id;
+		$page = $request->page;
+
+		$sections = DB::table('sections')
+			->select('sections.*')
+			->join('pages', 'pages.id', '=', 'sections.page_id')
+			->where('pages.title', $page)
+			->get();
+
+		//return $sections;
+
+		$data = [];
+		foreach ($sections as $key => $section) {
+			$sectionId = $section->id;
+			$articles = DB::table('articles')
+				->select('articles.*')
+				->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
+				->where([
+					['articles.active', 1],
+					['articles.section_id', $sectionId],
+					['accesses.user_id', $user_id],
+				])
+				->orWhere(function ($query) use ($sectionId) {
+					$query->where([
+						['articles.unrestricted', 1],
+						['articles.section_id', $sectionId],
+						['articles.active', 1],
+					]);
+				})
+				->orderBy('articles.created_at', 'asc')
+				->distinct()
+				->get();
+
+			$data[] = [
+				'section' => $section->title,
+				'articles' => $articles
+			];
+		}
+
+		return $data;
+
+		/* return DB::table('articles')
+			->select('articles.*')
+			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
+			->where('articles.active', 1)
+			->whereIn('articles.section_id', $sectionsId)
+			->orWhere(function ($query) use ($sectionsId) {
+				$query->where([
+					['articles.unrestricted', 1],
+					['articles.section_id', $sectionsId],
+					['articles.active', 1],
+				]);
+			})
+			->orWhere('accesses.user_id', $user_id)
+			->orderBy('articles.created_at', 'asc')
+			->get(); */
 	}
 }

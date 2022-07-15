@@ -99,11 +99,15 @@ $('#save').click(function (e) {
       message.push('Debe redactar contenido para mostrar en el post');
     }
   } else if (data.post_type == 'external') {
-    error = true;
-    message.push('Debe añadir un enlace');
+    if (!data.external_link?.length) {
+      error = true;
+      message.push('Debe añadir un enlace');
+    }
   } else if (data.post_type == 'internal') {
-    error = true;
-    message.push('Debe añadir un enlace');
+    if (!data.internal_link?.length) {
+      error = true;
+      message.push('Debe añadir un enlace');
+    }
   }
 
   if (!data.title?.length) {
