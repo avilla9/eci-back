@@ -76,8 +76,9 @@ class ArticleController extends Controller {
 		foreach ($sections as $key => $section) {
 			$sectionId = $section->id;
 			$articles = DB::table('articles')
-				->select('articles.*')
+				->select('articles.*', 'files.media_path')
 				->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
+				->join('files', 'files.id', '=', 'articles.file_id')
 				->where([
 					['articles.active', 1],
 					['articles.section_id', $sectionId],
@@ -90,8 +91,8 @@ class ArticleController extends Controller {
 						['articles.active', 1],
 					]);
 				})
-				->orderBy('articles.created_at', 'asc')
 				->distinct()
+				->orderBy('articles.id', 'desc')
 				->get();
 
 			$data[] = [
