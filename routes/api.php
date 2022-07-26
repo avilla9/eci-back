@@ -39,6 +39,10 @@ Route::prefix('/posts')->group(function () {
     });
 });
 
+Route::controller(ArticleController::class)->group(function () {
+    Route::post('/like', 'like');
+});
+
 Route::prefix('/users')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');

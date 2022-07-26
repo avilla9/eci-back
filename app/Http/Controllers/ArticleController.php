@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Access;
+use App\Models\Action;
 use App\Models\Article;
+use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -121,8 +123,6 @@ class ArticleController extends Controller {
 			->where('pages.title', $page)
 			->get();
 
-		//return $sections;
-
 		$data = [];
 		foreach ($sections as $key => $section) {
 			$sectionId = $section->id;
@@ -146,6 +146,24 @@ class ArticleController extends Controller {
 				->orderBy('articles.id', 'desc')
 				->get();
 
+			foreach ($articles as $key => $article) {
+				$reactions = DB::table('reactions')
+					->select('reactions.*', 'actions.name')
+					->join('actions', 'actions.id', '=', 'reactions.action_id')
+					->where([
+						['article_id', $article->id],
+						['user_id', $user_id],
+						['user_id', $user_id],
+					])
+					->get();
+
+				if (Count($reactions)) {
+					$article->reactions = $reactions;
+				} else {
+					$article->reactions = [];
+				}
+			}
+
 			$data[] = [
 				'section' => $section->title,
 				'articles' => $articles
@@ -158,5 +176,40 @@ class ArticleController extends Controller {
 	public function delete(Request $request) {
 		Article::where('id', $request->id)->delete();
 		return $request->id;
+	}
+
+	public function like(Request $request) {
+		$post = $request->post_id;
+		$user = $request->user_id;
+		$action = Action::where('name', 'like')->first();
+
+
+		$articleExists = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->get();
+
+		if (Count($articleExists)) {
+			DB::table('reactions')
+				->where([
+					'user_id' => $user,
+					'article_id' => $post,
+					'action_id' => $action->id,
+				])
+				->delete();
+			$articleid = 0;
+		} else {
+			$articleid = DB::table('reactions')->insertGetId([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			]);
+		}
+
+
+		return $articleid;
 	}
 }
