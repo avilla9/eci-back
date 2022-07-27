@@ -18,7 +18,8 @@ class FileController extends Controller {
         ]);
     }
 
-    public function store(Request $request) {
+    public function upload(Request $request) {
+
         $fileName = auth()->id()
             . '_'
             . time()
@@ -30,9 +31,9 @@ class FileController extends Controller {
         $request->file->move(public_path('file'), $fileName);
         $path = asset('file/' . strtolower($fileName));
 
-        File::create([
-            'title' => $request->get('title'),
-            'overview' => $request->get('overview'),
+        return  File::create([
+            'title' => $fileName,
+            'overview' => 'Created by controller',
             'user_id' => auth()->id(),
             'media_name' => $fileName,
             'media_type' => $type,
@@ -40,7 +41,17 @@ class FileController extends Controller {
             'media_path' => $path,
         ]);
 
-        return back()->with('message', 'Archivo cargado con éxito');
+        /* File::create([
+            'title' => $fileName,
+            'overview' => 'Created by controller',
+            'user_id' => auth()->id(),
+            'media_name' => $fileName,
+            'media_type' => $type,
+            'media_size' => $size,
+            'media_path' => $path,
+        ]);
+
+        return back()->with('message', 'Archivo cargado con éxito'); */
 
         /* $request->validate([
             'title' => 'required:max:255',
@@ -75,28 +86,6 @@ class FileController extends Controller {
             'overview' => $request->get('overview'),
         ]);
 
-        return back()->with('message', 'Your file is submitted Successfully'); */
-    }
-
-    public function upload(Request $request) {
-        /* $uploadedFile = $request->file('file');
-        $filename = time() . $uploadedFile->getClientOriginalName();
-
-        Storage::disk('local')->putFileAs(
-            'files/' . $filename,
-            $uploadedFile,
-            $filename
-        );
-
-        $upload = new Upload;
-        $upload->filename = $filename;
-
-        $upload->user()->associate(auth()->user());
-
-        $upload->save();
-
-        return response()->json([
-            'id' => $upload->id
-        ]); */
+        return back()->with('message', 'Your file is submitted Successfully');*/
     }
 }

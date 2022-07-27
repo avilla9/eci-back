@@ -44,7 +44,6 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(FileController::class)->group(function () {
-            Route::post('/store', 'store')->name('file.store');
             Route::post('/upload', 'upload')->name('file.upload');
         });
     });
