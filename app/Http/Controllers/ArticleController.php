@@ -251,6 +251,33 @@ class ArticleController extends Controller {
 		return $articleid;
 	}
 
+	public function view(Request $request) {
+		$post = $request->post_id;
+		$user = $request->user_id;
+		$action = Action::where('name', 'view')->first();
+
+
+		$articleExists = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->get();
+
+		$articleid = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->updateOrInsert([
+				'clicks' => property_exists($articleExists, 'clicks') ? $articleExists->clicks + 1 : 1,
+			]);
+
+		return $articleid;
+	}
+
 
 	public function getReaction(Request $request) {
 
