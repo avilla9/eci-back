@@ -108,7 +108,7 @@
     <!-- BEGIN: Directory & Files -->
     <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
       @foreach ($files as $file)
-      <div class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
+      <div id="file-{{$file['id']}}" class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
         <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
           <div class="absolute left-0 top-0 mt-3 ml-3">
             <input class="form-check-input border border-slate-500" type="checkbox" value="{{$file['id']}}">
@@ -149,9 +149,9 @@
             <div class="dropdown-menu w-40">
               <ul class="dropdown-content">
                 <li>
-                  <a href="" class="dropdown-item">
+                  <button class="dropdown-item single-delete" value="{{$file['id']}}">
                     <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -259,5 +259,37 @@
   $('#redirect-upload').click(function () {
     window.location.href = "{{route('file.up')}}"
   });
+
+  $('.single-delete').click(function () {
+    let list = [];
+    list.push($(this).val());
+
+    $(this).parent().remove();
+    $("#file-"+$(this).val()).remove();
+
+    $.ajax({
+      type: "POST",
+      url: "{{route('file.delete')}}",
+      data: {
+        "_token": $('meta[name="csrf-token"]').attr('content'),
+        data: list,
+      },
+
+      success: function success(data) {
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-success show mb-2');
+        $('#alert').html('Archivos eliminados con éxito');
+      },
+      error: function error(_error) {
+        console.log('error', _error);
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-danger show mb-2');
+        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+      }
+    });
+  });
+
 </script>
 @endsection
