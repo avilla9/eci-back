@@ -178,6 +178,44 @@ class ArticleController extends Controller {
 		return $request->id;
 	}
 
+	/* public function reaction(Request $request) {
+		$post = $request->post_id;
+		$user = $request->user_id;
+		$act = $request->action;
+		$action = Action::where('name', $act)->first();
+
+		$articleExists = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->get();
+
+		if (Count($articleExists)) {
+			DB::table('reactions')
+				->where([
+					'user_id' => $user,
+					'article_id' => $post,
+					'action_id' => $action->id,
+					'active' => '',
+					'clicks' => '',
+
+				])
+				->delete();
+			$articleid = 0;
+		} else {
+			$articleid = DB::table('reactions')->insertGetId([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			]);
+		}
+
+
+		return $articleid;
+	} */
+
 	public function like(Request $request) {
 		$post = $request->post_id;
 		$user = $request->user_id;
@@ -211,5 +249,69 @@ class ArticleController extends Controller {
 
 
 		return $articleid;
+	}
+
+
+	public function getReaction(Request $request) {
+
+		$data = [
+			'user_id' => $request->user_id,
+			'article_id' => $request->post_id,
+		];
+
+		$action = Action::where([
+			['name', $request->action],
+		])
+			->first();
+
+		$data['action_id'] = $action->id;
+
+		$query = DB::table('reactions')
+			->where($data)
+			->get();
+
+		return $query;
+	}
+
+	public function updateReaction(Request $request) {
+
+		$data = [
+			'user_id' => $request->user_id,
+			'article_id' => $request->post_id,
+		];
+
+		$action = Action::where([
+			['name', $request->action],
+		])
+			->first();
+
+		$data['action_id'] = $action->id;
+
+		$query = DB::table('reactions')
+			->where($data)
+			->get();
+
+
+		$newData = [
+			'user_id' => $data['user_id'],
+			'article_id' => $data['article_id'],
+			'action_id' => $data['action_id'],
+			'clicks' => $query->clicks,
+			'active' => $query->active,
+		];
+
+		// like
+		if ($request->action == 'like') {
+			array_key_exists('active', $newData) ? $newData['active'] = !$newData['active'] : $newData['active'] = 1;
+			array_key_exists('clicks', $newData) ? $newData['clicks']++ : $newData['clicks'] = 1;
+		} else if ($request->action == 'share') {
+			# code...
+		}
+
+		$query = DB::table('reactions')
+			->where($data)
+			->updateOrInsert($newData);
+
+		return $query;
 	}
 }

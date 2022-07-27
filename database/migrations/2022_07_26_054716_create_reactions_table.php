@@ -16,6 +16,8 @@ class CreateReactionsTable extends Migration {
             $table->integer('user_id')->nullable();
             $table->integer('article_id')->nullable();
             $table->integer('action_id')->nullable();
+            $table->integer('clicks')->nullable()->default(0);
+            $table->boolean('active')->nullable()->default(false);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
