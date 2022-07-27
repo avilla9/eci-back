@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(FileController::class)->group(function () {
             Route::post('/upload', 'upload')->name('file.upload');
+            Route::post('/delete', 'delete')->name('file.delete');
         });
     });
 

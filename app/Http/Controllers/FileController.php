@@ -7,6 +7,7 @@ use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Upload;
+use Illuminate\Support\Facades\DB;
 
 class FileController extends Controller {
 
@@ -87,5 +88,9 @@ class FileController extends Controller {
         ]);
 
         return back()->with('message', 'Your file is submitted Successfully');*/
+    }
+
+    public function delete(Request $request) {
+        return DB::table('files')->whereIn('id', $request->data)->delete();
     }
 }

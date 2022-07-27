@@ -50,8 +50,9 @@
     </div>
     <!-- END: File Manager Menu -->
   </div> --}}
-  <div class="col-span-12 lg:col-span-9 2xl:col-span-10">
+  <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
     <!-- BEGIN: File Manager Filter -->
+    <div id="alert" class="hidden"></div>
     <div class="intro-y flex flex-col-reverse sm:flex-row items-center">
       {{-- <div class="w-full sm:w-auto relative mr-auto mt-3 sm:mt-0">
         <i class="w-4 h-4 absolute my-auto inset-y-0 ml-3 left-0 z-10 text-slate-500" data-feather="search"></i>
@@ -94,23 +95,13 @@
         </div>
       </div> --}}
       <div class="w-full sm:w-auto flex">
-        <button class="btn btn-primary shadow-md mr-2">Subir archivos</button>
+        <button id="redirect-upload" class="btn btn-elevated-primary mr-2">Subir archivos</button>
       </div>
-      <div class="dropdown">
-        <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-          <span class="w-5 h-5 flex items-center justify-center">
-            <i class="w-4 h-4" data-feather="more-vertical"></i>
-          </span>
-        </button>
-        <div class="dropdown-menu w-40">
-          <ul class="dropdown-content">
-            <li>
-              <a href="" class="dropdown-item">
-                <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar Selección
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div class="w-full sm:w-auto flex">
+        <button id="checkAll" class="btn btn-elevated-success mr-2">Seleccionar todos</button>
+      </div>
+      <div class="w-full sm:w-auto flex">
+        <button id="deleteSelection" class="btn btn-elevated-danger mr-2">Borrar selección</button>
       </div>
     </div>
     <!-- END: File Manager Filter -->
@@ -120,7 +111,7 @@
       <div class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
         <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
           <div class="absolute left-0 top-0 mt-3 ml-3">
-            <input class="form-check-input border border-slate-500" type="checkbox">
+            <input class="form-check-input border border-slate-500" type="checkbox" value="{{$file['id']}}">
           </div>
 
           <div class="w-3/5 file__icon file__icon--image mx-auto">
@@ -148,7 +139,7 @@
 
           <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
           <div class="text-slate-500 text-xs text-center mt-0.5">{{ number_format(
-              (float)(intval($file['media_size']) / (1024 * 1024)), 2, '.', ''
+            (float)(intval($file['media_size']) / (1024 * 1024)), 2, '.', ''
             ) }} Mb</div>
           <div class="absolute top-0 right-0 mr-2 mt-3 dropdown ml-auto">
             <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"
@@ -221,4 +212,52 @@
     <!-- END: Pagination -->
   </div>
 </div>
+@endsection
+
+@section('script')
+<script>
+  $('#deleteSelection').click(function () {
+    list = $('input[type=checkbox]:checked').map(function(i, el) {
+      let value = $(el).val();
+      $(el).parent().parent().parent().remove();
+      return value;
+    }).get();
+
+    console.log(list);
+
+    $.ajax({
+      type: "POST",
+      url: "{{route('file.delete')}}",
+      data: {
+        "_token": $('meta[name="csrf-token"]').attr('content'),
+        data: list,
+      },
+
+      success: function success(data) {
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-success show mb-2');
+        $('#alert').html('Archivos eliminados con éxito');
+      },
+      error: function error(_error) {
+        console.log('error', _error);
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-danger show mb-2');
+        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+      }
+    });
+    
+
+  });
+
+  $("#checkAll").click(function () {
+    let checked = $('input:checkbox').is(':checked');
+    $('input:checkbox').not(this).prop('checked', !checked);
+  });
+
+  $('#redirect-upload').click(function () {
+    window.location.href = "{{route('file.up')}}"
+  });
+</script>
 @endsection
