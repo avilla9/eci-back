@@ -36,7 +36,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/posts')->group(function () {
     Route::controller(ArticleController::class)->group(function () {
         Route::post('/list', 'list')->name('posts.list');
-        Route::post('/stories', 'showStories')->name('stories.list');
+        Route::prefix('/stories')->group(function () {
+            Route::post('/', 'showStories')->name('stories.list');
+            Route::post('/view', 'viewStories')->name('viewStories');
+        });
     });
 });
 
@@ -66,8 +69,8 @@ Route::prefix('/roles')->group(function () {
     });
 });
 
-Route::prefix('/stories')->group(function () {
+/* Route::prefix('/stories')->group(function () {
     Route::controller(StoryController::class)->group(function () {
         Route::get('/', 'show')->name('all.stories');
     });
-});
+}); */

@@ -75,8 +75,9 @@ class ArticleController extends Controller {
 
 	public function showStories(Request $request) {
 		$stories = DB::table('articles')
-			->select('articles.*', 'files.media_path')
+			->select('articles.*', 'files.media_path', 'reactions.active as view')
 			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
+			->leftJoin('reactions', 'reactions.article_id', '=', 'articles.id')
 			->join('files', 'files.id', '=', 'articles.file_id')
 			->where([
 				['articles.active', 1],
@@ -88,16 +89,32 @@ class ArticleController extends Controller {
 				$query->where([
 					['articles.active', 1],
 					['articles.post_type', 'story'],
-					['articles.unrestricted', 1]
+					['articles.unrestricted', 1],
 				]);
 				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
 			})
 			->distinct()
+			->orderBy('view', 'asc')
 			->orderBy('articles.created_at', 'desc')
 			->orderBy('articles.id', 'desc')
 			->get();
 
 		return $stories;
+	}
+
+	public function viewStories(Request $request) {
+		return DB::table('reactions')
+			->updateOrInsert(
+				[
+					'user_id' => $request->user_id,
+					'article_id' => $request->post_id,
+				],
+				[
+					'user_id' => $request->user_id,
+					'article_id' => $request->post_id,
+					'active' => 1,
+				]
+			);
 	}
 
 	public function homeCreate(Request $request) {
