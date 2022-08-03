@@ -134,13 +134,33 @@ class PageController extends Controller {
         ]);
     }
 
-    public function storieCreate() {
+    /* public function storieCreate() {
         $data = contentParameters();
         return view('pages/stories/create', $data);
     }
 
     public function storieList() {
         return view('pages/stories/list');
+    } */
+
+    public function storieCreate() {
+        $data = contentParameters();
+        return view('pages/content/stories/create', $data);
+    }
+
+    public function storieList() {
+        $stories = DB::table('articles')
+            ->select('articles.*', 'files.media_path')
+            ->join('files', 'files.id', '=', 'articles.file_id')
+            ->where('articles.post_type', 'story')
+            ->whereRaw('DATEDIFF(CURDATE(), articles.created_at) <= 1')
+            ->orderBy('articles.created_at', 'desc')
+            ->orderBy('articles.id', 'desc')
+            ->get();
+
+        return view('pages/content/stories/list', [
+            'articles'  => $stories,
+        ]);
     }
 
     public function homeCreate() {

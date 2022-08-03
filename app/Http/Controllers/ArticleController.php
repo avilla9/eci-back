@@ -12,6 +12,67 @@ use Illuminate\Support\Facades\DB;
 use function PHPSTORM_META\map;
 
 class ArticleController extends Controller {
+	public function delete(Request $request) {
+		Article::where('id', $request->id)->delete();
+		return $request->id;
+	}
+
+	public function access(Request $request) {
+		return DB::table('accesses')
+			->join('users', 'users.id', '=', 'accesses.user_id')
+			->where('accesses.article_id', $request->id)
+			->get();
+	}
+
+	public function storyCreate(Request $request) {
+		$data = [
+			'title' => 'story',
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => 'story',
+		];
+
+		$articleid = DB::table('articles')->insertGetId($data);
+
+		if ($data['unrestricted']) {
+			return $articleid;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleid,
+					]);
+			}
+
+			return $users;
+		}
+	}
+
 	public function homeCreate(Request $request) {
 		$data = [
 			'title' => $request->title,
@@ -34,11 +95,11 @@ class ArticleController extends Controller {
 			return $articleid;
 		} else {
 			$filters = [
-				'groups' => count($request->groups) > 0 ? $request->groups : [0],
-				'quartiles' => count($request->quartiles) > 0 ? $request->quartiles : [0],
-				'delegations' => count($request->delegations) > 0 ? $request->delegations : [0],
-				'roles' => count($request->roles) > 0 ? $request->roles : [0],
-				'users' => count($request->users) > 0 ? $request->users : [0],
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
 			$users = DB::table('users')
@@ -59,6 +120,8 @@ class ArticleController extends Controller {
 						'article_id' => $articleid,
 					]);
 			}
+
+			return $users;
 		}
 	}
 
@@ -85,11 +148,11 @@ class ArticleController extends Controller {
 			return $articleid;
 		} else {
 			$filters = [
-				'groups' => count($request->groups) > 0 ? $request->groups : [0],
-				'quartiles' => count($request->quartiles) > 0 ? $request->quartiles : [0],
-				'delegations' => count($request->delegations) > 0 ? $request->delegations : [0],
-				'roles' => count($request->roles) > 0 ? $request->roles : [0],
-				'users' => count($request->users) > 0 ? $request->users : [0],
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
 			$users = DB::table('users')
@@ -110,6 +173,8 @@ class ArticleController extends Controller {
 						'article_id' => $articleid,
 					]);
 			}
+
+			return $users;
 		}
 	}
 
@@ -171,11 +236,6 @@ class ArticleController extends Controller {
 		}
 
 		return $data;
-	}
-
-	public function delete(Request $request) {
-		Article::where('id', $request->id)->delete();
-		return $request->id;
 	}
 
 	/* public function reaction(Request $request) {
