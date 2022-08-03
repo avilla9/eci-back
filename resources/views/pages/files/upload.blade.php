@@ -11,29 +11,28 @@
 <div class="grid grid-cols-12 gap-6 mt-5">
   <div class="intro-y col-span-12 lg:col-span-12">
     @if(session()->get('message'))
-      <div class="alert alert-success mb-3">
-        {{ session()->get('message') }}
-      </div>
+    <div class="alert alert-success mb-3">
+      {{ session()->get('message') }}
+    </div>
     @endif
-    <form action="{{ route('file.store') }}" method="post" enctype="multipart/form-data">
-      @csrf
-      <div>
-        <label class="form-label">Título</label>
-        <input type="text" name="title" class="form-control" placeholder="Título">
+    <div id="multiple-file-upload" class="p-5">
+      <div class="preview" class="dropzone">
+        <form data-single="false" action="{{route('file.upload')}}" method="POST" enctype="multipart/form-data"
+          class="dropzone">
+          @csrf
+          <div class="fallback">
+            <input name="file" type="file" multiple />
+          </div>
+          <div class="dz-message" data-dz-message>
+            <div class="text-lg font-medium">Arrastra y suelta o haz clic</div>
+            <div class="text-slate-500">
+              Seleccione archivos multimedia
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="mt-3">
-        <label class="form-label">Descripción</label>
-        <input type="text" name="overview" class="form-control" placeholder="Descripción">
-      </div>
-
-      <div class="form-group mt-3">
-        <input type="file" name="file" class="form-control"
-          accept=".jpg,.jpeg,.bmp,.png,.gif,.doc,.docx,.csv,.rtf,.xlsx,.xls,.txt,.pdf,.zip">
-      </div>
-
-      <button class="btn btn-primary mt-5">Guardar</button>
-    </form>
-    {{-- <form action="{{ route('file.store') }}" method="POST">
+    </div>
+    {{-- <form action="{{ route('file.upload') }}" method="POST">
       @csrf
       <div class="form-group row">
         <label for="title" class="col-sm-4 col-form-label text-md-right">{{ __('Title') }}</label>
@@ -85,17 +84,4 @@
     </form> --}}
   </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-  var drop = new Dropzone('#file', {
-    createImageThumbnails: false,
-    addRemoveLinks: true,
-    url: "{{ route('file.upload') }}",
-    headers: {
-      'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-    }
-  });
-</script>
 @endsection

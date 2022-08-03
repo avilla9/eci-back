@@ -44,8 +44,8 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::controller(FileController::class)->group(function () {
-            Route::post('/store', 'store')->name('file.store');
             Route::post('/upload', 'upload')->name('file.upload');
+            Route::post('/delete', 'delete')->name('file.delete');
         });
     });
 
@@ -89,20 +89,20 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('/stories')->group(function () {
-        Route::controller(PageController::class)->group(function () {
-            Route::get('/crear', 'storieCreate')->name('create-storie');
-            Route::get('/lista', 'storieList')->name('stories-list');
-        });
-
-        Route::controller(StoryController::class)->group(function () {
-            Route::post('/store', 'store')->name('story.store');
-        });
-    });
-
     Route::prefix('/posts')->group(function () {
         Route::controller(ArticleController::class)->group(function () {
             Route::post('/delete', 'delete')->name('article.delete');
+            Route::post('/access', 'access')->name('article.access');
+        });
+        Route::prefix('/stories')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'storieCreate')->name('create-storie');
+                Route::get('/lista', 'storieList')->name('stories-list');
+            });
+
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'storyCreate')->name('story.create');
+            });
         });
         Route::prefix('/home')->group(function () {
             Route::controller(PageController::class)->group(function () {

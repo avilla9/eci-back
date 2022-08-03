@@ -98,7 +98,7 @@ import Dropzone from "dropzone";
                 let printData = '';
                 for (let i = 0; i < data.length; i++) {
                   const item = data[i];
-                  let tr = '<tr id="'+item.id+'">'
+                  let tr = '<tr id="' + item.id + '">'
                     + '<td class="text-right">'
                     + item.dni
                     + '</td>'
@@ -168,6 +168,43 @@ import Dropzone from "dropzone";
       });
     });
   });
+
+  if ($("#multiple-file-upload").length) {
+    console.log('multiple')
+    $(".dropzone").each(function () {
+      let options = {
+        accept: (file, done) => {
+          console.log("Uploaded");
+          done();
+        },
+        success: function (file, response) {
+          console.log(response);
+        }
+      };
+  
+      if ($(this).data("file-types")) {
+        options.accept = (file, done) => {
+          if (
+            $(this).data("file-types").split("|").indexOf(file.type) ===
+            -1
+          ) {
+            alert("Error! Files of this type are not accepted");
+            done("Error! Files of this type are not accepted");
+          } else {
+            console.log("Uploaded");
+            done();
+          }
+        };
+      }
+  
+      let dz = new Dropzone(this, options);
+  
+      /* dz.on("maxfilesexceeded", (file) => {
+        alert("No more files please!");
+      }); */
+    });
+  }
+
   /* // Dropzone
   $(".dropzone").each(function () {
       let options = {

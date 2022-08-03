@@ -3,13 +3,120 @@
 namespace App\Http\Controllers;
 
 use App\Models\Access;
+use App\Models\Action;
 use App\Models\Article;
+use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use function PHPSTORM_META\map;
 
 class ArticleController extends Controller {
+	public function delete(Request $request) {
+		Article::where('id', $request->id)->delete();
+		return $request->id;
+	}
+
+	public function access(Request $request) {
+		return DB::table('accesses')
+			->join('users', 'users.id', '=', 'accesses.user_id')
+			->where('accesses.article_id', $request->id)
+			->get();
+	}
+
+	public function storyCreate(Request $request) {
+		$data = [
+			'title' => 'story',
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => 'story',
+		];
+
+		$articleid = DB::table('articles')->insertGetId($data);
+
+		if ($data['unrestricted']) {
+			return $articleid;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleid,
+					]);
+			}
+
+			return $users;
+		}
+	}
+
+	public function showStories(Request $request) {
+		$stories = DB::table('articles')
+			->select('articles.*', 'files.media_path', 'reactions.active as view')
+			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
+			->leftJoin('reactions', 'reactions.article_id', '=', 'articles.id')
+			->join('files', 'files.id', '=', 'articles.file_id')
+			->where([
+				['articles.active', 1],
+				['articles.post_type', 'story'],
+				['accesses.user_id', $request->user_id]
+			])
+			->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1')
+			->orWhere(function ($query) {
+				$query->where([
+					['articles.active', 1],
+					['articles.post_type', 'story'],
+					['articles.unrestricted', 1],
+				]);
+				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
+			})
+			->distinct()
+			->orderBy('view', 'asc')
+			->orderBy('articles.created_at', 'desc')
+			->orderBy('articles.id', 'desc')
+			->get();
+
+		return $stories;
+	}
+
+	public function viewStories(Request $request) {
+		return DB::table('reactions')
+			->updateOrInsert(
+				[
+					'user_id' => $request->user_id,
+					'article_id' => $request->post_id,
+				],
+				[
+					'user_id' => $request->user_id,
+					'article_id' => $request->post_id,
+					'active' => 1,
+				]
+			);
+	}
+
 	public function homeCreate(Request $request) {
 		$data = [
 			'title' => $request->title,
@@ -32,11 +139,11 @@ class ArticleController extends Controller {
 			return $articleid;
 		} else {
 			$filters = [
-				'groups' => count($request->groups) > 0 ? $request->groups : [0],
-				'quartiles' => count($request->quartiles) > 0 ? $request->quartiles : [0],
-				'delegations' => count($request->delegations) > 0 ? $request->delegations : [0],
-				'roles' => count($request->roles) > 0 ? $request->roles : [0],
-				'users' => count($request->users) > 0 ? $request->users : [0],
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
 			$users = DB::table('users')
@@ -57,6 +164,8 @@ class ArticleController extends Controller {
 						'article_id' => $articleid,
 					]);
 			}
+
+			return $users;
 		}
 	}
 
@@ -83,11 +192,11 @@ class ArticleController extends Controller {
 			return $articleid;
 		} else {
 			$filters = [
-				'groups' => count($request->groups) > 0 ? $request->groups : [0],
-				'quartiles' => count($request->quartiles) > 0 ? $request->quartiles : [0],
-				'delegations' => count($request->delegations) > 0 ? $request->delegations : [0],
-				'roles' => count($request->roles) > 0 ? $request->roles : [0],
-				'users' => count($request->users) > 0 ? $request->users : [0],
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
 			$users = DB::table('users')
@@ -108,6 +217,8 @@ class ArticleController extends Controller {
 						'article_id' => $articleid,
 					]);
 			}
+
+			return $users;
 		}
 	}
 
@@ -120,8 +231,6 @@ class ArticleController extends Controller {
 			->join('pages', 'pages.id', '=', 'sections.page_id')
 			->where('pages.title', $page)
 			->get();
-
-		//return $sections;
 
 		$data = [];
 		foreach ($sections as $key => $section) {
@@ -146,6 +255,24 @@ class ArticleController extends Controller {
 				->orderBy('articles.id', 'desc')
 				->get();
 
+			foreach ($articles as $key => $article) {
+				$reactions = DB::table('reactions')
+					->select('reactions.*', 'actions.name')
+					->join('actions', 'actions.id', '=', 'reactions.action_id')
+					->where([
+						['article_id', $article->id],
+						['user_id', $user_id],
+						['user_id', $user_id],
+					])
+					->get();
+
+				if (Count($reactions)) {
+					$article->reactions = $reactions;
+				} else {
+					$article->reactions = [];
+				}
+			}
+
 			$data[] = [
 				'section' => $section->title,
 				'articles' => $articles
@@ -155,8 +282,167 @@ class ArticleController extends Controller {
 		return $data;
 	}
 
-	public function delete(Request $request) {
-		Article::where('id', $request->id)->delete();
-		return $request->id;
+	/* public function reaction(Request $request) {
+		$post = $request->post_id;
+		$user = $request->user_id;
+		$act = $request->action;
+		$action = Action::where('name', $act)->first();
+
+		$articleExists = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->get();
+
+		if (Count($articleExists)) {
+			DB::table('reactions')
+				->where([
+					'user_id' => $user,
+					'article_id' => $post,
+					'action_id' => $action->id,
+					'active' => '',
+					'clicks' => '',
+
+				])
+				->delete();
+			$articleid = 0;
+		} else {
+			$articleid = DB::table('reactions')->insertGetId([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			]);
+		}
+
+
+		return $articleid;
+	} */
+
+	public function like(Request $request) {
+		$post = $request->post_id;
+		$user = $request->user_id;
+		$action = Action::where('name', 'like')->first();
+
+
+		$articleExists = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->get();
+
+		if (Count($articleExists)) {
+			DB::table('reactions')
+				->where([
+					'user_id' => $user,
+					'article_id' => $post,
+					'action_id' => $action->id,
+				])
+				->delete();
+			$articleid = 0;
+		} else {
+			$articleid = DB::table('reactions')->insertGetId([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			]);
+		}
+
+
+		return $articleid;
+	}
+
+	public function view(Request $request) {
+		$post = $request->post_id;
+		$user = $request->user_id;
+		$action = Action::where('name', 'view')->first();
+
+
+		$articleExists = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->get();
+
+		$articleid = DB::table('reactions')
+			->where([
+				'user_id' => $user,
+				'article_id' => $post,
+				'action_id' => $action->id,
+			])
+			->updateOrInsert([
+				'clicks' => property_exists($articleExists, 'clicks') ? $articleExists->clicks + 1 : 1,
+			]);
+
+		return $articleid;
+	}
+
+
+	public function getReaction(Request $request) {
+
+		$data = [
+			'user_id' => $request->user_id,
+			'article_id' => $request->post_id,
+		];
+
+		$action = Action::where([
+			['name', $request->action],
+		])
+			->first();
+
+		$data['action_id'] = $action->id;
+
+		$query = DB::table('reactions')
+			->where($data)
+			->get();
+
+		return $query;
+	}
+
+	public function updateReaction(Request $request) {
+
+		$data = [
+			'user_id' => $request->user_id,
+			'article_id' => $request->post_id,
+		];
+
+		$action = Action::where([
+			['name', $request->action],
+		])
+			->first();
+
+		$data['action_id'] = $action->id;
+
+		$query = DB::table('reactions')
+			->where($data)
+			->get();
+
+
+		$newData = [
+			'user_id' => $data['user_id'],
+			'article_id' => $data['article_id'],
+			'action_id' => $data['action_id'],
+			'clicks' => $query->clicks,
+			'active' => $query->active,
+		];
+
+		// like
+		if ($request->action == 'like') {
+			array_key_exists('active', $newData) ? $newData['active'] = !$newData['active'] : $newData['active'] = 1;
+			array_key_exists('clicks', $newData) ? $newData['clicks']++ : $newData['clicks'] = 1;
+		} else if ($request->action == 'share') {
+			# code...
+		}
+
+		$query = DB::table('reactions')
+			->where($data)
+			->updateOrInsert($newData);
+
+		return $query;
 	}
 }

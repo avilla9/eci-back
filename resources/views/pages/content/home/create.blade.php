@@ -142,6 +142,6 @@
 @endsection
 
 @section('script')
-<script src="{{ mix('dist/js/ckeditor-document.js') }}"></script>
+<script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
 <script src="{{ asset('dist/js/articles/home.js') }}"></script>
 @endsection
