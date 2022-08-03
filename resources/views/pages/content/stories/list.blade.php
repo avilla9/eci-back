@@ -49,10 +49,8 @@
                 @if ($article->unrestricted)
                 Todos
                 @else
-                <button data-target="#users-modal" data-tw-toggle="modal" article_id="{{$article->id}}"
-                  class="view flex items-center text-primary">
-                  <i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver
-                </button>
+                <a href="javascript:;" data-tw-toggle="modal" article_id="{{$article->id}}" data-tw-target="#user-list"
+                  class="view flex items-center text-primary"><i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver</a>
                 @endif
               </td>
               <td><button article_id="{{$article->id}}" class="delete flex items-center text-danger">
@@ -68,11 +66,30 @@
 </div>
 <!-- END: Table Head Options -->
 
-<div id="users-modal" class="modal" tabindex="-1" aria-hidden="true">
+<div id="user-list" class="modal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-body p-10 text-center">
-        This is totally awesome superlarge modal!
+      <div class="modal-header">
+        <h2 class="font-medium text-base mr-auto">Lista de usuarios con acceso a la story</h2>
+        <button type="button" class="btn btn-outline-secondary mr-1 mb-2" data-tw-dismiss="modal">X</button>
+      </div>
+      <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+        <div class="intro-y col-span-12 lg:col-span-12">
+          <table class="table">
+            <thead class="table-dark">
+              <th>#</th>
+              <th>DNI</th>
+              <th>Nombre</th>
+              <th>Email</th>
+            </thead>
+            <tbody id="access-details">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary w-20 mr-1" data-tw-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
@@ -94,6 +111,17 @@
       },
       success: function success(data) {
         console.log(data);
+        $('#access-details').html('');
+        $.map(data, function (val, index) {
+          $('#access-details').append(`
+          <tr>
+            <td class="whitespace-nowrap">${index + 1}</td>
+            <td class="whitespace-nowrap">${val.dni}</td>
+            <td class="whitespace-nowrap">${val.name}</td>
+            <td class="whitespace-nowrap">${val.email}</td>
+          </tr>
+          `);
+        });
       },
       error: function error(_error) {
         console.log('error', _error);
