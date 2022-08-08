@@ -306,6 +306,19 @@ class PageController extends Controller {
         ]);
     }
 
+    public function contentaccessCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Accesos');
+        $data['sections'] = $sections;
+        return view('pages/content/access/create', $data);
+    }
+
+    function contentaccessList() {
+        return view('pages/content/access/list', [
+            'articles'  => articlesByPage('Accesos')
+        ]);
+    }
+
     public function filesList() {
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
 

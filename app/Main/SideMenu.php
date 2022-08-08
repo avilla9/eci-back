@@ -322,6 +322,28 @@ class SideMenu {
                     ],
                 ]
             ],
+            'access-content' => [
+                'icon' => 'log-in',
+                'title' => 'Accesos',
+                'sub_menu' => [
+                    'content-access-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'content-access-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'content-access-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'content-access-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
             'devider',
             'menu-layout' => [
                 'icon' => 'box',
