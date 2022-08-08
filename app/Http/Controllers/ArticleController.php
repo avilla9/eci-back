@@ -327,6 +327,58 @@ class ArticleController extends Controller {
 		}
 	}
 
+	function roomCreate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => $request->post_type,
+		];
+
+		$articleid = DB::table('articles')->insertGetId($data);
+
+		if ($data['unrestricted']) {
+			return $articleid;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleid,
+					]);
+			}
+
+			return $users;
+		}
+	}
+
 	public function list(Request $request) {
 		$user_id = $request->user_id;
 		$page = $request->page;
@@ -381,6 +433,7 @@ class ArticleController extends Controller {
 			$data[] = [
 				'id' => $section->id,
 				'section' => $section->title,
+				'description' => $section->description,
 				'subtitle' => $section->subtitle,
 				'custom_class' => $section->custom_class,
 				'articles' => $articles

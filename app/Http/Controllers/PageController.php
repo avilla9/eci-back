@@ -271,6 +271,19 @@ class PageController extends Controller {
         ]);
     }
 
+    public function contentroomCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Salas');
+        $data['sections'] = $sections;
+        return view('pages/content/room/create', $data);
+    }
+
+    function contentroomList() {
+        return view('pages/content/room/list', [
+            'articles'  => articlesByPage('Salas')
+        ]);
+    }
+
     public function filesList() {
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
 

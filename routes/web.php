@@ -152,6 +152,16 @@ Route::middleware('auth')->group(function () {
                 Route::post('/create', 'rewardCreate')->name('reward.create');
             });
         });
+
+        Route::prefix('/room')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentroomCreate')->name('content-room-create');
+                Route::get('/lista', 'contentroomList')->name('content-room-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'roomCreate')->name('room.create');
+            });
+        });
     });
 
     Route::prefix('/produccion')->group(function () {

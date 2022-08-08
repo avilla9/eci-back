@@ -292,6 +292,28 @@ class SideMenu {
                     ],
                 ]
             ],
+            'room-content' => [
+                'icon' => 'star',
+                'title' => 'Salas',
+                'sub_menu' => [
+                    'content-room-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'content-room-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'content-room-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'content-room-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
             'devider',
             'menu-layout' => [
                 'icon' => 'box',
