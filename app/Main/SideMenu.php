@@ -248,6 +248,28 @@ class SideMenu {
                     ],
                 ]
             ],
+            'knowledge-content' => [
+                'icon' => 'settings',
+                'title' => 'Conocimiento',
+                'sub_menu' => [
+                    'content-knowledge-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'content-knowledge-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'content-knowledge-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'content-knowledge-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
             'devider',
             'menu-layout' => [
                 'icon' => 'box',

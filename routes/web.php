@@ -122,6 +122,7 @@ Route::middleware('auth')->group(function () {
                 Route::post('/create', 'campaignCreate')->name('campaign.create');
             });
         });
+
         Route::prefix('/adoption')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentadoptionCreate')->name('content-adoption-create');
@@ -129,6 +130,16 @@ Route::middleware('auth')->group(function () {
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'adoptionCreate')->name('adoption.create');
+            });
+        });
+
+        Route::prefix('/knowledge')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentknowledgeCreate')->name('content-knowledge-create');
+                Route::get('/lista', 'contentknowledgeList')->name('content-knowledge-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'knowledgeCreate')->name('knowledge.create');
             });
         });
     });

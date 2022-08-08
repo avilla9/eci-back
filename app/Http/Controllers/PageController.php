@@ -245,6 +245,19 @@ class PageController extends Controller {
         return view('pages/campaigns/list', compact(['campaigns']));
     }
 
+    public function contentknowledgeCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Conocimiento');
+        $data['sections'] = $sections;
+        return view('pages/content/knowledge/create', $data);
+    }
+
+    function contentknowledgeList() {
+        return view('pages/content/home/list', [
+            'articles'  => articlesByPage('Conocimiento')
+        ]);
+    }
+
     public function filesList() {
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
 
