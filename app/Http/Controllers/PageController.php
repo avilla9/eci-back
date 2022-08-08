@@ -253,8 +253,21 @@ class PageController extends Controller {
     }
 
     function contentknowledgeList() {
-        return view('pages/content/home/list', [
+        return view('pages/content/knowledge/list', [
             'articles'  => articlesByPage('Conocimiento')
+        ]);
+    }
+
+    public function contentrewardCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Recompensas');
+        $data['sections'] = $sections;
+        return view('pages/content/reward/create', $data);
+    }
+
+    function contentrewardList() {
+        return view('pages/content/reward/list', [
+            'articles'  => articlesByPage('Recompensas')
         ]);
     }
 

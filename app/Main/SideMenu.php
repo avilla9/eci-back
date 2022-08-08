@@ -270,6 +270,28 @@ class SideMenu {
                     ],
                 ]
             ],
+            'reward-content' => [
+                'icon' => 'thumbs-up',
+                'title' => 'Recompensas',
+                'sub_menu' => [
+                    'content-reward-create' => [
+                        'title' => 'Crear contenido',
+                        'icon' => '',
+                        'route_name' => 'content-reward-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                    'content-reward-list' => [
+                        'title' => 'Ver contenido',
+                        'icon' => '',
+                        'route_name' => 'content-reward-list',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
+                ]
+            ],
             'devider',
             'menu-layout' => [
                 'icon' => 'box',

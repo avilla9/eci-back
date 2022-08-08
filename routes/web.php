@@ -142,6 +142,16 @@ Route::middleware('auth')->group(function () {
                 Route::post('/create', 'knowledgeCreate')->name('knowledge.create');
             });
         });
+
+        Route::prefix('/reward')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentrewardCreate')->name('content-reward-create');
+                Route::get('/lista', 'contentrewardList')->name('content-reward-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'rewardCreate')->name('reward.create');
+            });
+        });
     });
 
     Route::prefix('/produccion')->group(function () {
