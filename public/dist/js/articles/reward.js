@@ -140,7 +140,7 @@ $('#save').click(function (e) {
 
     $.ajax({
       type: "POST",
-      url: '/posts/knowledge/create',
+      url: '/posts/reward/create',
       data: data,
       success: function success(data) {
         console.log('success', data);

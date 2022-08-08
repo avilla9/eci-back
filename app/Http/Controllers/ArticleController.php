@@ -382,6 +382,7 @@ class ArticleController extends Controller {
 				'id' => $section->id,
 				'section' => $section->title,
 				'subtitle' => $section->subtitle,
+				'custom_class' => $section->custom_class,
 				'articles' => $articles
 			];
 		}
