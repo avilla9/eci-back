@@ -122,6 +122,7 @@ Route::middleware('auth')->group(function () {
                 Route::post('/create', 'campaignCreate')->name('campaign.create');
             });
         });
+
         Route::prefix('/adoption')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentadoptionCreate')->name('content-adoption-create');
@@ -129,6 +130,48 @@ Route::middleware('auth')->group(function () {
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'adoptionCreate')->name('adoption.create');
+            });
+        });
+
+        Route::prefix('/knowledge')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentknowledgeCreate')->name('content-knowledge-create');
+                Route::get('/lista', 'contentknowledgeList')->name('content-knowledge-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'knowledgeCreate')->name('knowledge.create');
+            });
+        });
+
+        Route::prefix('/reward')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentrewardCreate')->name('content-reward-create');
+                Route::get('/lista', 'contentrewardList')->name('content-reward-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'rewardCreate')->name('reward.create');
+            });
+        });
+
+        Route::prefix('/room')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentroomCreate')->name('content-room-create');
+                Route::get('/lista', 'contentroomList')->name('content-room-list');
+                Route::get('/secciones', 'contentroomSections')->name('section-room-create');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'roomCreate')->name('room.create');
+                Route::post('/section', 'roomSection')->name('room.section');
+            });
+        });
+
+        Route::prefix('/access')->group(function () {
+            Route::controller(PageController::class)->group(function () {
+                Route::get('/crear', 'contentaccessCreate')->name('content-access-create');
+                Route::get('/lista', 'contentaccessList')->name('content-access-list');
+            });
+            Route::controller(ArticleController::class)->group(function () {
+                Route::post('/create', 'accessCreate')->name('access.create');
             });
         });
     });

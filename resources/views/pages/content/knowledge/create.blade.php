@@ -1,13 +1,13 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>Crear contenido - Adopción</title>
+<title>Crear contenido - Conocimiento</title>
 @endsection
 
 @section('subcontent')
 <div id="alert" class="hidden"></div>
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-  <h2 class="text-lg font-medium mr-auto">Crear contenido para Adopción</h2>
+  <h2 class="text-lg font-medium mr-auto">Crear contenido para la sección Conocimiento</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
     <button id="save" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
       Guardar <i class="w-4 h-4 ml-2" data-feather="database"></i>
@@ -18,14 +18,6 @@
   <!-- BEGIN: Post Content -->
   <div class="intro-y col-span-12 lg:col-span-9">
     <div class="form-inline mt-3 mb-2">
-      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Campaña</label>
-      <select name="campaign" data-placeholder="Seleccione una Campaña" class="form-control tom-select w-full mb-2">
-        @foreach ($campaigns as $campaign)
-        <option value="{{$campaign->id}}">{{$campaign->title}}</option>
-        @endforeach
-      </select>
-    </div>
-    <div class="form-inline mb-2">
       <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Sección</label>
       <select name="section" data-placeholder="Seleccione una sección" class="form-control tom-select w-full mb-2">
         @foreach ($sections as $section)
@@ -41,6 +33,12 @@
       <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Descripción corta</label>
       <input name="short_description" id="horizontal-form-2" type="text" class="form-control" placeholder="Descripción corta">
     </div>
+    
+    <div class="form-inline mb-2">
+    <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link de la descripción</label>
+      <input name="link_short_description" id="horizontal-form-2" type="text" class="form-control" placeholder="Enlace en la descripción (opcional)">
+    </div>
+
     <div class="form-inline mb-2">
       <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Tipo de contenido</label>
       <div class="flex flex-col sm:flex-row content-center">
@@ -151,5 +149,5 @@
 
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
-<script src="{{ asset('dist/js/articles/campaign.js') }}"></script>
+<script src="{{ asset('dist/js/articles/knowledge.js') }}"></script>
 @endsection

@@ -19,3 +19,4 @@ Homestead.json
 .phpunit.result.cache
 
 public/file
+.rnd

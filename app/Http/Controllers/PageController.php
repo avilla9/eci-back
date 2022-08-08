@@ -216,7 +216,7 @@ class PageController extends Controller {
                 'pages.title as page_title',
             )
             ->join('pages', 'pages.id', '=', 'campaigns.page_id')
-            ->where('pages.title', 'Campaña')
+            ->where('pages.title', 'Adopción')
             ->orderBy('created_at', 'desc')
             ->get();
         return view('pages/content/adoption/create', $data);
@@ -243,6 +243,80 @@ class PageController extends Controller {
             ->orderBy('created_at', 'desc')
             ->get();
         return view('pages/campaigns/list', compact(['campaigns']));
+    }
+
+    public function contentknowledgeCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Conocimiento');
+        $data['sections'] = $sections;
+        return view('pages/content/knowledge/create', $data);
+    }
+
+    function contentknowledgeList() {
+        return view('pages/content/knowledge/list', [
+            'articles'  => articlesByPage('Conocimiento')
+        ]);
+    }
+
+    public function contentrewardCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Recompensas');
+        $data['sections'] = $sections;
+        return view('pages/content/reward/create', $data);
+    }
+
+    function contentrewardList() {
+        return view('pages/content/reward/list', [
+            'articles'  => articlesByPage('Recompensas')
+        ]);
+    }
+
+    public function contentroomCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Salas');
+        $data['sections'] = $sections;
+        return view('pages/content/room/create', $data);
+    }
+
+    function contentroomList() {
+        return view('pages/content/room/list', [
+            'articles'  => articlesByPage('Salas')
+        ]);
+    }
+
+    function contentroomSections() {
+        $sections = DB::table('pages')
+            ->join('sections', 'sections.page_id', '=', 'pages.id')
+            ->where('pages.title', 'Salas')
+            ->get();
+
+        $articles = DB::table('pages')
+            ->select('sections.*', 'files.media_path as img')
+            ->join('sections', 'sections.page_id', '=', 'pages.id')
+            ->leftJoin('files', 'files.id', '=', 'sections.file_id')
+            ->where('pages.title', 'Salas')
+            ->get();
+            
+        $files = File::where('media_type', 'like', '%image%')->latest()->get();
+
+        return view('pages/content/room/sections', [
+            'sections' => $sections,
+            'articles'  => $articles,
+            'files' => $files
+        ]);
+    }
+
+    public function contentaccessCreate() {
+        $data = contentParameters();
+        $sections = sectionParameters('Accesos');
+        $data['sections'] = $sections;
+        return view('pages/content/access/create', $data);
+    }
+
+    function contentaccessList() {
+        return view('pages/content/access/list', [
+            'articles'  => articlesByPage('Accesos')
+        ]);
     }
 
     public function filesList() {
