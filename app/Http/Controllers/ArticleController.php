@@ -411,11 +411,12 @@ class ArticleController extends Controller {
 		$user_id = $request->user_id;
 		$page = $request->page;
 
-		$sections = DB::table('sections')
-			->select('sections.*')
-			->join('pages', 'pages.id', '=', 'sections.page_id')
-			->where('pages.title', $page)
-			->get();
+		$sections = DB::table('pages')
+		->select('sections.*', 'files.media_path as img')
+		->join('sections', 'sections.page_id', '=', 'pages.id')
+		->leftJoin('files', 'files.id', '=', 'sections.file_id')
+		->where('pages.title', $page)
+		->get();
 
 		$data = [];
 		foreach ($sections as $key => $section) {
@@ -462,6 +463,7 @@ class ArticleController extends Controller {
 				'id' => $section->id,
 				'section' => $section->title,
 				'description' => $section->description,
+				'img' => $section->img,
 				'subtitle' => $section->subtitle,
 				'custom_class' => $section->custom_class,
 				'articles' => $articles

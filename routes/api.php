@@ -53,6 +53,7 @@ Route::prefix('/users')->group(function () {
         Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');
         Route::post('/delete', 'delete')->name('delete-users');
         Route::post('/data', 'getUserData');
+        Route::post('/level', 'getUserRole');
     });
 });
 

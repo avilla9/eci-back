@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller {
     /**
@@ -26,6 +27,15 @@ class UserController extends Controller {
 
     public function getUserData(Request $request) {
         return User::where('id', $request->id)->first();
+    }
+    
+    public function getUserRole(Request $request) {
+        $role = DB::table('users')
+        ->select('roles.name as role_name')
+        ->where('users.id', $request->id)
+        ->join('roles', 'roles.id', '=', 'users.role_id')
+        ->first();
+        return $role;
     }
 
     /**
