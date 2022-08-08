@@ -216,7 +216,7 @@ class PageController extends Controller {
                 'pages.title as page_title',
             )
             ->join('pages', 'pages.id', '=', 'campaigns.page_id')
-            ->where('pages.title', 'Campaña')
+            ->where('pages.title', 'Adopción')
             ->orderBy('created_at', 'desc')
             ->get();
         return view('pages/content/adoption/create', $data);

@@ -18,8 +18,8 @@
   <!-- BEGIN: Post Content -->
   <div class="intro-y col-span-12 lg:col-span-9">
     <div class="form-inline mt-3 mb-2">
-      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Adopción</label>
-      <select name="campaign" data-placeholder="Seleccione una Adopción" class="form-control tom-select w-full mb-2">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Campaña</label>
+      <select name="campaign" data-placeholder="Seleccione una Campaña" class="form-control tom-select w-full mb-2">
         @foreach ($campaigns as $campaign)
         <option value="{{$campaign->id}}">{{$campaign->title}}</option>
         @endforeach
