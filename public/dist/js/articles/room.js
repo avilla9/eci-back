@@ -160,3 +160,72 @@ $('#save').click(function (e) {
     });
   }
 });
+
+$('#save-section').click(function (e) {
+  e.preventDefault();
+  let data = {
+    "_token": $('meta[name="csrf-token"]').attr('content'),
+    section: $('select[name=section]').val(),
+    image: $('input[name=image]:checked').val(),
+  };
+
+  console.log(data);
+
+  let error = false;
+
+  if (!data.image?.length) {
+    error = true;
+    message.push('Debe seleccionar una imagen');
+  }
+
+  if (error) {
+    $('#alert').html();
+    $('#alert').removeClass();
+    $('#alert').addClass('alert alert-danger show mb-2');
+    let value = '';
+    for (var i = 0; i < message.length; i++) {
+      value += message[i];
+      if (i + 1 != message.length) {
+        value += '<br>';
+      }
+    }
+    $('#alert').html(value);
+  } else {
+    console.log(data);
+
+    $.ajax({
+      type: "POST",
+      url: '/posts/room/section',
+      data: data,
+      success: function success(data) {
+        console.log('success', data);
+
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-success show mb-2');
+        $('#alert').html('Imagen asignada con éxito');
+
+        $('tbody').html('');
+
+        $.each(data, function (indexInArray, value) {
+          $('tbody').append(`
+          <tr>
+          <td><img src="${value.img?.length ? value.img : 'https://picsum.photos/800/800'}" class="w-40"></td>
+          <td>${value.title}</td>
+          <td>${value.description}</td>
+          <td>${value.created_at}</td>`);
+        });
+
+
+      },
+      error: function error(_error) {
+        console.log('error', _error);
+
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-danger show mb-2');
+        $('#alert').html('Ha ocurrido un error al asignar');
+      }
+    });
+  }
+});

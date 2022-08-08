@@ -379,6 +379,34 @@ class ArticleController extends Controller {
 		}
 	}
 
+	function roomSection(Request $request) {
+		$data = [
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+		];
+
+		$sections = DB::table('sections')
+			->updateOrInsert(
+				[
+					'id' => $data['section_id'],
+				],
+				[
+					'file_id' => $data['file_id'],
+				]
+			);
+
+		if ($sections) {
+			return DB::table('pages')
+				->select('sections.*', 'files.media_path as img')
+				->join('sections', 'sections.page_id', '=', 'pages.id')
+				->leftJoin('files', 'files.id', '=', 'sections.file_id')
+				->where('pages.title', 'Salas')
+				->get();
+		} else {
+			return $sections;
+		}
+	}
+
 	public function list(Request $request) {
 		$user_id = $request->user_id;
 		$page = $request->page;

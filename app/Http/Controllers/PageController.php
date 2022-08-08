@@ -284,6 +284,28 @@ class PageController extends Controller {
         ]);
     }
 
+    function contentroomSections() {
+        $sections = DB::table('pages')
+            ->join('sections', 'sections.page_id', '=', 'pages.id')
+            ->where('pages.title', 'Salas')
+            ->get();
+
+        $articles = DB::table('pages')
+            ->select('sections.*', 'files.media_path as img')
+            ->join('sections', 'sections.page_id', '=', 'pages.id')
+            ->leftJoin('files', 'files.id', '=', 'sections.file_id')
+            ->where('pages.title', 'Salas')
+            ->get();
+            
+        $files = File::where('media_type', 'like', '%image%')->latest()->get();
+
+        return view('pages/content/room/sections', [
+            'sections' => $sections,
+            'articles'  => $articles,
+            'files' => $files
+        ]);
+    }
+
     public function filesList() {
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
 

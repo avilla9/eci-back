@@ -304,6 +304,14 @@ class SideMenu {
                             'layout' => 'side-menu'
                         ],
                     ],
+                    'section-room-create' => [
+                        'title' => 'Gestionar secciones',
+                        'icon' => '',
+                        'route_name' => 'section-room-create',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                    ],
                     'content-room-list' => [
                         'title' => 'Ver contenido',
                         'icon' => '',
