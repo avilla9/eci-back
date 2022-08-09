@@ -78,7 +78,11 @@ class ArticleController extends Controller {
 		$stories = DB::table('articles')
 			->select('articles.*', 'files.media_path', 'reactions.active as view')
 			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
-			->leftJoin('reactions', 'reactions.article_id', '=', 'articles.id')
+			//->leftJoin('reactions', 'reactions.article_id', '=', 'articles.id')
+			->leftJoin('reactions', function($join) use ($userId) {
+					$join->on('reactions.article_id', '=', 'articles.id');
+					$join->on('reactions.user_id', '=', DB::raw("'".$userId."'"));
+				})
 			->join('files', 'files.id', '=', 'articles.file_id')
 			->where([
 				['articles.active', 1],
@@ -99,6 +103,7 @@ class ArticleController extends Controller {
 			->orderBy('view', 'asc')
 			->orderBy('articles.created_at', 'desc')
 			->orderBy('articles.id', 'desc')
+			//->toSql();
 			->get();
 
 		return $stories;
