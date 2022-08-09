@@ -91,7 +91,6 @@ class ArticleController extends Controller {
 					['articles.active', 1],
 					['articles.post_type', 'story'],
 					['articles.unrestricted', 1],
-					['reactions.user_id', $request->user_id]
 				]);
 				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
 			})
