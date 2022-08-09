@@ -82,7 +82,8 @@ class ArticleController extends Controller {
 			->where([
 				['articles.active', 1],
 				['articles.post_type', 'story'],
-				['accesses.user_id', $request->user_id]
+				['accesses.user_id', $request->user_id],
+				['reactions.user_id', $request->user_id]
 			])
 			->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1')
 			->orWhere(function ($query) {
@@ -90,6 +91,7 @@ class ArticleController extends Controller {
 					['articles.active', 1],
 					['articles.post_type', 'story'],
 					['articles.unrestricted', 1],
+					['reactions.user_id', $request->user_id]
 				]);
 				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
 			})
