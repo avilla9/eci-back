@@ -74,6 +74,7 @@ class ArticleController extends Controller {
 	}
 
 	public function showStories(Request $request) {
+		$userId = $request->user_id;
 		$stories = DB::table('articles')
 			->select('articles.*', 'files.media_path', 'reactions.active as view')
 			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
@@ -93,6 +94,7 @@ class ArticleController extends Controller {
 				]);
 				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
 			})
+			->orWhere('reactions.user_id', $request->user_id)
 			->distinct()
 			->orderBy('view', 'asc')
 			->orderBy('articles.created_at', 'desc')
