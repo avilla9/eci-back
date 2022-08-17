@@ -344,6 +344,14 @@ class SideMenu {
                     ],
                 ]
             ],
+            'firebase-notification' => [
+                'icon' => 'bell',
+                'title' => 'Notificaciones',
+                'route_name' => 'firebase-notification',
+                'params' => [
+                    'layout' => 'side-menu'
+                ],
+            ],
         ];
     }
 }
