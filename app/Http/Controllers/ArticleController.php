@@ -79,10 +79,10 @@ class ArticleController extends Controller {
 			->select('articles.*', 'files.media_path', 'reactions.active as view')
 			->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
 			//->leftJoin('reactions', 'reactions.article_id', '=', 'articles.id')
-			->leftJoin('reactions', function($join) use ($userId) {
-					$join->on('reactions.article_id', '=', 'articles.id');
-					$join->on('reactions.user_id', '=', DB::raw("'".$userId."'"));
-				})
+			->leftJoin('reactions', function ($join) use ($userId) {
+				$join->on('reactions.article_id', '=', 'articles.id');
+				$join->on('reactions.user_id', '=', DB::raw("'" . $userId . "'"));
+			})
 			->join('files', 'files.id', '=', 'articles.file_id')
 			->where([
 				['articles.active', 1],
@@ -98,7 +98,14 @@ class ArticleController extends Controller {
 				]);
 				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
 			})
-			->orWhere('reactions.user_id', $request->user_id)
+			->orWhere(function ($query) use($userId) {
+				$query->where([
+					['reactions.user_id', $userId],
+					['articles.active', 1],
+					['articles.post_type', 'story'],
+				]);
+				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
+			})
 			->distinct()
 			->orderBy('view', 'asc')
 			->orderBy('articles.created_at', 'desc')
@@ -333,7 +340,7 @@ class ArticleController extends Controller {
 			return $users;
 		}
 	}
-	
+
 
 	function roomCreate(Request $request) {
 		$data = [
@@ -472,11 +479,11 @@ class ArticleController extends Controller {
 		$page = $request->page;
 
 		$sections = DB::table('pages')
-		->select('sections.*', 'files.media_path as img')
-		->join('sections', 'sections.page_id', '=', 'pages.id')
-		->leftJoin('files', 'files.id', '=', 'sections.file_id')
-		->where('pages.title', $page)
-		->get();
+			->select('sections.*', 'files.media_path as img')
+			->join('sections', 'sections.page_id', '=', 'pages.id')
+			->leftJoin('files', 'files.id', '=', 'sections.file_id')
+			->where('pages.title', $page)
+			->get();
 
 		$data = [];
 		foreach ($sections as $key => $section) {
