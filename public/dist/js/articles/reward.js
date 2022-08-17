@@ -40,7 +40,6 @@ $('#save').click(function (e) {
     section: $('select[name=section]').val(),
     title: $('input[name=title]').val(),
     short_description: $('input[name=short_description]').val(),
-    link_short_description: $('input[name=link_short_description]').val(),
     post_type: $('input[name=post_type]:checked').val(),
     internal_link: $('input[name=internal_link]').val(),
     external_link: $('input[name=external_link]').val(),

@@ -293,7 +293,6 @@ class ArticleController extends Controller {
 			'title' => $request->title,
 			'description' => $request->description,
 			'short_description' => $request->short_description,
-			'link_short_description' => $request->link_short_description,
 			'button_name' => $request->button_name,
 			'button_link' => $request->button_link,
 			'internal_link' => $request->internal_link,
