@@ -35,11 +35,6 @@
     </div>
     
     <div class="form-inline mb-2">
-    <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link de la descripción</label>
-      <input name="link_short_description" id="horizontal-form-2" type="text" class="form-control" placeholder="Enlace en la descripción (opcional)">
-    </div>
-
-    <div class="form-inline mb-2">
       <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Tipo de contenido</label>
       <div class="flex flex-col sm:flex-row content-center">
         <div class="form-check mr-2">
