@@ -46,6 +46,7 @@ Route::prefix('/posts')->group(function () {
 Route::controller(ArticleController::class)->group(function () {
     Route::post('/like', 'like');
     Route::post('/view', 'view');
+    Route::post('/sendmail', 'sendMail');
 });
 
 Route::prefix('/users')->group(function () {

@@ -8,6 +8,8 @@ use App\Models\Article;
 use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\MailController;
+use App\Models\User;
 
 use function PHPSTORM_META\map;
 
@@ -98,7 +100,7 @@ class ArticleController extends Controller {
 				]);
 				$query->whereRaw('DATEDIFF(CURDATE(), articles.created_at) BETWEEN 0 AND 1');
 			})
-			->orWhere(function ($query) use($userId) {
+			->orWhere(function ($query) use ($userId) {
 				$query->where([
 					['reactions.user_id', $userId],
 					['articles.active', 1],
@@ -701,5 +703,22 @@ class ArticleController extends Controller {
 			->updateOrInsert($newData);
 
 		return $query;
+	}
+
+	public function sendMail(Request $request) {
+		$user = DB::table('users')
+			->where('id', $request->user_id)
+			->first();
+
+		$data = [
+			'dni' => $user->dni,
+			'name' => $user->name,
+			'email' => $user->email,
+			'agent_code' => $request->agent_code,
+			'type' => $request->type,
+			'message' => $request->message,
+		];
+		new MailController($data);
+		return true;
 	}
 }
