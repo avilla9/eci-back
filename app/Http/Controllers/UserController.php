@@ -125,6 +125,7 @@ class UserController extends Controller {
         } else {
             $request->merge(['password' => Hash::make($request->password)]);
             $user = User::where('dni', $request->dni)->first();
+            $delegation = Delegation::where('id', $request->delegation_id)->first();
             $user->dni = $request->dni;
             $user->name = $request->name;
             $user->gender = $request->gender;
@@ -132,9 +133,9 @@ class UserController extends Controller {
             $user->territorial = $request->territorial;
             $user->secicoins = $request->secicoins;
             $user->password = $request->password;
-            $user->role_id = $request->role_id;
-            $user->delegation_id = $request->delegation_id;
             $user->group_id = $request->group_id;
+            $user->role_id = $request->role_id;
+            $user->delegation_code = $delegation->code;
             $user->quartile_id = $request->quartile_id;
             $user->save();
             return 'ok';
