@@ -124,7 +124,7 @@ class UserController extends Controller {
             return response()->json($validator->errors(), 404);
         } else {
             $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('id', $request->id)->first();
+            $user = User::where('dni', $request->dni)->first();
             $user->dni = $request->dni;
             $user->name = $request->name;
             $user->gender = $request->gender;
