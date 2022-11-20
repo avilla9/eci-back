@@ -24,6 +24,10 @@ class ActionSeeder extends Seeder {
             [
                 'name' => 'share',
                 'description' => 'Interacción que indica que un usuario ha compartido un post'
+            ],
+            [
+                'name' => 'click',
+                'description' => 'Interacción que indica que un usuario ha hecho click'
             ]
         ]);
     }
