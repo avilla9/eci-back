@@ -135,9 +135,9 @@
 </div>
 
 <div id="edit-user" class="modal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xl" style="overflow-y: initial !important;">
     <div class="modal-content">
-      <div class="modal-body">
+      <div class="modal-body" style="max-height: calc(100vh - 130px); overflow-y: auto;">
         <h2 class="p-5 font-medium text-base mr-auto">Editar información del usuario</h2>
         <div id="editable">
           <form id="SubmitForm">
@@ -148,7 +148,7 @@
                 <div class="preview">
                   <div>
                     <label for="regular-form-1" class="form-label">DNI</label>
-                    <input id="dni" name="dni" type="number" class="form-control" placeholder="DNI">
+                    <input id="dni" name="dni" type="number" readonly class="form-control" placeholder="DNI">
                   </div>
                   <div>
                     <label for="regular-form-1" class="form-label">Nombre completo</label>
@@ -197,7 +197,6 @@
                     </select>
                   </div>
                 </div>
-
                 <div class="mt-3">
                   <label>Delegación</label>
                   <div class="mt-2">
@@ -238,11 +237,18 @@
                     </select>
                   </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer my-5">
+                  
                   <button type="button" data-tw-dismiss="modal"
                     class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
-                  <button type="submit" class="btn btn-primary">Actualizar
+                  <button type="submit" class="btn btn-primary my-4">Actualizar
                     Usuario</button>
+                  <div class="alert alert-success my-3" role="alert" style="display:none;" id="alertUpdateSuccess">
+                    Usuario actualizado con exito!
+                  </div>
+                  <div class="alert alert-danger my-3" role="alert" style="display:none;" id="alertUpdateFailed">
+                    Error al actualizar usuario!
+                  </div>
                 </div>
               </div>
             </div>
