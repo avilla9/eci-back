@@ -38,7 +38,7 @@
     <form id="tabulator-html-filter-form" class="xl:flex sm:mr-auto">
       <div class="sm:flex items-center sm:mr-4">
         <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Campo</label>
-        <select id="tabulator-html-filter-field" class="form-select w-full sm:w-32 2xl:w-full mt-2 sm:mt-0 sm:w-auto">
+        <select id="tabulator-html-filter-field" class="form-select w-full 2xl:w-full mt-2 sm:mt-0 sm:w-auto">
           <option value="name">Nombre</option>
           <option value="rol">Rol</option>
           <option value="email">Correo</option>
