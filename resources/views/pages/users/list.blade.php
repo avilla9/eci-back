@@ -182,9 +182,9 @@
                   </div>
                   <div class="mt-3">
                     <label for="regular-form-4" class="form-label">Password </label>
-                    <input style="width: 94%;" id="password" name="password" type="password" class="form-control" placeholder="Password">
-                    <li class="bg-dark" style="cursor:pointer; display: inline-block; border-radius: 4px;" id="hovering">
-                    <i data-feather="eye" class="w-5 h-5 mx-2" id="togglePassword" style="cursor:pointer; display: inline-block;"></i>
+                    <input style="width: 94%;" id="password" name="password" type="password" class="form-control mr-1" placeholder="Password">
+                    <li class="bg-dark" style="cursor:pointer; display: inline-block; border-radius:  4px; position: absolute; margin-top: 1%;" id="hovering">
+                      <i data-feather="eye" class="w-5 h-5 mx-2" id="togglePassword" style="cursor:pointer; display: inline-block;"></i>
                     </li>
                   </div>
                 </div>

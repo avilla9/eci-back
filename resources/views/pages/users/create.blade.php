@@ -65,9 +65,9 @@
               <input id="regular-form-1" type="number" class="form-control" name="secicoins" placeholder="SECI Coins">
             </div>
             <div class="mt-3">
-              <label for="regular-form-4" class="form-label">Password</label>
-              <input id="password" name="password" type="password" class="form-control" placeholder="Password" style="width: 94%;">
-              <li class="bg-dark" style="cursor:pointer; display: inline-block; border-radius: 4px;" id="hovering">
+              <label for="regular-form-4" class="form-label" style="width: 100%;">Password</label>
+              <input id="password" name="password" type="password" class="form-control" placeholder="Password" style="width: 97%;">
+              <li class="bg-dark" style="cursor:pointer; display: inline-block; border-radius: 4px; position: absolute; margin: 8px;" id="hovering">
                 <i data-feather="eye" class="w-5 h-5 mx-2" id="togglePassword" style="cursor:pointer; display: inline-block;"></i>
               </li>
             </div>
