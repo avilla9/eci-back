@@ -29,31 +29,18 @@ $('#SubmitForm').on('submit', function (e) {
       console.log('error', error);
     },
   });
+});
 
-  /* let name = $('#InputName').val();
-  let email = $('#InputEmail').val();
-  let mobile = $('#InputMobile').val();
-  let message = $('#InputMessage').val();
+$('#togglePassword').on("click", function (e) {
+  e.preventDefault();
+  let type = $("#password").attr("type") === "password" ? "text" : "password";
+  $("#password").attr("type", type);
 
-  $.ajax({
-    url: "/usuarios/update",
-    type: "PUT",
-    data: {
-      "_token": "{{ csrf_token() }}",
-      name: name,
-      email: email,
-      mobile: mobile,
-      message: message,
-    },
-    success: function (response) {
-      $('#successMsg').show();
-      console.log(response);
-    },
-    error: function (response) {
-      $('#nameErrorMsg').text(response.responseJSON.errors.name);
-      $('#emailErrorMsg').text(response.responseJSON.errors.email);
-      $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
-      $('#messageErrorMsg').text(response.responseJSON.errors.message);
-    },
-  }); */
+  if (type !== "password") {
+    $('.open').css('display', 'block');
+    $('.closed').css('display', 'none');
+  } else {
+    $('.closed').css('display', 'block');
+    $('.open').css('display', 'none');
+  }
 });
