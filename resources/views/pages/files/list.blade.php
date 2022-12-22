@@ -224,29 +224,40 @@
     }).get();
 
     console.log(list);
+    Swal.fire({
+      title: '¿Desea Eliminar este post?',
+      text: "Esta accion es irrversible!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "{{route('file.delete')}}",
+            data: {
+              "_token": $('meta[name="csrf-token"]').attr('content'),
+              data: list,
+            },
 
-    $.ajax({
-      type: "POST",
-      url: "{{route('file.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        data: list,
-      },
-
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Archivos eliminados con éxito');
-      },
-      error: function error(_error) {
-        console.log('error', _error);
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
-      }
-    });
+            success: function success(data) {
+              $('#alert').html();
+              $('#alert').removeClass();
+              $('#alert').addClass('alert alert-success show mb-2');
+              $('#alert').html('Archivos eliminados con éxito');
+            },
+            error: function error(_error) {
+              console.log('error', _error);
+              $('#alert').html();
+              $('#alert').removeClass();
+              $('#alert').addClass('alert alert-danger show mb-2');
+              $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+            }
+          });
+        }
+      })
     
 
   });
@@ -261,34 +272,47 @@
   });
 
   $('.single-delete').click(function () {
-    let list = [];
-    list.push($(this).val());
+    e.preventDefault();
+    Swal.fire({
+      title: '¿Desea Eliminar este post?',
+      text: "Esta accion es irrversible!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          let list = [];
+          list.push($(this).val());
 
-    $(this).parent().remove();
-    $("#file-"+$(this).val()).remove();
+          $(this).parent().remove();
+          $("#file-"+$(this).val()).remove();
 
-    $.ajax({
-      type: "POST",
-      url: "{{route('file.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        data: list,
-      },
+          $.ajax({
+            type: "POST",
+            url: "{{route('file.delete')}}",
+            data: {
+              "_token": $('meta[name="csrf-token"]').attr('content'),
+              data: list,
+            },
 
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Archivos eliminados con éxito');
-      },
-      error: function error(_error) {
-        console.log('error', _error);
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
-      }
-    });
+            success: function success(data) {
+              $('#alert').html();
+              $('#alert').removeClass();
+              $('#alert').addClass('alert alert-success show mb-2');
+              $('#alert').html('Archivos eliminados con éxito');
+            },
+            error: function error(_error) {
+              console.log('error', _error);
+              $('#alert').html();
+              $('#alert').removeClass();
+              $('#alert').addClass('alert alert-danger show mb-2');
+              $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+            }
+          });
+        }
+      })
   });
 
 </script>

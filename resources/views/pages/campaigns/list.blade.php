@@ -51,29 +51,41 @@
 <script>
   $('.delete').click(function (e) { 
     e.preventDefault();
-    $.ajax({
-        type: "POST",
-        url: "{{route('campaign.delete')}}",
-        data: {
-          "_token": $('meta[name="csrf-token"]').attr('content'),
-          id: $(this).attr('campaign_id'),
-        },
-        success: function success(data) {
-          $('#alert').html();
-          $('#alert').removeClass();
-          $('#alert').addClass('alert alert-success show mb-2');
-          $('#alert').html('Campaña eliminada con éxito');
-          $('tr#' + data).remove();
-        },
-        error: function error(_error) {
-          console.log('error', _error);
+    Swal.fire({
+      title: '¿Desea Eliminar este post?',
+      text: "Esta accion es irrversible!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si'
+      }).then((result) => {
+                if (result.isConfirmed) {
+                  $.ajax({
+                      type: "POST",
+                      url: "{{route('campaign.delete')}}",
+                      data: {
+                        "_token": $('meta[name="csrf-token"]').attr('content'),
+                        id: $(this).attr('campaign_id'),
+                      },
+                      success: function success(data) {
+                        $('#alert').html();
+                        $('#alert').removeClass();
+                        $('#alert').addClass('alert alert-success show mb-2');
+                        $('#alert').html('Campaña eliminada con éxito');
+                        $('tr#' + data).remove();
+                      },
+                      error: function error(_error) {
+                        console.log('error', _error);
 
-          $('#alert').html();
-          $('#alert').removeClass();
-          $('#alert').addClass('alert alert-danger show mb-2');
-          $('#alert').html('Ha ocurrido un error al eliminar la campaña');
-        }
-      });
+                        $('#alert').html();
+                        $('#alert').removeClass();
+                        $('#alert').addClass('alert alert-danger show mb-2');
+                        $('#alert').html('Ha ocurrido un error al eliminar la campaña');
+                      }
+                    });
+                  }
+                })
     
   });
 </script>
