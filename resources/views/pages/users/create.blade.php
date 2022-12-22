@@ -66,10 +66,11 @@
             </div>
             <div class="mt-3">
               <label for="regular-form-4" class="form-label" style="width: 100%;">Password</label>
-              <input id="password" name="password" type="password" class="form-control" placeholder="Password" style="width: 97%;">
-              <li class="bg-dark" style="cursor:pointer; display: inline-block; border-radius: 4px; position: absolute; margin: 8px;" id="hovering">
-                <i data-feather="eye" class="w-5 h-5 mx-2" id="togglePassword" style="cursor:pointer; display: inline-block;"></i>
-              </li>
+              <div class="input-group mt-2">
+                <input id="password" name="password" type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="togglePassword">
+                <div id="togglePassword" class="input-group-text cursor-pointer"><i class="open" data-feather="eye"></i><i class="closed" data-feather="eye-off"></i>
+                </div>
+              </div>
             </div>
           </div>
           <div class="mt-3">
