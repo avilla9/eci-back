@@ -38,6 +38,7 @@ import "./zoom";
 import "./notification";
 import "./tabulator";
 import "./calendar";
+window.Swal = require('sweetalert2')
 
 /*
  |--------------------------------------------------------------------------
