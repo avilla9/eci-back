@@ -57,9 +57,9 @@ class UserController extends Controller {
         $request->merge(['active' => 1]);
         $delegation = Delegation::where('id', $request->delegation_id)->first()->code;
         $request->merge(['delegation_code' => $delegation]);
-        //$passwordCorrect = preg_match("hola",$request->password);
-        //$request->preg_match("//^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$//", 'password');
-        ///echo $passwordCorrect;
+        //$passwordCorrect = preg_match("hola",$request->password);///
+        //$request->preg_match("//^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$//", 'password');///
+        ///echo $passwordCorrect;///
         $request->validate([
             'dni' => 'required',
             'name' => 'required',
@@ -67,8 +67,7 @@ class UserController extends Controller {
             'password' => [
                 'required',
                 'min:8',
-                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
-                'confirmed'],
+                'regex:/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/','confirmed'],
             'gender' => 'required',
             'territorial' => 'required',
             'role_id' => 'required|not_in:0',
