@@ -1,5 +1,0 @@
-.has-error {
-    .form-control {
-        @apply border-danger dark:border-danger/70;
-    }
-}
