@@ -31,7 +31,11 @@
                         <form id="login-form">
                             <input id="email" type="text" class="intro-x login__input form-control py-3 px-4 block" placeholder="Email" value="midone@left4code.com">
                             <div id="error-email" class="login__input-error text-danger mt-2"></div>
-                            <input id="password" type="password" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password" value="password">
+                            <div class="input-group mt-2">
+                                <input id="password" type="password" class="intro-x login__input form-control" placeholder="Password" value="password">
+                                <div id="togglePassword" class="input-group-text cursor-pointer"><i class="open" data-feather="eye"></i><i class="closed" data-feather="eye-off"></i>
+                                </div>
+                            </div>
                             <div id="error-password" class="login__input-error text-danger mt-2"></div>
                         </form>
                     </div>

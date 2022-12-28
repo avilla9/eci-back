@@ -2845,6 +2845,10 @@ select{
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
+.my-3{
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
 .mt-5{
     margin-top: 1.25rem;
 }
@@ -3321,9 +3325,6 @@ select{
 .grid-cols-7{
     grid-template-columns: repeat(7, minmax(0, 1fr));
 }
-.grid-cols-6{
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-}
 .grid-cols-8{
     grid-template-columns: repeat(8, minmax(0, 1fr));
 }
@@ -3332,6 +3333,9 @@ select{
 }
 .grid-cols-1{
     grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.grid-cols-6{
+    grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 .flex-col{
     flex-direction: column;
@@ -3536,6 +3540,14 @@ select{
 .border-opacity-10{
     --tw-border-opacity: 0.1;
 }
+.bg-dark{
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--color-dark) / var(--tw-bg-opacity));
+}
+.bg-success{
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--color-success) / var(--tw-bg-opacity));
+}
 .bg-white{
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -3575,10 +3587,6 @@ select{
 .bg-danger{
     --tw-bg-opacity: 1;
     background-color: rgb(var(--color-danger) / var(--tw-bg-opacity));
-}
-.bg-success{
-    --tw-bg-opacity: 1;
-    background-color: rgb(var(--color-success) / var(--tw-bg-opacity));
 }
 .bg-slate-200{
     --tw-bg-opacity: 1;
@@ -17213,6 +17221,9 @@ html body{
 .dark .has-error .form-control{
     border-color: rgb(var(--color-danger) / 0.7);
 }
+.open {
+  display: none;
+}
 .before\:absolute::before{
     content: var(--tw-content);
     position: absolute;
@@ -17679,6 +17690,9 @@ html body{
     }
     .sm\:gap-6{
         gap: 1.5rem;
+    }
+    .sm\:gap-4{
+        gap: 1rem;
     }
     .sm\:overflow-x-visible{
         overflow-x: visible;
