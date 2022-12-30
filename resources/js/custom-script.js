@@ -64,3 +64,8 @@ $("#deleteUserId").on("click", function() {
     });
   })
 })
+$('#checkAll').on("click", (function () {
+  $('.checkElement').each(function(index) {
+    $('.checkElement').prop("checked", true); 
+  })
+}));
