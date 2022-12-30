@@ -69,13 +69,11 @@
           <button id="tabulator-html-filter-reset" type="button"
             class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Reiniciar
           </button>
-
+          <button id="checkAll" type="button"
+            class=" btn btn-warning w-full sm:w-40 mt-2 sm:mt-0 sm:ml-1">Seleccionar todos
+          </button>
           <button id="deleteUserId" type="button"
             class=" btn btn-danger w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Eliminar
-          </button>
-
-          <button id="checkAll" type="button"
-            class=" btn btn-warning w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Seleccionar todos
           </button>
         </div>
       </form>
