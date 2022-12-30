@@ -44,3 +44,23 @@ $('#togglePassword').on("click", function (e) {
     $('.open').css('display', 'none');
   }
 });
+
+$("#deleteUserId").on("click", function() {
+  $('.checkElement:checked').each(function(index) {
+    console.log($(this).attr("itemId"));
+    fetch('/api/users/delete', {
+      method: 'POST',
+      headers: { "Content-type": "application/json;charset=UTF-8" },
+      body: JSON.stringify({
+        id: $(this).attr("itemId")
+      }),
+    }).then(function (response) {
+      if (response) {
+        console.log(response);
+        window.location.reload()
+      } else {
+        throw "Error en la llamada Ajax";
+      }
+    });
+  })
+})

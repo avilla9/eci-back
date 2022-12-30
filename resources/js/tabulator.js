@@ -34,6 +34,21 @@ import Tabulator from "tabulator-tables";
 
         // For HTML table
         {
+          title: "ID",
+          minWidth: 100,
+          responsive: 0,
+          field: "id",
+          vertAlign: "left",
+          print: false,
+          download: false,
+          formatter(cell, formatterParams) {
+            return `<div>
+                            <input itemId= "${cell.getData().id
+                            }" type="checkbox" class="checkElement font-medium whitespace-nowrap"></
+                        </div>`;
+          },
+        },
+        {
           title: "DNI",
           minWidth: 100,
           responsive: 0,

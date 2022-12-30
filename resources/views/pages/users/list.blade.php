@@ -65,8 +65,14 @@
           <button id="tabulator-html-filter-go" type="button" class="btn btn-primary w-full sm:w-16">
             Buscar
           </button>
+
           <button id="tabulator-html-filter-reset" type="button"
-            class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Reiniciar</button>
+            class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Reiniciar
+          </button>
+
+          <button id="deleteUserId" type="button"
+            class=" btn btn-danger w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Eliminar
+          </button>
         </div>
       </form>
       <div class="flex mt-5 sm:mt-0">
