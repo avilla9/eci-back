@@ -13,7 +13,7 @@ class CreateFilesTable extends Migration {
     public function up() {
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index();
+            $table->integer('user_id')->nullable();
             $table->string('title');
             $table->text('overview')->nullable();
             $table->timestamp('created_at')->useCurrent();
@@ -23,11 +23,6 @@ class CreateFilesTable extends Migration {
             $table->string('media_type')->nullable();
             $table->string('media_path')->nullable();
             $table->softDeletes();
-
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
         });
     }
 
