@@ -146,6 +146,17 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'dni' => 'DNI',
+        'name' => 'Nombre',
+        'email' => 'Correo',
+        'password' => 'Contraseña',
+        'gender' => 'Genero',
+        'territorial' => 'Territorial',
+        'role_id' => 'Rol del usuario',
+        'delegation_id' => 'Delegación',
+        'quartile_id' => 'Cuartil del usuario',
+        'group_id' => 'Grupo del usuario',
+    ],
 
 ];

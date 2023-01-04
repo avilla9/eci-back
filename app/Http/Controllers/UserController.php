@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller {
     /**
@@ -53,16 +54,19 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-
-        $request->merge(['active' => 1]);
-        $delegation = Delegation::where('id', $request->delegation_id)->first()->code;
-        $request->merge(['delegation_code' => $delegation]);
-
         $request->validate([
             'dni' => 'required',
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
             'gender' => 'required',
             'territorial' => 'required',
             'role_id' => 'required|not_in:0',
@@ -70,6 +74,10 @@ class UserController extends Controller {
             'quartile_id' => 'required|not_in:0',
             'group_id' => 'required|not_in:0',
         ]);
+
+        $request->merge(['active' => 1]);
+        $delegation = Delegation::where('id', $request->delegation_id)->first()->code;
+        $request->merge(['delegation_code' => $delegation]);
 
         $request->merge(['password' => Hash::make($request->password)]);
 
