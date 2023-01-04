@@ -115,7 +115,7 @@ class ArticleController extends Controller {
 			//->toSql();
 			->get();
 
-		return json_encode($stories, JSON_UNESCAPED_SLASHES);
+		return $stories;
 	}
 
 	public function viewStories(Request $request) {
@@ -538,7 +538,7 @@ class ArticleController extends Controller {
 			];
 		}
 
-		return json_encode($data, JSON_UNESCAPED_SLASHES);
+		return $data;
 	}
 
 	/* public function reaction(Request $request) {

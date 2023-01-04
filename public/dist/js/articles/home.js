@@ -65,6 +65,8 @@ $('#save').click(function (e) {
     if (!data.button_name.length) {
       error = true;
       message.push('Debe añadir un nombre para el botón del link');
+    } else {
+      data.button_name = $('#form-body input[name=button-name]').val();
     }
   }
 
