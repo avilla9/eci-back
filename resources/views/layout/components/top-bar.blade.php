@@ -5,7 +5,7 @@
         <a href="" class="-intro-x hidden md:flex">
             <img alt="Icewall Tailwind HTML Admin Template" class="w-6" src="{{ asset('dist/images/logo.svg') }}">
             <span class="text-white text-lg ml-3">
-                Icewall
+                The Values Corner
             </span>
         </a>
         <!-- END: Logo -->
