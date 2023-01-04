@@ -24,6 +24,7 @@ import "@left4code/tw-starter/dist/js/tab";
 
 import $ from 'jquery';
 window.$ = window.jQuery = $;
+window.Swal = require('sweetalert2');
 import "./bootstrap";
 import "./chart";
 import "./highlight";

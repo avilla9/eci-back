@@ -193,21 +193,34 @@ import Tabulator from "tabulator-tables";
               .find(".delete")
               .on("click", function () {
                 console.log('id log', cell.getData().id)
-                fetch('/api/users/delete', {
-                  method: 'POST',
-                  headers: { "Content-type": "application/json;charset=UTF-8" },
-                  body: JSON.stringify({
-                    id: cell.getData().id
-                  }),
-                }).then(function (response) {
-                  if (response) {
-                    console.log(response);
-                    cell.getRow().delete();
-                    table.redraw(true);
-                  } else {
-                    throw "Error en la llamada Ajax";
+                Swal.fire({
+                  title: '¿Desea eliminar este/os usuario/s?',
+                  text: "Esta accion es irreversible!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Si, seguro!',
+                  cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    fetch('/api/users/delete', {
+                      method: 'POST',
+                      headers: { "Content-type": "application/json;charset=UTF-8" },
+                      body: JSON.stringify({
+                        id: cell.getData().id
+                      }),
+                    }).then(function (response) {
+                      if (response) {
+                        console.log(response);
+                        cell.getRow().delete();
+                        table.redraw(true);
+                      } else {
+                        throw "Error en la llamada Ajax";
+                      }
+                    });
                   }
-                });
+                })
               });
 
             return a[0];
@@ -448,8 +461,18 @@ import Tabulator from "tabulator-tables";
               .find(".delete")
               .on("click", function () {
                 console.log('id log', cell.getData().id)
-                alert("DELETE");
-                /* fetch('/api/users/delete', {
+                Swal.fire({
+                  title: '¿Desea eliminar este/os roles?',
+                  text: "Esta accion es irreversible!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Si, seguro!',
+                  cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    /* fetch('/api/users/delete', {
                     method: 'POST',
                     headers: { "Content-type": "application/json;charset=UTF-8" },
                     body: JSON.stringify({
@@ -462,6 +485,8 @@ import Tabulator from "tabulator-tables";
                         throw "Error en la llamada Ajax";
                     }
                 }); */
+                  }
+                })
               });
 
             return a[0];
