@@ -34,7 +34,7 @@ import Tabulator from "tabulator-tables";
 
         // For HTML table
         {
-          title: "ID",
+          title: "",
           minWidth: 100,
           responsive: 0,
           field: "id",
@@ -44,7 +44,7 @@ import Tabulator from "tabulator-tables";
           formatter(cell, formatterParams) {
             return `<div>
                             <input itemId= "${cell.getData().id
-                            }" type="checkbox" class="checkElement font-medium whitespace-nowrap"></
+                            }" type="checkbox" class="checkElement form-check-input"></
                         </div>`;
           },
         },

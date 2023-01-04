@@ -67,19 +67,19 @@
           </button>
 
           <button id="tabulator-html-filter-reset" type="button"
-            class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Reiniciar
+            class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-3">Reiniciar
           </button>
           <button id="checkAll" type="button"
-            class=" btn btn-warning w-full sm:w-40 mt-2 sm:mt-0 sm:ml-1">Seleccionar todos
+            class="btn btn-success w-full sm:w-20 mt-2 sm:mt-0 sm:ml-3">Seleccionar todos
           </button>
           <button id="deleteUserId" type="button"
-            class=" btn btn-danger w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Eliminar
+            class=" btn btn-danger w-full sm:w-16 mt-2 sm:mt-0 sm:ml-3">Eliminar
           </button>
         </div>
       </form>
       <div class="flex mt-5 sm:mt-0">
         <button id="tabulator-print" class="btn btn-outline-secondary w-1/2 sm:w-auto mr-2">
-          <i data-feather="printer" class="w-4 h-4 mr-2"></i> Imprimir
+          <i data-feather="printer" class="w-4 h-4"></i>
         </button>
         <div class="dropdown w-1/2 sm:w-auto">
           <button class="dropdown-toggle btn btn-outline-secondary w-full sm:w-auto" aria-expanded="false"
