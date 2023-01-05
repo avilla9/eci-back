@@ -251,6 +251,9 @@
                             $('#alert').removeClass();
                             $('#alert').addClass('alert alert-success show mb-2');
                             $('#alert').html('Archivos eliminados con éxito');
+                            setTimeout(() => {
+                              window.location.reload()
+                            }, 2000);
                         },
                         error: function error(_error) {
                             console.log('error', _error);
@@ -305,6 +308,9 @@
                             $('#alert').removeClass();
                             $('#alert').addClass('alert alert-success show mb-2');
                             $('#alert').html('Archivos eliminados con éxito');
+                            setTimeout(() => {
+                              window.location.reload()
+                            }, 2000);
                         },
                         error: function error(_error) {
                             console.log('error', _error);
