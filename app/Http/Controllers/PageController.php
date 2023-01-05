@@ -163,6 +163,10 @@ class PageController extends Controller {
         ]);
     }
 
+    public function home() {
+        return view('pages/users/list');
+    }
+
     public function homeCreate() {
         $data = contentParameters();
         $sections = sectionParameters('Home');
