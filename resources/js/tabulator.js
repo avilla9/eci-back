@@ -472,7 +472,7 @@ import Tabulator from "tabulator-tables";
                   cancelButtonText: 'No, cancelar'
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    /* fetch('/api/users/delete', {
+                    fetch('/api/users/delete', {
                     method: 'POST',
                     headers: { "Content-type": "application/json;charset=UTF-8" },
                     body: JSON.stringify({
@@ -481,10 +481,13 @@ import Tabulator from "tabulator-tables";
                 }).then(function (response) {
                     if (response) {
                         console.log(response);
+                        setTimeout(() => {
+                          window.location.reload();
+                        }, 1000);
                     } else {
                         throw "Error en la llamada Ajax";
                     }
-                }); */
+                });
                   }
                 })
               });
