@@ -33,11 +33,11 @@
           <div class="preview">
             <div>
               <label for="regular-form-1" class="form-label">DNI</label>
-              <input id="regular-form-1" name="dni" type="number" class="form-control" placeholder="DNI">
+              <input id="regular-form-1" name="dni" type="number" class="form-control" placeholder="DNI" value="{{ old('dni') }}">
             </div>
             <div>
               <label for="regular-form-1" class="form-label">Nombre completo</label>
-              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Nombres">
+              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Nombres" value="{{ old('name') }}">
             </div>
             <div class="mt-3">
               <label>Género</label>
@@ -54,11 +54,11 @@
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">Correo</label>
-              <input id="regular-form-1" type="email" class="form-control" name="email" placeholder="Correo">
+              <input id="regular-form-1" type="email" class="form-control" name="email" placeholder="Correo" value="{{ old('email') }}">
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">Territorial</label>
-              <input id="regular-form-1" type="text" class="form-control" name="territorial" placeholder="Territorial">
+              <input id="regular-form-1" type="text" class="form-control" name="territorial" placeholder="Territorial" value="{{ old('territorial') }}">
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">SECI Coins</label>

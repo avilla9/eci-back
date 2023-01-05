@@ -13,29 +13,33 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $users = User::latest()->paginate(5);
 
         return view('pages/users/list', compact('users'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    public function getUserData(Request $request) {
+    public function getUserData(Request $request)
+    {
         return User::where('id', $request->id)->first();
     }
-    
-    public function getUserRole(Request $request) {
+
+    public function getUserRole(Request $request)
+    {
         $role = DB::table('users')
-        ->select('roles.name as role_name')
-        ->where('users.id', $request->id)
-        ->join('roles', 'roles.id', '=', 'users.role_id')
-        ->first();
+            ->select('roles.name as role_name')
+            ->where('users.id', $request->id)
+            ->join('roles', 'roles.id', '=', 'users.role_id')
+            ->first();
         return $role;
     }
 
@@ -44,7 +48,8 @@ class UserController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
     }
 
     /**
@@ -53,27 +58,34 @@ class UserController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        $request->validate([
-            'dni' => 'required',
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => [
-                'required',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised()
+    public function store(Request $request)
+    {
+        $request->validate(
+            [
+                'dni' => 'required',
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => [
+                    'required',
+                    Password::min(8)
+                        ->letters()
+                        ->mixedCase()
+                        ->numbers()
+                        ->symbols()
+                        ->uncompromised()
+                ],
+                'gender' => 'required',
+                'territorial' => 'required',
+                'role_id' => 'required|not_in:0',
+                'delegation_id' => 'required|not_in:0',
+                'quartile_id' => 'required|not_in:0',
+                'group_id' => 'required|not_in:0',
             ],
-            'gender' => 'required',
-            'territorial' => 'required',
-            'role_id' => 'required|not_in:0',
-            'delegation_id' => 'required|not_in:0',
-            'quartile_id' => 'required|not_in:0',
-            'group_id' => 'required|not_in:0',
-        ]);
+            [
+                "password.min" => "El campo :attribute debe contener al menos :min caracteres.",
+                "password.mixedCase" => "El campo :attribute debe contener al menos una letra mayúcula y una minúscula.",
+            ],
+        );
 
         $request->merge(['active' => 1]);
         $delegation = Delegation::where('id', $request->delegation_id)->first()->code;
@@ -93,7 +105,8 @@ class UserController extends Controller {
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user) {
+    public function show(User $user)
+    {
         //
     }
 
@@ -103,7 +116,8 @@ class UserController extends Controller {
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user) {
+    public function edit(User $user)
+    {
         //
     }
 
@@ -114,12 +128,21 @@ class UserController extends Controller {
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
         $validator = Validator($request->all(), [
             'dni' => 'required',
             'name' => 'required',
             'email' => 'required',
-            // 'password' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
             'gender' => 'required',
             'territorial' => 'required',
             'role_id' => 'required|not_in:0',
@@ -156,13 +179,15 @@ class UserController extends Controller {
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user) {
+    public function destroy(User $user)
+    {
         //
     }
 
     /* API */
 
-    public function getAllUsers(Request $request) {
+    public function getAllUsers(Request $request)
+    {
 
         $users = User::select(
             'users.dni',
@@ -222,12 +247,14 @@ class UserController extends Controller {
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
         User::where('id', $request->id)->delete();
         return true;
     }
 
-    public function fileImport(Request $request) {
+    public function fileImport(Request $request)
+    {
         $import = new UsersImport;
         Excel::import($import, $request->file('file')->store('files'));
 
@@ -253,7 +280,8 @@ class UserController extends Controller {
         /* return redirect()->back()->with('errors', $errors); */
     }
 
-    public function deleteImport(Request $request) {
+    public function deleteImport(Request $request)
+    {
         Excel::import(new DeleteUsersImport, $request->file('file')->store('files'));
         return redirect()->back();
     }
