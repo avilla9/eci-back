@@ -17204,6 +17204,9 @@ html body{
 .open {
   display: none;
 }
+.swal2-popup {
+  line-height : 30px !important;
+}
 .before\:absolute::before{
     content: var(--tw-content);
     position: absolute;
