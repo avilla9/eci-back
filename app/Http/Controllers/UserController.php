@@ -7,6 +7,7 @@ use App\Imports\UsersImport;
 use App\Models\Delegation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
@@ -248,5 +249,33 @@ class UserController extends Controller {
     public function deleteImport(Request $request) {
         Excel::import(new DeleteUsersImport, $request->file('file')->store('files'));
         return redirect()->back();
+    }
+
+    public function password(Request $request) {
+        $emailExist = User::where('email', $request->email)->get();
+
+        if(count($emailExist) > 0) {
+            $data = [
+                "id" => $emailExist->id[0],
+                "name" => $emailExist->name[0],
+                "email" => $emailExist->email[0],
+            ]; 
+
+            $email = new PasswordController($data);
+
+            return [
+                "status" => Response::HTTP_ACCEPTED,
+                "message" => "Si está mi pana" 
+            ];
+        } else {
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "message" => "El correo ingresado no se encuentra en nuestros registros." 
+            ];
+        }
+    }
+
+    public function resetPassword(Request $request, $id) {
+        
     }
 }

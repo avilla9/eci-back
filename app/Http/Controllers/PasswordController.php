@@ -2,25 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordController extends Controller
 {
-    public function resetPassword($email) {
-        $emailExist = User::where('email', $email)->get();
+     /**
+   * The contact object instance.
+   *
+   * @var Contact
+   */
+  public $data;
 
-        if(count($emailExist) > 0) {
-            return [
-                "status" => Response::HTTP_ACCEPTED,
-                "message" => "Si está mi pana" 
-            ];
-        } else {
-            return [
-                "status" => Response::HTTP_BAD_REQUEST,
-                "message" => "El correo ingresado no se encuentra en nuestros registros." 
-            ];
-        }
-    }
+  /**
+   * Create a new message instance.
+   *
+   * @return void
+   */
+  public function __construct($data) {
+    $this->data = $data;
+    $this->send($data);
+  }
+
+  public function send($data) {
+    $email = new \stdClass();
+
+    $email->id = $this->data['id'];
+    $email->name = $this->data['name'];
+    $email->email = $this->data['email'];
+
+    Mail::to($email->email)
+      ->send(new ResetPasswordMail($email));
+  }
 }

@@ -56,9 +56,8 @@ Route::prefix('/users')->group(function () {
         Route::post('/delete', 'delete')->name('delete-users');
         Route::post('/data', 'getUserData');
         Route::post('/level', 'getUserRole');
-    });
-    Route::controller(PasswordController::class)->group(function() {
-        Route::post('/reset-password/{email}', 'resetPassword')->name('users.reset.password');
+        Route::post('/password/{email}', 'password')->name('users.password');
+        Route::put('/reset-password/{id}', 'resetPassword')->name('users.reset.password');
     });
 });
 
