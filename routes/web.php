@@ -65,7 +65,8 @@ Route::middleware('auth')->group(function () {
             Route::post('/store', 'store')->name('user.store');
             Route::post('/users-import', 'fileImport')->name('file-import');
             Route::post('/users-delete', 'deleteImport')->name('file-delete');
-            Route::put('/update', 'update')->name('user.update');;
+            Route::put('/update', 'update')->name('user.update');
+            Route::get('/new-password/{id}', 'newPassword')->name('users.new.password');
         });
     });
 

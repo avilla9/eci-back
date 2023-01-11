@@ -56,8 +56,8 @@ Route::prefix('/users')->group(function () {
         Route::post('/delete', 'delete')->name('delete-users');
         Route::post('/data', 'getUserData');
         Route::post('/level', 'getUserRole');
-        Route::post('/password/{email}', 'password')->name('users.password');
-        Route::put('/reset-password/{id}', 'resetPassword')->name('users.reset.password');
+        Route::get('/password/{email}', 'password')->name('users.password');
+        Route::put('/reset-password', 'resetPassword')->name('users.reset.password');
     });
 });
 

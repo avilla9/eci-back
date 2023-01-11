@@ -68,4 +68,9 @@ class User extends Authenticatable {
     public function uploads() {
         return $this->hasMany(Upload::class);
     }
+
+    public function routeNotificationForMail()
+    {
+        return $this->email;
+    }
 }

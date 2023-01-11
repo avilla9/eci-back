@@ -6,12 +6,14 @@ use App\Imports\DeleteUsersImport;
 use App\Imports\UsersImport;
 use App\Models\Delegation;
 use App\Models\User;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller {
     /**
@@ -256,12 +258,15 @@ class UserController extends Controller {
 
         if(count($emailExist) > 0) {
             $data = [
-                "id" => $emailExist->id[0],
-                "name" => $emailExist->name[0],
-                "email" => $emailExist->email[0],
+                "id" => $emailExist[0]->id,
+                "name" => $emailExist[0]->name,
+                "email" => $emailExist[0]->email,
             ]; 
 
-            $email = new PasswordController($data);
+            $user = User::find($emailExist[0]->id);
+
+
+            $user->notify(new ResetPasswordNotification($data));
 
             return [
                 "status" => Response::HTTP_ACCEPTED,
@@ -275,7 +280,23 @@ class UserController extends Controller {
         }
     }
 
-    public function resetPassword(Request $request, $id) {
-        
+    public function newPassword($id) {
+        $user = User::where('id', $id)->get();
+
+        return view('pages.users.get_password', ['user' => $user]);
+    }
+
+    public function resetPassword(Request $request) {
+        $affected = DB::table('users')
+              ->where('id', $request->id)
+              ->update([
+                    'password' => Hash::make($request->password)
+                ]);
+
+        return [
+            "status" => Response::HTTP_ACCEPTED,
+            "message" => "Contraseña Actualizada",
+            "affected" => $affected
+        ];
     }
 }

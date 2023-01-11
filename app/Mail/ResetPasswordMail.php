@@ -31,7 +31,8 @@ class ResetPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.reset_password')
+        return $this->from(env('MAIL_USERNAME'))
+                ->view('mails.reset_password')
                 ->text('mails.reset_password_plain');
     }
 }
