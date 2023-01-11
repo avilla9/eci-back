@@ -68,6 +68,7 @@ Route::prefix('/campaign')->group(function () {
 Route::prefix('/roles')->group(function () {
     Route::controller(RoleController::class)->group(function () {
         Route::get('/all-roles', 'getAllRoles')->name('all-roles');
+        Route::post('/delete', 'destroy')->name('delete-roles');
     });
 });
 
