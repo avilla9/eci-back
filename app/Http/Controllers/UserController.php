@@ -270,7 +270,7 @@ class UserController extends Controller {
 
             return [
                 "status" => Response::HTTP_ACCEPTED,
-                "message" => "Si está mi pana" 
+                "message" => "El correo ha sido enviado." 
             ];
         } else {
             return [
