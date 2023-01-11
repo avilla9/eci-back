@@ -122,7 +122,7 @@
           </div>
           @elseif (explode("/", $file['media_type'])[0] == 'application')
           <a class="w-3/5 file__icon file__icon--file mx-auto">
-            <div class="file__icon__file-name">.PDF
+            <div class="file__icon__file-name">
               {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
             </div>
           </a>
