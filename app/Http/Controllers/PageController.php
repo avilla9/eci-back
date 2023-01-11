@@ -324,10 +324,11 @@ class PageController extends Controller {
     }
 
     public function filesList() {
-        $files = File::where('media_type', 'like', '%image%')->latest()->get();
+        $files = File::all();
+        // File::where('media_type', 'like', '%pdf%')->latest()->get();
 
         return view('pages/files/list', [
-            'files' => $files,
+            'files' => $files
         ]);
     }
 

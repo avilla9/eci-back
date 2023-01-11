@@ -109,33 +109,48 @@
     <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
       @foreach ($files as $file)
       <div id="file-{{$file['id']}}" class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-        <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+        <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
           <div class="absolute left-0 top-0 mt-3 ml-3">
             <input class="form-check-input border border-slate-500" type="checkbox" value="{{$file['id']}}">
           </div>
 
+          @if (explode("/", $file['media_type'])[0] == 'image')
           <div class="w-3/5 file__icon file__icon--image mx-auto">
             <div class="file__icon--image__preview image-fit">
-              <img alt="Imagen" src="{{ asset('file/' . strtolower($file['media_name'])) }} " data-action="zoom">
+              <img alt="image" src="{{ asset('file/' . strtolower($file['media_name'])) }} " data-action="zoom">
             </div>
           </div>
-
-          {{-- @if ($file['files'][0]['type'] == 'Empty Folder')
-          <a href="" class="w-3/5 file__icon file__icon--empty-directory mx-auto"></a>
-          @elseif ($file['files'][0]['type'] == 'Folder')
-          <a href="" class="w-3/5 file__icon file__icon--directory mx-auto"></a>
-          @elseif ($file['files'][0]['type'] == 'Image')
-          <a href="" class="w-3/5 file__icon file__icon--image mx-auto">
+          {{-- @elseif ($file['media_type'] == 'image')
+          <div class="w-3/5 file__icon file__icon--image mx-auto">
             <div class="file__icon--image__preview image-fit">
-              <img alt="Icewall Tailwind HTML Admin Template"
-                src="{{ asset('dist/images/' . strtolower($file['files'][0]['file_name'])) }}">
+              <img alt="image" src="{{ asset('file/' . strtolower($file['media_name'])) }} " data-action="zoom">
+            </div>
+          </div> --}}
+          @elseif (explode("/", $file['media_type'])[0] == 'application')
+          <a class="w-3/5 file__icon file__icon--file mx-auto">
+            <div class="file__icon__file-name">.PDF
+              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
+            </div>
+          </a>
+          @elseif (explode("/", $file['media_type'])[0] == 'video')
+          <a class="w-3/5 file__icon file__icon--file mx-auto">
+            <div class="file__icon__file-name">.MP4
+              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
+            </div>
+          </a>
+          @elseif (explode("/", $file['media_type'])[0] == 'audio')
+          <a class="w-3/5 file__icon file__icon--file mx-auto">
+            <div class="file__icon__file-name">.MP3
+              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
             </div>
           </a>
           @else
-          <a href="" class="w-3/5 file__icon file__icon--file mx-auto">
-            <div class="file__icon__file-name">{{ $file['files'][0]['type'] }}</div>
+          <a class="w-3/5 file__icon file__icon--file mx-auto">
+            <div class="file__icon__file-name">{{ $file['media_type'] }}
+              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
+            </div>
           </a>
-          @endif --}}
+          @endif
 
           <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
           <div class="text-slate-500 text-xs text-center mt-0.5">{{ number_format(
