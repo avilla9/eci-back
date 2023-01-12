@@ -1,12 +1,12 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>Gestor de archivos</title>
+    <title>Gestor de archivos</title>
 @endsection
 
 @section('subcontent')
-<div class="grid grid-cols-12 gap-6 mt-8">
-  {{-- <div class="col-span-12 lg:col-span-3 2xl:col-span-2">
+    <div class="grid grid-cols-12 gap-6 mt-8">
+        {{-- <div class="col-span-12 lg:col-span-3 2xl:col-span-2">
     <h2 class="intro-y text-lg font-medium mr-auto mt-2">Gestor de archivos</h2>
     <!-- BEGIN: File Manager Menu -->
     <div class="intro-y box p-5 mt-6">
@@ -50,11 +50,11 @@
     </div>
     <!-- END: File Manager Menu -->
   </div> --}}
-  <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
-    <!-- BEGIN: File Manager Filter -->
-    <div id="alert" class="hidden"></div>
-    <div class="intro-y flex flex-col-reverse sm:flex-row items-center">
-      {{-- <div class="w-full sm:w-auto relative mr-auto mt-3 sm:mt-0">
+        <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
+            <!-- BEGIN: File Manager Filter -->
+            <div id="alert" class="hidden"></div>
+            <div class="intro-y flex flex-col-reverse sm:flex-row items-center">
+                {{-- <div class="w-full sm:w-auto relative mr-auto mt-3 sm:mt-0">
         <i class="w-4 h-4 absolute my-auto inset-y-0 ml-3 left-0 z-10 text-slate-500" data-feather="search"></i>
         <input type="text" class="form-control w-full sm:w-64 box px-10" placeholder="Search files">
         <div class="inbox-filter dropdown absolute inset-y-0 mr-3 right-0 flex items-center"
@@ -94,84 +94,103 @@
           </div>
         </div>
       </div> --}}
-      <div class="w-full sm:w-auto flex">
-        <button id="redirect-upload" class="btn btn-elevated-primary mr-2">Subir archivos</button>
-      </div>
-      <div class="w-full sm:w-auto flex">
-        <button id="checkAll" class="btn btn-elevated-success mr-2">Seleccionar todos</button>
-      </div>
-      <div class="w-full sm:w-auto flex">
-        <button id="deleteSelection" class="btn btn-elevated-danger mr-2">Borrar selección</button>
-      </div>
-    </div>
-    <!-- END: File Manager Filter -->
-    <!-- BEGIN: Directory & Files -->
-    <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
-      @foreach ($files as $file)
-      <div id="file-{{$file['id']}}" class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-        <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
-          <div class="absolute left-0 top-0 mt-3 ml-3">
-            <input class="form-check-input border border-slate-500" type="checkbox" value="{{$file['id']}}">
-          </div>
+                <div class="w-full sm:w-auto flex">
+                    <button id="redirect-upload" class="btn btn-elevated-primary mr-2">Subir archivos</button>
+                </div>
+                <div class="w-full sm:w-auto flex">
+                    <button id="checkAll" class="btn btn-elevated-success mr-2">Seleccionar todos</button>
+                </div>
+                <div class="w-full sm:w-auto flex">
+                    <button id="deleteSelection" class="btn btn-elevated-danger mr-2">Borrar selección</button>
+                </div>
+            </div>
+            <!-- END: File Manager Filter -->
+            <!-- BEGIN: Directory & Files -->
+            <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
+                @foreach ($files as $file)
+                    <div id="file-{{ $file['id'] }}"
+                        class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
+                        <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+                            <div class="absolute left-0 top-0 mt-3 ml-3">
+                                <input class="form-check-input border border-slate-500" type="checkbox"
+                                    value="{{ $file['id'] }}">
+                            </div>
 
-          @if (explode("/", $file['media_type'])[0] == 'image')
-          <div class="w-3/5 file__icon file__icon--image mx-auto">
-            <div class="file__icon--image__preview image-fit">
-              <img alt="image" src="{{ asset('file/' . strtolower($file['media_name'])) }} " data-action="zoom">
-            </div>
-          </div>
-          @elseif (explode("/", $file['media_type'])[0] == 'application')
-          <a class="w-3/5 file__icon file__icon--file mx-auto">
-            <div class="file__icon__file-name">
-              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
-            </div>
-          </a>
-          @elseif (explode("/", $file['media_type'])[0] == 'video')
-          <a class="w-3/5 file__icon file__icon--file mx-auto">
-            <div class="file__icon__file-name">.MP4
-              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
-            </div>
-          </a>
-          @elseif (explode("/", $file['media_type'])[0] == 'audio')
-          <a class="w-3/5 file__icon file__icon--file mx-auto">
-            <div class="file__icon__file-name">.MP3
-              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
-            </div>
-          </a>
-          @else
-          <a class="w-3/5 file__icon file__icon--file mx-auto">
-            <div class="file__icon__file-name">{{ $file['media_type'] }}
-              {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
-            </div>
-          </a>
-          @endif
+                            @if (explode('/', $file['media_type'])[0] == 'image')
+                                <div class="w-3/5 file__icon file__icon--image mx-auto">
+                                    <div class="file__icon--image__preview image-fit">
+                                        <img alt="image" src="{{ asset('file/' . strtolower($file['media_name'])) }} "
+                                            data-action="zoom">
+                                    </div>
+                                </div>
+                            @elseif (explode('/', $file['media_type'])[0] == 'application')
+                                <a class="w-3/5 file__icon file__icon--file mx-auto">
+                                    <div class="file__icon__file-name">
+                                    </div>
+                                    {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
+                                </a>
+                            @elseif (explode('/', $file['media_type'])[0] == 'video')
+                                <a class="w-3/5 file__icon file__icon--file mx-auto">
+                                    <div class="file__icon__file-name">.MP4
 
-          <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
-          <div class="text-slate-500 text-xs text-center mt-0.5">{{ number_format(
-            (float)(intval($file['media_size']) / (1024 * 1024)), 2, '.', ''
-            ) }} Mb</div>
-          <div class="absolute top-0 right-0 mr-2 mt-3 dropdown ml-auto">
-            <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"
-              data-tw-toggle="dropdown">
-              <i data-feather="more-vertical" class="w-5 h-5 text-slate-500"></i>
-            </a>
-            <div class="dropdown-menu w-40">
-              <ul class="dropdown-content">
-                <li>
-                  <button class="dropdown-item single-delete" value="{{$file['id']}}">
-                    <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
-                  </button>
-                </li>
-              </ul>
+                                    </div>
+                                </a>
+                            @elseif (explode('/', $file['media_type'])[0] == 'audio')
+                                <a class="w-3/5 file__icon file__icon--file mx-auto">
+                                    <div class="file__icon__file-name">.MP3
+
+                                    </div>
+                                </a>
+                            @else
+                                <a class="w-3/5 file__icon file__icon--file mx-auto">
+                                    <div class="file__icon__file-name">{{ $file['media_type'] }}
+
+                                    </div>
+                                </a>
+                            @endif
+
+                            <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
+                            <div class="text-slate-500 text-xs text-center mt-0.5">
+                                {{ number_format((float) (intval($file['media_size']) / (1024 * 1024)), 2, '.', '') }}
+                                Mb</div>
+                            <div class="absolute top-0 right-0 mr-2 mt-3 dropdown ml-auto">
+                                <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"
+                                    data-tw-toggle="dropdown">
+                                    <i data-feather="more-vertical" class="w-5 h-5 text-slate-500"></i>
+                                </a>
+                                <div class="dropdown-menu w-40">
+                                    <ul class="dropdown-content">
+                                        <li>
+                                            <button class="dropdown-item single-delete" value="{{ $file['id'] }}">
+                                                <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
+                                            </button>
+                                            @if (explode('/', $file['media_type'])[0] == 'application')
+                                            <div class="text-center">
+                                              <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#file-{{ $file['id'] }}" class="btn btn-primary ">Ver</a>
+                                            </div>     
+                                            <div id="file-{{ $file['id'] }}" class="modal w-full h-full" tabindex="-1" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                  <div class="modal-content">
+                                                      <div class="modal-body p-10 text-center">
+                                                          <embed src="{{ asset('file/' . strtolower($file['media_name'])) }}" width="100%" height="100%">
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                            @endif                       
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                
             </div>
-          </div>
-        </div>
-      </div>
-      @endforeach
-    </div>
-    <!-- END: Directory & Files -->
-    <!-- BEGIN: Pagination -->
-    {{-- <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-6">
+
+            <!-- END: Directory & Files -->
+            <!-- BEGIN: Pagination -->
+            {{-- <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-6">
       <nav class="w-full sm:w-auto sm:mr-auto">
         <ul class="pagination">
           <li class="page-item">
@@ -218,87 +237,93 @@
         <option>50</option>
       </select>
     </div> --}}
-    <!-- END: Pagination -->
-  </div>
-</div>
+            <!-- END: Pagination -->
+        </div>
+    </div>
 @endsection
 
 @section('script')
-<script>
-  $('#deleteSelection').click(function () {
-    list = $('input[type=checkbox]:checked').map(function(i, el) {
-      let value = $(el).val();
-      $(el).parent().parent().parent().remove();
-      return value;
-    }).get();
+    <script>
+        const modalOpen = () => {
+            console.log("aaaaaa");
+            $("#myModal").show()
 
-    console.log(list);
+        }
 
-    $.ajax({
-      type: "POST",
-      url: "{{route('file.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        data: list,
-      },
 
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Archivos eliminados con éxito');
-      },
-      error: function error(_error) {
-        console.log('error', _error);
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
-      }
-    });
-    
+        $('#deleteSelection').click(function() {
+            list = $('input[type=checkbox]:checked').map(function(i, el) {
+                let value = $(el).val();
+                $(el).parent().parent().parent().remove();
+                return value;
+            }).get();
 
-  });
+            console.log(list);
 
-  $("#checkAll").click(function () {
-    let checked = $('input:checkbox').is(':checked');
-    $('input:checkbox').not(this).prop('checked', !checked);
-  });
+            $.ajax({
+                type: "POST",
+                url: "{{ route('file.delete') }}",
+                data: {
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
+                    data: list,
+                },
 
-  $('#redirect-upload').click(function () {
-    window.location.href = "{{route('file.up')}}"
-  });
+                success: function success(data) {
+                    $('#alert').html();
+                    $('#alert').removeClass();
+                    $('#alert').addClass('alert alert-success show mb-2');
+                    $('#alert').html('Archivos eliminados con éxito');
+                },
+                error: function error(_error) {
+                    console.log('error', _error);
+                    $('#alert').html();
+                    $('#alert').removeClass();
+                    $('#alert').addClass('alert alert-danger show mb-2');
+                    $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+                }
+            });
 
-  $('.single-delete').click(function () {
-    let list = [];
-    list.push($(this).val());
 
-    $(this).parent().remove();
-    $("#file-"+$(this).val()).remove();
+        });
 
-    $.ajax({
-      type: "POST",
-      url: "{{route('file.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        data: list,
-      },
+        $("#checkAll").click(function() {
+            let checked = $('input:checkbox').is(':checked');
+            $('input:checkbox').not(this).prop('checked', !checked);
+        });
 
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Archivos eliminados con éxito');
-      },
-      error: function error(_error) {
-        console.log('error', _error);
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
-      }
-    });
-  });
+        $('#redirect-upload').click(function() {
+            window.location.href = "{{ route('file.up') }}"
+        });
 
-</script>
+        $('.single-delete').click(function() {
+            let list = [];
+            list.push($(this).val());
+
+            $(this).parent().remove();
+            $("#file-" + $(this).val()).remove();
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('file.delete') }}",
+                data: {
+                    "_token": $('meta[name="csrf-token"]').attr('content'),
+                    data: list,
+                },
+
+                success: function success(data) {
+                    $('#alert').html();
+                    $('#alert').removeClass();
+                    $('#alert').addClass('alert alert-success show mb-2');
+                    $('#alert').html('Archivos eliminados con éxito');
+                },
+                error: function error(_error) {
+                    console.log('error', _error);
+                    $('#alert').html();
+                    $('#alert').removeClass();
+                    $('#alert').addClass('alert alert-danger show mb-2');
+                    $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+                }
+            });
+        });
+    </script>
 @endsection
