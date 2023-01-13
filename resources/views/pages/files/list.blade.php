@@ -126,7 +126,7 @@
                             @elseif (explode('/', $file['media_type'])[0] == 'application')
                                 <a class="w-3/5 file__icon file__icon--file mx-auto">
                                     <div class="file__icon__file-name">
-                                      
+
                                     </div>
                                     {{-- <a alt="" src="{{ asset('file/' . strtolower($file['media_name'])) }}"></a> --}}
                                 </a>
@@ -149,7 +149,7 @@
                                     </div>
                                 </a>
                             @endif
-                            
+
 
                             <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
                             <div class="text-slate-500 text-xs text-center mt-0.5">
@@ -166,16 +166,18 @@
                                             <button class="dropdown-item single-delete" value="{{ $file['id'] }}">
                                                 <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
                                             </button>
-                                            {{-- @if (explode('/', $file['media_type'])[0] == 'application')
-                                                
-                                            @endif --}}
-                                            @if ($file['media_type'] == 'application/pdf')  
-                                          
-                                              <a  data-tw-toggle="modal" data-tw-target="#myMalditoModal" class="btn border-0 dropdown-item justify-start" onclick="modalOpen(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
-                                                <i data-feather="eye" class="w-4 h-4 mr-2 text-slate-500"></i>Ver
-                                              </a>
-                                            
-                                            @endif                     
+                                            @if ($file['media_type'] !== 'application/pdf')
+                                            <a id="download" class="border-0 dropdown-item justify-start" href="#" target="_blank" onclick="downloadOnClick(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
+                                              <i data-feather="download" class="w-4 h-4 mr-2"></i>Descargar
+                                            </a>
+                                            @endif
+                                            @if ($file['media_type'] == 'application/pdf')
+                                                <a data-tw-toggle="modal" data-tw-target="#myMalditoModal"
+                                                    class="btn border-0 dropdown-item justify-start"
+                                                    onclick="modalOpen(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
+                                                    <i data-feather="eye" class="w-4 h-4 mr-2 text-slate-500"></i>Ver
+                                                </a>
+                                            @endif
                                         </li>
                                     </ul>
                                 </div>
@@ -183,22 +185,22 @@
                         </div>
                     </div>
                 @endforeach
-              
-                <div id="myMalditoModal" class="modal " tabindex="-1" aria-hidden="true" >
-                  
-                  <div class="modal-dialog modal-xl">
-                      <div class="modal-content">
-                          <div class="modal-body" style="height: 80vh; overflow-y: auto;">
-                              {{-- <embed src="{{ asset('file/' . strtolower($file['media_name'])) }}" width="100%" height="100%"> --}}
-                              <embed src="" width="100%" height="100%" id="filePdf">
-                                
 
-                          </div>
-                      </div>
-                  </div>
+                <div id="myMalditoModal" class="modal " tabindex="-1" aria-hidden="true">
+
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-body" style="height: 80vh; overflow-y: auto;">
+                                {{-- <embed src="{{ asset('file/' . strtolower($file['media_name'])) }}" width="100%" height="100%"> --}}
+                                <embed src="" width="100%" height="100%" id="filePdf">
+
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                
+
+
             </div>
 
             <!-- END: Directory & Files -->
@@ -258,10 +260,16 @@
 @section('script')
     <script>
         const modalOpen = (e) => {
-            console.log(e);
+            // console.log(e);
             $("#filePdf").attr("src", e);
-           
+
         }
+        const downloadOnClick = (e) => {      
+                // console.log(e);
+                window.open(e);
+        }
+
+
 
 
         $('#deleteSelection').click(function() {
