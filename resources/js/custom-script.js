@@ -44,3 +44,17 @@ $('#togglePassword').on("click", function (e) {
     $('.open').css('display', 'none');
   }
 });
+
+$('#togglePassword-check').on("click", function (e) {
+  e.preventDefault();
+  let type = $("#password-check").attr("type") === "password" ? "text" : "password";
+  $("#password-check").attr("type", type);
+
+  if (type !== "password") {
+    $('#open-check').css('display', 'block');
+    $('#closed-check').css('display', 'none');
+  } else {
+    $('#closed-check').css('display', 'block');
+    $('#open-check').css('display', 'none');
+  }
+});

@@ -32,6 +32,8 @@ Route::middleware('loggedin')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.check');
     Route::get('register', [AuthController::class, 'registerView'])->name('register.index');
     Route::post('register', [AuthController::class, 'register'])->name('register.store');
+    Route::get('/contraseña', [PageController::class, 'getEmail'])->name('contraseña.usuarios');
+    Route::get('/nueva-contraseña/{id}', [UserController::class, 'newPassword'])->name('users.new.password');
 });
 
 Route::middleware('auth')->group(function () {
@@ -66,7 +68,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/users-import', 'fileImport')->name('file-import');
             Route::post('/users-delete', 'deleteImport')->name('file-delete');
             Route::put('/update', 'update')->name('user.update');
-            Route::get('/new-password/{id}', 'newPassword')->name('users.new.password');
         });
     });
 
