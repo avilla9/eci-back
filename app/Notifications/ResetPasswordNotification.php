@@ -43,9 +43,9 @@ class ResetPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', route('users.new.password', $this->data['id']))
-                    ->line('Thank you for using our application!');
+                    ->line('Para cambiar tu contraseña haz click en el siguiente botón.')
+                    ->action('Click aquí', route('users.new.password', $this->data['id']))
+                    ->line('Gracias por usar nuestra aplicación!');
     }
 
     /**

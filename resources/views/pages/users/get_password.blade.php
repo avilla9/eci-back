@@ -35,12 +35,13 @@
                                 <div id="togglePassword" class="input-group-text cursor-pointer"><i class="open" data-feather="eye"></i><i class="closed" data-feather="eye-off"></i>
                                 </div>
                             </div>
+                            <div id="error-password" class="password login__input-error text-danger mt-2"></div>
                             <div class="input-group mt-2">
                                 <input id="password-check" type="password" class="intro-x login__input form-control" placeholder="" value="">
                                 <div id="togglePassword-check" class="input-group-text cursor-pointer"><i class="open-check" id="open-check" data-feather="eye"></i><i class="closed-check" id="closed-check" data-feather="eye-off"></i>
                                 </div>
                             </div>
-                            <div id="error-password" class="login__input-error text-danger mt-2"></div>
+                            <div id="error-password" class="password_check login__input-error text-danger mt-2"></div>
                         </form>
                     </div>
                     <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left flex justify-center">
@@ -57,6 +58,9 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('js/sweetalert.js') }}"></script>
+<script src="{{ asset('js/jquery.js') }}"></script>
+
     <script>
         $(document).ready(function () {
             $('#send').on('click', function (e) {
@@ -82,7 +86,21 @@
                     data: data,
                     dataType: "JSON",
                     success: function (response) {
-                        console.log("🚀 ~ file: get_password.blade.php:39 ~ response", response);
+                        if(response.status === 400) {
+                            $.each(response.errors, function (key, error) { 
+                                $('.'+key).text(error[0]);
+                            });
+                        } else {
+                            swal.fire({
+                                title: "Excelente!",
+                                text: response.message,
+                                type: "success"
+                            }).then(function() {
+                                window.location = "{{ route('login.index') }}";
+                            });
+                            $('.password').text("");
+                            $('.password_check').text("");
+                        }
                     }
                 });
             });

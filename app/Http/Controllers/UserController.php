@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -296,7 +297,7 @@ class UserController extends Controller
 
         return [
             "status" => Response::HTTP_ACCEPTED,
-            "message" => "El correo ha sido enviado."
+            "message" => "¡Te hemos enviado un correo!"
         ];
     }
 
@@ -310,9 +311,24 @@ class UserController extends Controller
     public function resetPassword(Request $request)
     {
         $validated = Validator::make($request->all(), [
-             "password" => "required",
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
              "password_check" => "required|same:password",
         ]);
+
+        if($validated->fails()) {
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "errors" => $validated->errors()
+            ];
+        }
 
         $affected = DB::table('users')
             ->where('id', $request->id)

@@ -47,6 +47,7 @@
 @endsection
 
 @section('script')
+<script src="{{ asset('js/sweetalert.js') }}"></script>
 <script src="{{ asset('js/jquery.js') }}"></script>
     <script>
        $(document).ready(function () {
@@ -70,6 +71,13 @@
                                  $('#error-text').text(error[0]);
                             });
                         } else {
+                            swal.fire({
+                                title: "Excelente!",
+                                text: response.message,
+                                type: "success"
+                            }).then(function() {
+                                window.location = "{{ route('login.index') }}";
+                            });
                             $('#email').css('border-color', '#E2E8F0');
                             $('#error-text').text("");
                         }
