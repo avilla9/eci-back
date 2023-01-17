@@ -10,23 +10,7 @@
     <h2 class="intro-y text-lg font-medium mr-auto mt-2">Gestor de archivos</h2>
     <!-- BEGIN: File Manager Menu -->
     <div class="intro-y box p-5 mt-6">
-      <div class="mt-1">
-        <a href="" class="flex items-center px-3 py-2 rounded-md bg-primary text-white font-medium">
-          <i class="w-4 h-4 mr-2" data-feather="image"></i> Images
-        </a>
-        <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
-          <i class="w-4 h-4 mr-2" data-feather="video"></i> Videos
-        </a>
-        <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
-          <i class="w-4 h-4 mr-2" data-feather="file"></i> Documents
-        </a>
-        <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
-          <i class="w-4 h-4 mr-2" data-feather="users"></i> Shared
-        </a>
-        <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
-          <i class="w-4 h-4 mr-2" data-feather="trash"></i> Trash
-        </a>
-      </div>
+      
       <div class="border-t border-slate-200 dark:border-darkmode-400 mt-4 pt-4">
         <a href="" class="flex items-center px-3 py-2 rounded-md">
           <div class="w-2 h-2 bg-pending rounded-full mr-3"></div> Custom Work
@@ -50,6 +34,23 @@
     </div>
     <!-- END: File Manager Menu -->
   </div> --}}
+        {{-- <div class="mt-1">
+            <a class="flex items-center px-3 py-2 rounded-md bg-primary text-white font-medium" onclick="hideImg()">
+                <i class="w-4 h-4 mr-2" data-feather="image"></i> Images
+            </a>
+            <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
+                <i class="w-4 h-4 mr-2" data-feather="video"></i> Videos
+            </a>
+            <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
+                <i class="w-4 h-4 mr-2" data-feather="file"></i> Documents
+            </a>
+            <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
+                <i class="w-4 h-4 mr-2" data-feather="users"></i> Shared
+            </a>
+            <a href="" class="flex items-center px-3 py-2 mt-2 rounded-md">
+                <i class="w-4 h-4 mr-2" data-feather="trash"></i> Trash
+            </a>
+        </div> --}}
         <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
             <!-- BEGIN: File Manager Filter -->
             <div id="alert" class="hidden"></div>
@@ -117,7 +118,7 @@
                             </div>
 
                             @if (explode('/', $file['media_type'])[0] == 'image')
-                                <div class="w-3/5 file__icon file__icon--image mx-auto">
+                                <div class="w-3/5 file__icon file__icon--image mx-auto" id="images">
                                     <div class="file__icon--image__preview image-fit">
                                         <img alt="image" src="{{ asset('file/' . strtolower($file['media_name'])) }} "
                                             data-action="zoom">
@@ -166,18 +167,28 @@
                                             <button class="dropdown-item single-delete" value="{{ $file['id'] }}">
                                                 <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
                                             </button>
-                                            @if ($file['media_type'] !== 'application/pdf')
-                                            <a id="download" class="border-0 dropdown-item justify-start" href="#" target="_blank" onclick="downloadOnClick(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
-                                              <i data-feather="download" class="w-4 h-4 mr-2"></i>Descargar
-                                            </a>
+                                            @if (explode('/', $file['media_type'])[0] == 'application')
+                                                @if ($file['media_type'] == 'application/pdf')
+                                                    <a data-tw-toggle="modal" data-tw-target="#myMalditoModal"
+                                                        class="btn border-0 dropdown-item justify-start"
+                                                        onclick="modalOpen(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
+                                                        <i data-feather="eye" class="w-4 h-4 mr-2 text-slate-500"></i>Ver
+                                                    </a>
+                                                @else
+                                                    <a id="download" class="border-0 dropdown-item justify-start"
+                                                        data-tw-toggle="modal" data-tw-target="#myModal">
+                                                        <i data-feather="eye" class="w-4 h-4 mr-2"></i> Ver
+                                                    </a>
+                                                @endif
                                             @endif
-                                            @if ($file['media_type'] == 'application/pdf')
-                                                <a data-tw-toggle="modal" data-tw-target="#myMalditoModal"
-                                                    class="btn border-0 dropdown-item justify-start"
-                                                    onclick="modalOpen(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
-                                                    <i data-feather="eye" class="w-4 h-4 mr-2 text-slate-500"></i>Ver
+                                            @if (explode('/', $file['media_type'])[0] !== 'application')
+                                                <a id="download" class="border-0 dropdown-item justify-start"
+                                                    target="_blank"
+                                                    onclick="downloadOnClick(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
+                                                    <i data-feather="eye" class="w-4 h-4 mr-2"></i>Ver
                                                 </a>
                                             @endif
+
                                         </li>
                                     </ul>
                                 </div>
@@ -193,7 +204,24 @@
                             <div class="modal-body" style="height: 80vh; overflow-y: auto;">
                                 {{-- <embed src="{{ asset('file/' . strtolower($file['media_name'])) }}" width="100%" height="100%"> --}}
                                 <embed src="" width="100%" height="100%" id="filePdf">
-
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="myModal" class="modal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body p-0">
+                                <div class="p-5 text-center">
+                                    <i data-feather="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
+                                    <div class="text-2xl mt-5">Este tipo de archivo no esta disponible para su previsualizacion.</div>
+                                </div>
+                                <div class="px-5 pb-8 text-center">
+                                    <a data-tw-dismiss="modal" class="btn btn-primary" id="download"
+                                        onclick="downloadOnClick(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
+                                        <i data-feather="download" class="w-4 h-4 mr-2"></i> Descargar
+                                    </a>
+                                </div>
 
                             </div>
                         </div>
@@ -264,9 +292,14 @@
             $("#filePdf").attr("src", e);
 
         }
-        const downloadOnClick = (e) => {      
-                // console.log(e);
-                window.open(e);
+        const downloadOnClick = (e) => {
+            // console.log(e);
+            window.open(e);
+        }
+
+        const hideImg = () => {
+            let n = $(".file").find("div");
+            console.log(n);
         }
 
 
