@@ -51,7 +51,7 @@
         $('.delete').click(function(e) {
             e.preventDefault();
             Swal.fire({
-                title: '¿Desea eliminar esta/s campañas?',
+                title: '¿Desea eliminar esta seleccion?',
                 text: "Esta accion es irreversible!",
                 icon: 'warning',
                 showCancelButton: true,

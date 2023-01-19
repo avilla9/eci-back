@@ -219,16 +219,11 @@
 
 @section('script')
     <script>
-        $('#deleteSelection').click(function() {
-            list = $('input[type=checkbox]:checked').map(function(i, el) {
-                let value = $(el).val();
-                $(el).parent().parent().parent().remove();
-                return value;
-            }).get();
+        $('#deleteSelection').click(function(e) {
+            e.preventDefault();
 
-            console.log(list);
             Swal.fire({
-                title: '¿Desea eliminar este/os archivos?',
+                title: '¿Desea eliminar estos archivos?',
                 text: "Esta accion es irreversible!",
                 icon: 'warning',
                 showCancelButton: true,
@@ -238,6 +233,11 @@
                 cancelButtonText: 'No, cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    list = $('input[type=checkbox]:checked').map(function(i, el) {
+                        let value = $(el).val();
+                        $(el).parent().parent().parent().remove();
+                        return value;
+                    }).get();
                     $.ajax({
                         type: "POST",
                         url: "{{ route('file.delete') }}",
@@ -251,9 +251,7 @@
                             $('#alert').removeClass();
                             $('#alert').addClass('alert alert-success show mb-2');
                             $('#alert').html('Archivos eliminados con éxito');
-                            setTimeout(() => {
-                              window.location.reload()
-                            }, 2000);
+                            
                         },
                         error: function error(_error) {
                             console.log('error', _error);
@@ -278,12 +276,6 @@
         });
 
         $('.single-delete').click(function() {
-            let list = [];
-            list.push($(this).val());
-
-            $(this).parent().remove();
-            $("#file-" + $(this).val()).remove();
-
             Swal.fire({
                 title: '¿Desea eliminar este archivo?',
                 text: "Esta accion es irreversible!",
@@ -295,6 +287,10 @@
                 cancelButtonText: 'No, cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    let list = [];
+                    list.push($(this).val());
+                    $(this).parent().remove();
+                    $("#file-" + $(this).val()).remove();
                     $.ajax({
                         type: "POST",
                         url: "{{ route('file.delete') }}",
@@ -309,7 +305,7 @@
                             $('#alert').addClass('alert alert-success show mb-2');
                             $('#alert').html('Archivos eliminados con éxito');
                             setTimeout(() => {
-                              window.location.reload()
+                                window.location.reload()
                             }, 2000);
                         },
                         error: function error(_error) {
