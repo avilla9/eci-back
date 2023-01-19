@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Validation\Rules\Password;
+
+
 return [
 
     /*
@@ -18,5 +21,9 @@ return [
     'token' => 'Este token de restablecimiento de contraseña es inválido.',
     'user' => 'No se ha encontrado un usuario con esa dirección de correo.',
     'throttled' => 'Por favor espere antes de volver a intentarlo.',
-    'password' => 'Las contraseñas deben tener al menos seis caracteres y coincidir con la confirmación.'
+    'password' => 'Las contraseñas deben tener al menos seis caracteres y coincidir con la confirmación.',
+    "The :attribute must contain at least one letter." => ":attribute يجب أن يحتوي على الأقل حرف واحد.",
+    "The :attribute must contain at least one uppercase and one lowercase letter." => ":attribute يجب أن يحتوي على الأقل حرف كبير واحد وحرف صغير واحد.",
+    "The :attribute must contain at least one number." => ":attribute يجب أن يحتوي على الأقل رقم واحد.",
+    "The :attribute must contain at least one symbol." => ":attribute يجب أن يحتوي على الأقل رمز واحد."
 ];
