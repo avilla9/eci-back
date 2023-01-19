@@ -140,7 +140,7 @@
         <div class="modal-body" style="max-height: calc(100vh - 130px); overflow-y: auto;">
           <h2 class="p-5 font-medium text-base mr-auto">Editar información del usuario</h2>
           <div id="editable">
-            <form id="SubmitForm">
+            <form id="SubmitForm" action="{{ route('') }}">
               @csrf
               <!-- BEGIN: Input -->
               <div class="intro-y box">
