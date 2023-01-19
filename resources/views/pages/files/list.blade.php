@@ -1,12 +1,12 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>Gestor de archivos</title>
+    <title>Gestor de archivos</title>
 @endsection
 
 @section('subcontent')
-<div class="grid grid-cols-12 gap-6 mt-8">
-  {{-- <div class="col-span-12 lg:col-span-3 2xl:col-span-2">
+    <div class="grid grid-cols-12 gap-6 mt-8">
+        {{-- <div class="col-span-12 lg:col-span-3 2xl:col-span-2">
     <h2 class="intro-y text-lg font-medium mr-auto mt-2">Gestor de archivos</h2>
     <!-- BEGIN: File Manager Menu -->
     <div class="intro-y box p-5 mt-6">
@@ -50,11 +50,11 @@
     </div>
     <!-- END: File Manager Menu -->
   </div> --}}
-  <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
-    <!-- BEGIN: File Manager Filter -->
-    <div id="alert" class="hidden"></div>
-    <div class="intro-y flex flex-col-reverse sm:flex-row items-center">
-      {{-- <div class="w-full sm:w-auto relative mr-auto mt-3 sm:mt-0">
+        <div class="col-span-12 lg:col-span-12 2xl:col-span-12">
+            <!-- BEGIN: File Manager Filter -->
+            <div id="alert" class="hidden"></div>
+            <div class="intro-y flex flex-col-reverse sm:flex-row items-center">
+                {{-- <div class="w-full sm:w-auto relative mr-auto mt-3 sm:mt-0">
         <i class="w-4 h-4 absolute my-auto inset-y-0 ml-3 left-0 z-10 text-slate-500" data-feather="search"></i>
         <input type="text" class="form-control w-full sm:w-64 box px-10" placeholder="Search files">
         <div class="inbox-filter dropdown absolute inset-y-0 mr-3 right-0 flex items-center"
@@ -94,33 +94,36 @@
           </div>
         </div>
       </div> --}}
-      <div class="w-full sm:w-auto flex">
-        <button id="redirect-upload" class="btn btn-elevated-primary mr-2">Subir archivos</button>
-      </div>
-      <div class="w-full sm:w-auto flex">
-        <button id="checkAll" class="btn btn-elevated-success mr-2">Seleccionar todos</button>
-      </div>
-      <div class="w-full sm:w-auto flex">
-        <button id="deleteSelection" class="btn btn-elevated-danger mr-2">Borrar selección</button>
-      </div>
-    </div>
-    <!-- END: File Manager Filter -->
-    <!-- BEGIN: Directory & Files -->
-    <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
-      @foreach ($files as $file)
-      <div id="file-{{$file['id']}}" class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-        <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
-          <div class="absolute left-0 top-0 mt-3 ml-3">
-            <input class="form-check-input border border-slate-500" type="checkbox" value="{{$file['id']}}">
-          </div>
-
-          <div class="w-3/5 file__icon file__icon--image mx-auto">
-            <div class="file__icon--image__preview image-fit">
-              <img alt="Imagen" src="{{ asset('file/' . strtolower($file['media_name'])) }} " data-action="zoom">
+                <div class="w-full sm:w-auto flex">
+                    <button id="redirect-upload" class="btn btn-elevated-primary mr-2">Subir archivos</button>
+                </div>
+                <div class="w-full sm:w-auto flex">
+                    <button id="checkAll" class="btn btn-elevated-success mr-2">Seleccionar todos</button>
+                </div>
+                <div class="w-full sm:w-auto flex">
+                    <button id="deleteSelection" class="btn btn-elevated-danger mr-2">Borrar selección</button>
+                </div>
             </div>
-          </div>
+            <!-- END: File Manager Filter -->
+            <!-- BEGIN: Directory & Files -->
+            <div class="intro-y grid grid-cols-12 gap-3 sm:gap-6 mt-5">
+                @foreach ($files as $file)
+                    <div id="file-{{ $file['id'] }}"
+                        class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
+                        <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+                            <div class="absolute left-0 top-0 mt-3 ml-3">
+                                <input class="form-check-input border border-slate-500" type="checkbox"
+                                    value="{{ $file['id'] }}">
+                            </div>
 
-          {{-- @if ($file['files'][0]['type'] == 'Empty Folder')
+                            <div class="w-3/5 file__icon file__icon--image mx-auto">
+                                <div class="file__icon--image__preview image-fit">
+                                    <img alt="Imagen" src="{{ asset('file/' . strtolower($file['media_name'])) }} "
+                                        data-action="zoom">
+                                </div>
+                            </div>
+
+                            {{-- @if ($file['files'][0]['type'] == 'Empty Folder')
           <a href="" class="w-3/5 file__icon file__icon--empty-directory mx-auto"></a>
           @elseif ($file['files'][0]['type'] == 'Folder')
           <a href="" class="w-3/5 file__icon file__icon--directory mx-auto"></a>
@@ -137,32 +140,32 @@
           </a>
           @endif --}}
 
-          <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
-          <div class="text-slate-500 text-xs text-center mt-0.5">{{ number_format(
-            (float)(intval($file['media_size']) / (1024 * 1024)), 2, '.', ''
-            ) }} Mb</div>
-          <div class="absolute top-0 right-0 mr-2 mt-3 dropdown ml-auto">
-            <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"
-              data-tw-toggle="dropdown">
-              <i data-feather="more-vertical" class="w-5 h-5 text-slate-500"></i>
-            </a>
-            <div class="dropdown-menu w-40">
-              <ul class="dropdown-content">
-                <li>
-                  <button class="dropdown-item single-delete" value="{{$file['id']}}">
-                    <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
-                  </button>
-                </li>
-              </ul>
+                            <a href="" class="block font-medium mt-4 text-center truncate">{{ $file['title'] }}</a>
+                            <div class="text-slate-500 text-xs text-center mt-0.5">
+                                {{ number_format((float) (intval($file['media_size']) / (1024 * 1024)), 2, '.', '') }}
+                                Mb</div>
+                            <div class="absolute top-0 right-0 mr-2 mt-3 dropdown ml-auto">
+                                <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false"
+                                    data-tw-toggle="dropdown">
+                                    <i data-feather="more-vertical" class="w-5 h-5 text-slate-500"></i>
+                                </a>
+                                <div class="dropdown-menu w-40">
+                                    <ul class="dropdown-content">
+                                        <li>
+                                            <button class="dropdown-item single-delete" value="{{ $file['id'] }}">
+                                                <i data-feather="trash" class="w-4 h-4 mr-2"></i> Eliminar
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-          </div>
-        </div>
-      </div>
-      @endforeach
-    </div>
-    <!-- END: Directory & Files -->
-    <!-- BEGIN: Pagination -->
-    {{-- <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-6">
+            <!-- END: Directory & Files -->
+            <!-- BEGIN: Pagination -->
+            {{-- <div class="intro-y flex flex-wrap sm:flex-row sm:flex-nowrap items-center mt-6">
       <nav class="w-full sm:w-auto sm:mr-auto">
         <ul class="pagination">
           <li class="page-item">
@@ -209,87 +212,113 @@
         <option>50</option>
       </select>
     </div> --}}
-    <!-- END: Pagination -->
-  </div>
-</div>
+            <!-- END: Pagination -->
+        </div>
+    </div>
 @endsection
 
 @section('script')
-<script>
-  $('#deleteSelection').click(function () {
-    list = $('input[type=checkbox]:checked').map(function(i, el) {
-      let value = $(el).val();
-      $(el).parent().parent().parent().remove();
-      return value;
-    }).get();
+    <script>
+        $('#deleteSelection').click(function(e) {
+            e.preventDefault();
 
-    console.log(list);
+            Swal.fire({
+                title: '¿Desea eliminar estos archivos?',
+                text: "¡Esta accion es irreversible!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, seguro!',
+                cancelButtonText: 'No, cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    list = $('input[type=checkbox]:checked').map(function(i, el) {
+                        let value = $(el).val();
+                        $(el).parent().parent().parent().remove();
+                        return value;
+                    }).get();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('file.delete') }}",
+                        data: {
+                            "_token": $('meta[name="csrf-token"]').attr('content'),
+                            data: list,
+                        },
 
-    $.ajax({
-      type: "POST",
-      url: "{{route('file.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        data: list,
-      },
+                        success: function success(data) {
+                            $('#alert').html();
+                            $('#alert').removeClass();
+                            $('#alert').addClass('alert alert-success show mb-2');
+                            $('#alert').html('Archivos eliminados con éxito');
+                            
+                        },
+                        error: function error(_error) {
+                            console.log('error', _error);
+                            $('#alert').html();
+                            $('#alert').removeClass();
+                            $('#alert').addClass('alert alert-danger show mb-2');
+                            $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+                        }
+                    });
 
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Archivos eliminados con éxito');
-      },
-      error: function error(_error) {
-        console.log('error', _error);
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
-      }
-    });
-    
+                }
+            })
+        });
 
-  });
+        $("#checkAll").click(function() {
+            let checked = $('input:checkbox').is(':checked');
+            $('input:checkbox').not(this).prop('checked', !checked);
+        });
 
-  $("#checkAll").click(function () {
-    let checked = $('input:checkbox').is(':checked');
-    $('input:checkbox').not(this).prop('checked', !checked);
-  });
+        $('#redirect-upload').click(function() {
+            window.location.href = "{{ route('file.up') }}"
+        });
 
-  $('#redirect-upload').click(function () {
-    window.location.href = "{{route('file.up')}}"
-  });
+        $('.single-delete').click(function() {
+            Swal.fire({
+                title: '¿Desea eliminar este archivo?',
+                text: "¡Esta accion es irreversible!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, seguro!',
+                cancelButtonText: 'No, cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let list = [];
+                    list.push($(this).val());
+                    $(this).parent().remove();
+                    $("#file-" + $(this).val()).remove();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('file.delete') }}",
+                        data: {
+                            "_token": $('meta[name="csrf-token"]').attr('content'),
+                            data: list,
+                        },
 
-  $('.single-delete').click(function () {
-    let list = [];
-    list.push($(this).val());
+                        success: function success(data) {
+                            $('#alert').html();
+                            $('#alert').removeClass();
+                            $('#alert').addClass('alert alert-success show mb-2');
+                            $('#alert').html('Archivos eliminados con éxito');
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 2000);
+                        },
+                        error: function error(_error) {
+                            console.log('error', _error);
+                            $('#alert').html();
+                            $('#alert').removeClass();
+                            $('#alert').addClass('alert alert-danger show mb-2');
+                            $('#alert').html('Ha ocurrido un error al eliminar los archivos');
+                        }
+                    });
+                }
+            })
 
-    $(this).parent().remove();
-    $("#file-"+$(this).val()).remove();
-
-    $.ajax({
-      type: "POST",
-      url: "{{route('file.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        data: list,
-      },
-
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Archivos eliminados con éxito');
-      },
-      error: function error(_error) {
-        console.log('error', _error);
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar los archivos');
-      }
-    });
-  });
-
-</script>
+        });
+    </script>
 @endsection
