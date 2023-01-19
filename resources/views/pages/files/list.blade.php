@@ -224,7 +224,7 @@
 
             Swal.fire({
                 title: '¿Desea eliminar estos archivos?',
-                text: "Esta accion es irreversible!",
+                text: "¡Esta accion es irreversible!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -278,7 +278,7 @@
         $('.single-delete').click(function() {
             Swal.fire({
                 title: '¿Desea eliminar este archivo?',
-                text: "Esta accion es irreversible!",
+                text: "¡Esta accion es irreversible!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

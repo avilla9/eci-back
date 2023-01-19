@@ -194,7 +194,7 @@ import Tabulator from "tabulator-tables";
                                 console.log('id log', cell.getData().id)
                                 Swal.fire({
                                     title: '¿Desea eliminar esta seleccion?',
-                                    text: "Esta accion es irreversible!",
+                                    text: "¡Esta accion es irreversible!",
                                     icon: 'warning',
                                     showCancelButton: true,
                                     confirmButtonColor: '#3085d6',
@@ -461,7 +461,7 @@ import Tabulator from "tabulator-tables";
                                 console.log('id log', cell.getData().id)
                                 Swal.fire({
                                     title: '¿Desea eliminar esta seleccion?',
-                                    text: "Esta accion es irreversible!",
+                                    text: "¡Esta accion es irreversible!",
                                     icon: 'warning',
                                     showCancelButton: true,
                                     confirmButtonColor: '#3085d6',

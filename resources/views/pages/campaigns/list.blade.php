@@ -54,7 +54,7 @@
             e.preventDefault();
             Swal.fire({
                 title: '¿Desea eliminar esta campaña?',
-                text: "Esta accion es irreversible!",
+                text: "¡Esta accion es irreversible!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
