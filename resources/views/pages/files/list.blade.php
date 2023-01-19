@@ -176,7 +176,7 @@
                                                 </button>
                                                 @if (explode('/', $file['media_type'])[0] == 'application')
                                                     @if ($file['media_type'] == 'application/pdf')
-                                                        <a data-tw-toggle="modal" data-tw-target="#myMalditoModal"
+                                                        <a data-tw-toggle="modal" data-tw-target="#myPreviewModal"
                                                             class="btn border-0 dropdown-item justify-start"
                                                             onclick="modalOpen(`{{ asset('file/' . strtolower($file['media_name'])) }}`)">
                                                             <i data-feather="eye"
@@ -317,7 +317,7 @@
                     @endif
                 @endforeach
 
-                <div id="myMalditoModal" class="modal " tabindex="-1" aria-hidden="true">
+                <div id="myPreviewModal" class="modal " tabindex="-1" aria-hidden="true">
 
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
