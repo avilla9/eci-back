@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
@@ -303,9 +304,10 @@ class UserController extends Controller
 
     public function newPassword($id)
     {
-        $user = User::where('id', $id)->get();
+        $user = User::where('id', Crypt::decrypt($id))->get();
+        $userId = Crypt::encrypt($user[0]->id);
 
-        return view('pages.users.get_password', ['layout' => 'login', "user" => $user]);
+        return view('pages.users.get_password', ['layout' => 'login', "user" => $userId]);
     }
 
     public function resetPassword(Request $request)
@@ -330,8 +332,10 @@ class UserController extends Controller
             ];
         }
 
+        $id = Crypt::decrypt($request->id);
+
         $affected = DB::table('users')
-            ->where('id', $request->id)
+            ->where('id', $id)
             ->update([
                 'password' => Hash::make($request->password)
             ]);

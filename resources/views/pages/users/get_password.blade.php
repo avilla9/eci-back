@@ -29,7 +29,7 @@
                     <div class="intro-x mt-2 text-slate-400 xl:hidden text-center">A few more clicks to sign in to your account. Manage all your e-commerce accounts in one place</div>
                     <div class="intro-x mt-8">
                         <form id="login-form">
-                            <input type="hidden" id="id" value="{{ $user[0]->id }}">
+                            <input type="hidden" id="id" value="{{ $user }}">
                             <div class="input-group mt-2">
                                 <input id="password" type="password" class="intro-x login__input form-control" placeholder="" value="">
                                 <div id="togglePassword" class="input-group-text cursor-pointer"><i class="open" data-feather="eye"></i><i class="closed" data-feather="eye-off"></i>

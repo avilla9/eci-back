@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Crypt;
 
 class ResetPasswordNotification extends Notification
 {
@@ -44,7 +45,7 @@ class ResetPasswordNotification extends Notification
     {
         return (new MailMessage)
                     ->line('Para cambiar tu contraseña haz click en el siguiente botón.')
-                    ->action('Click aquí', route('users.new.password', $this->data['id']))
+                    ->action('Click aquí', route('users.new.password', Crypt::encrypt($this->data['id'])))
                     ->line('Gracias por usar nuestra aplicación!');
     }
 
