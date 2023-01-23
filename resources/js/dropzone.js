@@ -9,11 +9,9 @@ import Dropzone from "dropzone";
     $(".dropzone").each(function () {
       let options = {
         accept: (file, done) => {
-          console.log("Uploaded");
           done();
         },
         success: function (file, response) {
-          console.log(response);
           $('#alert').innerHTML = '';
           if (typeof (response) === 'string') {
             $('#alert').append('<div class="alert alert-success">' + response + '</div>');
@@ -54,7 +52,6 @@ import Dropzone from "dropzone";
             alert("Error! Files of this type are not accepted");
             done("Error! Files of this type are not accepted");
           } else {
-            console.log("Uploaded");
             done();
           }
         };
@@ -69,12 +66,10 @@ import Dropzone from "dropzone";
   }
 
   $('#automatic-modal #auto_campaign_id').on('change', function () {
-    console.log($(this).val());
     $('#import-campaign').removeClass('hidden');
     $(".dropzone").each(function () {
       let options = {
         accept: (file, done) => {
-          console.log("Uploaded");
           done();
         },
         success: function (file, response) {
@@ -127,7 +122,7 @@ import Dropzone from "dropzone";
               }
             },
             error: function error(_error) {
-              console.log('error', _error);
+              
 
               $('#manually-modal #alert').html();
               $('#manually-modal #alert').removeClass();
@@ -151,7 +146,6 @@ import Dropzone from "dropzone";
             alert("Error! Files of this type are not accepted");
             done("Error! Files of this type are not accepted");
           } else {
-            console.log("Uploaded");
             done();
           }
         };
@@ -170,15 +164,12 @@ import Dropzone from "dropzone";
   });
 
   if ($("#multiple-file-upload").length) {
-    console.log('multiple')
     $(".dropzone").each(function () {
       let options = {
         accept: (file, done) => {
-          console.log("Uploaded");
           done();
         },
         success: function (file, response) {
-          console.log(response);
         }
       };
   
@@ -191,7 +182,6 @@ import Dropzone from "dropzone";
             alert("Error! Files of this type are not accepted");
             done("Error! Files of this type are not accepted");
           } else {
-            console.log("Uploaded");
             done();
           }
         };
@@ -209,11 +199,9 @@ import Dropzone from "dropzone";
   $(".dropzone").each(function () {
       let options = {
           accept: (file, done) => {
-              console.log("Uploaded");
               done();
           },
           success: function (file, response) {
-              console.log(response);
           }
       };
 
@@ -230,7 +218,6 @@ import Dropzone from "dropzone";
                   alert("Error! Files of this type are not accepted");
                   done("Error! Files of this type are not accepted");
               } else {
-                  console.log("Uploaded");
                   done();
               }
           };

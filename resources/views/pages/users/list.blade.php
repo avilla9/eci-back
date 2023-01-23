@@ -142,13 +142,13 @@
     </div>
   </div>
 
-  <div id="edit-user" class="modal" tabindex="-1" aria-hidden="true">
+  <div id="edit-user" class="modal" tabindex="-1" aria-hidden="true" data-modal-backdrop="static">
     <div class="modal-dialog modal-xl" style="overflow-y: initial !important;">
       <div class="modal-content">
         <div class="modal-body" style="max-height: calc(100vh - 130px); overflow-y: auto;">
           <h2 class="p-5 font-medium text-base mr-auto">Editar información del usuario</h2>
           <div id="editable">
-            <form id="SubmitForm" action="{{ route('') }}">
+            <form id="SubmitForm">
               @csrf
               <!-- BEGIN: Input -->
               <div class="intro-y box">
@@ -156,6 +156,8 @@
                   <div class="preview">
                     <div>
                       <label for="regular-form-1" class="form-label">DNI</label>
+                      <input id="id" name="id" type="hidden" hidden class="form-control"
+                        placeholder="DNI">
                       <input id="dni" name="dni" type="number" readonly class="form-control"
                         placeholder="DNI">
                     </div>

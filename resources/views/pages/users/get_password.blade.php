@@ -64,9 +64,7 @@
     <script>
         $(document).ready(function () {
             $('#send').on('click', function (e) {
-                console.log("hola");
                 e.preventDefault();
-                console.log("hola")
     
                 let data = {
                     id: $('#id').val(),
