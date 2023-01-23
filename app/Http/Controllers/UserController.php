@@ -6,35 +6,36 @@ use App\Imports\DeleteUsersImport;
 use App\Imports\UsersImport;
 use App\Models\Delegation;
 use App\Models\User;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $users = User::latest()->paginate(5);
 
         return view('pages/users/list', compact('users'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    public function getUserData(Request $request)
-    {
+    public function getUserData(Request $request) {
         return User::where('id', $request->id)->first();
     }
 
-    public function getUserRole(Request $request)
-    {
+    public function getUserRole(Request $request) {
         $role = DB::table('users')
             ->select('roles.name as role_name')
             ->where('users.id', $request->id)
@@ -48,8 +49,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
     }
 
     /**
@@ -58,8 +58,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $request->validate(
             [
                 'dni' => 'required',
@@ -105,8 +104,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
-    {
+    public function show(User $user) {
         //
     }
 
@@ -116,8 +114,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
-    {
+    public function edit(User $user) {
         //
     }
 
@@ -128,8 +125,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $validator = Validator($request->all(), [
             'dni' => 'required',
             'name' => 'required',
@@ -179,15 +175,13 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
-    {
+    public function destroy(User $user) {
         //
     }
 
     /* API */
 
-    public function getAllUsers(Request $request)
-    {
+    public function getAllUsers(Request $request) {
 
         $users = User::select(
             'users.dni',
@@ -247,14 +241,12 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
-    {
+    public function delete(Request $request) {
         User::where('id', $request->id)->delete();
         return true;
     }
 
-    public function fileImport(Request $request)
-    {
+    public function fileImport(Request $request) {
         $import = new UsersImport;
         Excel::import($import, $request->file('file')->store('files'));
 
@@ -280,9 +272,82 @@ class UserController extends Controller
         /* return redirect()->back()->with('errors', $errors); */
     }
 
-    public function deleteImport(Request $request)
-    {
+    public function deleteImport(Request $request) {
         Excel::import(new DeleteUsersImport, $request->file('file')->store('files'));
         return redirect()->back();
+    }
+
+    public function password(Request $request) {
+        $validated = Validator::make($request->all(), [
+            "email" => 'required|email|max:255|exists:users,email'
+        ]);
+
+        if ($validated->fails()) {
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "errors" => $validated->errors(),
+            ];
+        }
+
+        $emailExist = User::where('email', $request->email)->get();
+
+        $data = [
+            "id" => $emailExist[0]->id,
+            "name" => $emailExist[0]->name,
+            "email" => $emailExist[0]->email,
+        ];
+
+        $user = User::find($emailExist[0]->id);
+
+
+        $user->notify(new ResetPasswordNotification($data));
+
+        return [
+            "status" => Response::HTTP_ACCEPTED,
+            "message" => "¡Te hemos enviado un correo!"
+        ];
+    }
+
+    public function newPassword($id) {
+        $user = User::where('id', Crypt::decrypt($id))->get();
+        $userId = Crypt::encrypt($user[0]->id);
+
+        return view('pages.users.get_password', ['layout' => 'login', "user" => $userId]);
+    }
+
+    public function resetPassword(Request $request) {
+        $validated = Validator::make($request->all(), [
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
+            "password_check" => "required|same:password",
+        ]);
+
+        if ($validated->fails()) {
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "errors" => $validated->errors()
+            ];
+        }
+
+        $id = Crypt::decrypt($request->id);
+
+        $affected = DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'password' => Hash::make($request->password)
+            ]);
+
+        return [
+            "status" => Response::HTTP_ACCEPTED,
+            "message" => "Contraseña Actualizada",
+            "affected" => $affected
+        ];
     }
 }

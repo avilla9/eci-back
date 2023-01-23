@@ -962,6 +962,10 @@ class PageController extends Controller {
     public function imageZoom() {
         return view('pages/image-zoom');
     }
+
+    public function getEmail() {
+        return view('pages.users.get_email', ['layout' => 'login']);
+    }
 }
 
 function contentParameters() {

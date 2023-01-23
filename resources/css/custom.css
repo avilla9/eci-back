@@ -3,5 +3,9 @@
 }
 
 .swal2-popup {
-  line-height : 30px !important;
+  line-height: 30px !important;
+}
+
+.open-check {
+  display: none;
 }

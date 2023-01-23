@@ -5,6 +5,7 @@ use App\Http\Controllers\CampaignController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
@@ -55,6 +56,8 @@ Route::prefix('/users')->group(function () {
         Route::post('/delete', 'delete')->name('delete-users');
         Route::post('/data', 'getUserData');
         Route::post('/level', 'getUserRole');
+        Route::post('/password', 'password')->name('users.password');
+        Route::put('/reset-password', 'resetPassword')->name('users.reset.password');
     });
 });
 
