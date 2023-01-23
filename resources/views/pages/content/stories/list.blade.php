@@ -110,7 +110,6 @@
         id: $(this).attr('article_id'),
       },
       success: function success(data) {
-        console.log(data);
         $('#access-details').html('');
         $.map(data, function (val, index) {
           $('#access-details').append(`
@@ -124,7 +123,7 @@
         });
       },
       error: function error(_error) {
-        console.log('error', _error);
+        
         $('#alert').html();
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-danger show mb-2');
@@ -161,7 +160,7 @@
                       $('tr#' + data).remove();
                     },
                     error: function error(_error) {
-                      console.log('error', _error);
+                      
 
                       $('#alert').html();
                       $('#alert').removeClass();

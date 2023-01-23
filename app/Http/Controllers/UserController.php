@@ -151,9 +151,8 @@ class UserController extends Controller {
             return response()->json($validator->errors(), 404);
         } else {
             $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('dni', $request->dni)->first();
+            $user = User::where('id', $request->id)->first();
             $delegation = Delegation::where('id', $request->delegation_id)->first();
-            $user->dni = $request->dni;
             $user->name = $request->name;
             $user->gender = $request->gender;
             $user->email = $request->email;
@@ -165,7 +164,6 @@ class UserController extends Controller {
             $user->delegation_code = $delegation->code;
             $user->quartile_id = $request->quartile_id;
             $user->save();
-            return 'ok';
         }
     }
 

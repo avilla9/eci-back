@@ -78,8 +78,6 @@
                             $('tr#' + data).remove();
                         },
                         error: function error(_error) {
-                            console.log('error', _error);
-
                             $('#alert').html();
                             $('#alert').removeClass();
                             $('#alert').addClass('alert alert-danger show mb-2');

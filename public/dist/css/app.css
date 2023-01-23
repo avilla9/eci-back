@@ -17214,6 +17214,9 @@ html body{
 .open {
   display: none;
 }
+.swal2-popup {
+  line-height: 30px !important;
+}
 .open-check {
   display: none;
 }
