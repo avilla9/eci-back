@@ -10,7 +10,7 @@
 </div>
 @if ($errors->any())
 <div class="alert alert-danger">
-  <strong>Whoops!</strong> There were some problems with your input.<br><br>
+  <strong>Whoops!</strong> Hubo algunos problemas con la información ingresada.<br><br>
   <ul>
     @foreach ($errors->all() as $error)
     <li>{{ $error }}</li>
@@ -33,11 +33,11 @@
           <div class="preview">
             <div>
               <label for="regular-form-1" class="form-label">DNI</label>
-              <input id="regular-form-1" name="dni" type="number" class="form-control" placeholder="DNI">
+              <input id="regular-form-1" name="dni" type="number" class="form-control" placeholder="DNI" value="{{ old('dni') }}">
             </div>
             <div>
               <label for="regular-form-1" class="form-label">Nombre completo</label>
-              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Nombres">
+              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Nombres" value="{{ old('name') }}">
             </div>
             <div class="mt-3">
               <label>Género</label>
@@ -54,20 +54,20 @@
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">Correo</label>
-              <input id="regular-form-1" type="email" class="form-control" name="email" placeholder="Correo">
+              <input id="regular-form-1" type="email" class="form-control" name="email" placeholder="Correo" value="{{ old('email') }}">
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">Territorial</label>
-              <input id="regular-form-1" type="text" class="form-control" name="territorial" placeholder="Territorial">
+              <input id="regular-form-1" type="text" class="form-control" name="territorial" placeholder="Territorial" value="{{ old('territorial') }}">
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">SECI Coins</label>
               <input id="regular-form-1" type="number" class="form-control" name="secicoins" placeholder="SECI Coins">
             </div>
             <div class="mt-3">
-              <label for="regular-form-4" class="form-label" style="width: 100%;">Password</label>
+              <label for="regular-form-4" class="form-label" style="width: 100%;">Contraseña</label>
               <div class="input-group mt-2">
-                <input id="password" name="password" type="password" class="form-control" placeholder="Password" aria-label="password" aria-describedby="togglePassword">
+                <input id="password" name="password" type="password" class="form-control" placeholder="Contraseña" aria-label="password" aria-describedby="togglePassword">
                 <div id="togglePassword" class="input-group-text cursor-pointer"><i class="open" data-feather="eye"></i><i class="closed" data-feather="eye-off"></i>
                 </div>
               </div>
