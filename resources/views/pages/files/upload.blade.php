@@ -10,15 +10,13 @@
 </div>
 <div class="grid grid-cols-12 gap-6 mt-5">
   <div class="intro-y col-span-12 lg:col-span-12">
-    @if(session()->get('message'))
-    <div class="alert alert-success mb-3">
-      {{ session()->get('message') }}
-    </div>
-    @endif
+    
+    <div class="alert alert-success mb-3" id="alertSuccess" style="display: none;"></div>
+    
     <div id="multiple-file-upload" class="p-5">
       <div class="preview" class="dropzone">
-        <form data-single="false" action="{{route('file.upload')}}" method="POST" enctype="multipart/form-data"
-          class="dropzone">
+        <form action="{{route('file.upload')}}" method="POST" enctype="multipart/form-data"
+          class="dropzone" id="my-awesome-dropzone">
           @csrf
           <div class="fallback">
             <input name="file" type="file" multiple />
@@ -26,12 +24,21 @@
           <div class="dz-message" data-dz-message>
             <div class="text-lg font-medium">Arrastra y suelta o haz clic</div>
             <div class="text-slate-500">
-              Seleccione archivos multimedia
+              Seleccione archivos multimedia y de click en "Subir archivos"
             </div>
           </div>
         </form>
+        <button id="submit-files" class="btn btn-primary p-3 mt-2"> 
+          <i data-feather="download" class="w-4 h-4 mr-2"></i> Subir archivos
+        </button>
+          <button type="button" data-tw-dismiss="modal" class="btn btn-primary p-3 mt-2" id="redirect-files" style="display: none;">
+            <i data-feather="eye" class="w-4 h-4 mr-2"></i> Ver archivos
+          </button>
+
       </div>
     </div>
+    
+    
     {{-- <form action="{{ route('file.upload') }}" method="POST">
       @csrf
       <div class="form-group row">
@@ -84,4 +91,12 @@
     </form> --}}
   </div>
 </div>
+@endsection
+
+@section('script')
+    <script> 
+     $('#redirect-files').on("click", function() {
+                  window.location.href = "{{ route('file.list') }}"
+                });
+    </script>
 @endsection

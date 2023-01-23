@@ -14,9 +14,7 @@ class FileController extends Controller {
     public function index() {
         $files = File::all();
 
-        return view('files.index', [
-            'files' => $files
-        ]);
+        return view('files.index', compact('files'));
     }
 
     public function upload(Request $request) {
