@@ -58,6 +58,7 @@ Route::prefix('/users')->group(function () {
         Route::post('/level', 'getUserRole');
         Route::post('/password', 'password')->name('users.password');
         Route::put('/reset-password', 'resetPassword')->name('users.reset.password');
+        Route::post('/change-password', 'changePassword');
     });
 });
 

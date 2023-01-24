@@ -348,4 +348,16 @@ class UserController extends Controller {
             "affected" => $affected
         ];
     }
+    public function changePassword(Request $request) {
+        $user = User::where('id', $request->user_id)->first();
+        // return $user;
+        $hasher = app('hash');
+        if (Hash::check($request->old_password, $user->getAuthPassword())) {
+            return "ok";
+        }
+        else {
+            return "no";
+        }
+        
+    }
 }
