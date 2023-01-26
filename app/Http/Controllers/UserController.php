@@ -272,6 +272,7 @@ class UserController extends Controller
 
     public function password(Request $request)
     {
+        // return $request;
         $validated = Validator::make($request->all(), [
             "email" => 'required|email|max:255|exists:users,email'
         ]);
@@ -289,6 +290,7 @@ class UserController extends Controller
             "id" => $emailExist[0]->id,
             "name" => $emailExist[0]->name,
             "email" => $emailExist[0]->email,
+            "origin" => $request->origin
         ];
 
         $user = User::find($emailExist[0]->id);

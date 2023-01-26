@@ -56,7 +56,8 @@
 
 
                 let data = {
-                    email: $('#email').val()
+                    email: $('#email').val(),
+                    origin: window.location.hostname + '/nueva-contraseña'
                 }
 
                 $.ajax({
@@ -65,6 +66,7 @@
                     data: data,
                     dataType: "JSON",
                     success: function (response) {
+                        // console.log("🚀 ~ file:x get_email.blade.php:87 ~ response", response)
                         if(response.status === 400) {
                             $('#email').css('border-color', '#B91C1C');
                             $.each(response.errors, function (key, error) { 
