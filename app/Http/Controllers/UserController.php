@@ -303,6 +303,7 @@ class UserController extends Controller {
             "id" => $emailExist->id,
             "name" => $emailExist->name,
             "email" => $emailExist->email,
+            "origin" => $request->origin
         ];
 
         $user = User::find($emailExist->id);

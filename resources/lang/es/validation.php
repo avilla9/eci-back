@@ -157,6 +157,7 @@ return [
         'delegation_id' => 'Delegación',
         'quartile_id' => 'Cuartil del usuario',
         'group_id' => 'Grupo del usuario',
+        'password_check' => 'Confirma tu contraseña'
     ],
 
 ];
