@@ -1,21 +1,21 @@
 <!-- BEGIN: Top Bar -->
 <div class="top-bar-boxed h-[70px] z-[51] relative border-b border-white/[0.08] -mt-7 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 md:pt-0 mb-12">
-    <div class="h-full flex items-center">
+    <div class="h-full flex items-center justify-between">
         <!-- BEGIN: Logo -->
-        <a href="" class="-intro-x hidden md:flex">
+        <a href="{{ route('lista-de-usuarios') }}" class="-intro-x hidden md:flex">
             <img alt="Icewall Tailwind HTML Admin Template" class="w-6" src="{{ asset('dist/images/logo.svg') }}">
             <span class="text-white text-lg ml-3">
-                Icewall
+                El Corte Inglés
             </span>
         </a>
         <!-- END: Logo -->
         <!-- BEGIN: Breadcrumb -->
-        <nav aria-label="breadcrumb" class="-intro-x h-full mr-auto">
+        {{-- <nav aria-label="breadcrumb" class="-intro-x h-full mr-auto">
             <ol class="breadcrumb breadcrumb-light">
                 <li class="breadcrumb-item"><a href="#">Application</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
             </ol>
-        </nav>
+        </nav> --}}
         <!-- END: Breadcrumb -->
         <!-- BEGIN: Search -->
         <!-- <div class="intro-x relative mr-3 sm:mr-6">

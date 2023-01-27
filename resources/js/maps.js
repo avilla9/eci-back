@@ -636,9 +636,6 @@ import axios from "axios";
                         ],
                     };
                     new MarkerClusterer(map, markersArray, mcOptions);
-                })
-                .catch(function (err) {
-                    console.log(err);
                 });
         }
 

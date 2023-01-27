@@ -37,7 +37,8 @@ Route::middleware('loggedin')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');
+    // Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');
+    Route::get('/', [PageController::class, 'userList'])->name('lista-de-usuarios');
 
     Route::get('/notifications', function () {
         return redirect()->away('https://console.firebase.google.com/project/app-eci/messaging');
@@ -57,7 +58,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/usuarios')->group(function () {
         Route::controller(PageController::class)->group(function () {
-            Route::get('/lista', 'userList')->name('lista-de-usuarios');
+            // Route::get('/lista', 'userList')->name('lista-de-usuarios');
             Route::get('/crear', 'userCreate')->name('crear-usuarios');
             Route::get('/subir', 'userUpload')->name('subir-usuarios');
             Route::get('/eliminar', 'deleteUserUpload')->name('eliminar-usuarios');
@@ -196,7 +197,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');
+    // Route::get('/', [PageController::class, 'dashboardOverview1'])->name('dashboard-overview-1');
     Route::get('dashboard-overview-2-page', [PageController::class, 'dashboardOverview2'])->name('dashboard-overview-2');
     Route::get('dashboard-overview-3-page', [PageController::class, 'dashboardOverview3'])->name('dashboard-overview-3');
     Route::get('inbox-page', [PageController::class, 'inbox'])->name('inbox');

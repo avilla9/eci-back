@@ -110,7 +110,6 @@
         id: $(this).attr('article_id'),
       },
       success: function success(data) {
-        console.log(data);
         $('#access-details').html('');
         $.map(data, function (val, index) {
           $('#access-details').append(`
@@ -124,7 +123,7 @@
         });
       },
       error: function error(_error) {
-        console.log('error', _error);
+        
         $('#alert').html();
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-danger show mb-2');
@@ -135,29 +134,42 @@
 
   $('.delete').click(function (e) {
     e.preventDefault();
-    $.ajax({
-      type: "POST",
-      url: "{{route('article.delete')}}",
-      data: {
-        "_token": $('meta[name="csrf-token"]').attr('content'),
-        id: $(this).attr('article_id'),
-      },
-      success: function success(data) {
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-success show mb-2');
-        $('#alert').html('Campaña eliminada con éxito');
-        $('tr#' + data).remove();
-      },
-      error: function error(_error) {
-        console.log('error', _error);
+    Swal.fire({
+                title: '¿Desea eliminar esta seleccion?',
+                text: "¡Esta accion es irreversible!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, seguro!',
+                cancelButtonText: 'No, cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  $.ajax({
+                    type: "POST",
+                    url: "{{route('article.delete')}}",
+                    data: {
+                      "_token": $('meta[name="csrf-token"]').attr('content'),
+                      id: $(this).attr('article_id'),
+                    },
+                    success: function success(data) {
+                      $('#alert').html();
+                      $('#alert').removeClass();
+                      $('#alert').addClass('alert alert-success show mb-2');
+                      $('#alert').html('Campaña eliminada con éxito');
+                      $('tr#' + data).remove();
+                    },
+                    error: function error(_error) {
+                      
 
-        $('#alert').html();
-        $('#alert').removeClass();
-        $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al eliminar la story');
-      }
-    });
+                      $('#alert').html();
+                      $('#alert').removeClass();
+                      $('#alert').addClass('alert alert-danger show mb-2');
+                      $('#alert').html('Ha ocurrido un error al eliminar la story');
+                    }
+                  });
+            }
+          })
   });
 </script>
 @endsection

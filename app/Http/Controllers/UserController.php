@@ -18,28 +18,24 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $users = User::latest()->paginate(5);
 
         return view('pages/users/list', compact('users'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    public function getUserData(Request $request)
-    {
+    public function getUserData(Request $request) {
         return User::where('id', $request->id)->first();
     }
 
-    public function getUserRole(Request $request)
-    {
+    public function getUserRole(Request $request) {
         $role = DB::table('users')
             ->select('roles.name as role_name')
             ->where('users.id', $request->id)
@@ -53,8 +49,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
     }
 
     /**
@@ -63,25 +58,37 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+        $request->validate(
+            [
+                'dni' => 'required',
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => [
+                    'required',
+                    Password::min(8)
+                        ->letters()
+                        ->mixedCase()
+                        ->numbers()
+                        ->symbols()
+                        ->uncompromised()
+                ],
+                'gender' => 'required',
+                'territorial' => 'required',
+                'role_id' => 'required|not_in:0',
+                'delegation_id' => 'required|not_in:0',
+                'quartile_id' => 'required|not_in:0',
+                'group_id' => 'required|not_in:0',
+            ],
+            [
+                "password.min" => "El campo :attribute debe contener al menos :min caracteres.",
+                "password.mixedCase" => "El campo :attribute debe contener al menos una letra mayúcula y una minúscula.",
+            ],
+        );
 
         $request->merge(['active' => 1]);
         $delegation = Delegation::where('id', $request->delegation_id)->first()->code;
         $request->merge(['delegation_code' => $delegation]);
-
-        $request->validate([
-            'dni' => 'required',
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'gender' => 'required',
-            'territorial' => 'required',
-            'role_id' => 'required|not_in:0',
-            'delegation_id' => 'required|not_in:0',
-            'quartile_id' => 'required|not_in:0',
-            'group_id' => 'required|not_in:0',
-        ]);
 
         $request->merge(['password' => Hash::make($request->password)]);
 
@@ -97,8 +104,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
-    {
+    public function show(User $user) {
         //
     }
 
@@ -108,8 +114,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
-    {
+    public function edit(User $user) {
         //
     }
 
@@ -120,13 +125,20 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $validator = Validator($request->all(), [
             'dni' => 'required',
             'name' => 'required',
             'email' => 'required',
-            // 'password' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
             'gender' => 'required',
             'territorial' => 'required',
             'role_id' => 'required|not_in:0',
@@ -139,9 +151,8 @@ class UserController extends Controller
             return response()->json($validator->errors(), 404);
         } else {
             $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('dni', $request->dni)->first();
+            $user = User::where('id', $request->id)->first();
             $delegation = Delegation::where('id', $request->delegation_id)->first();
-            $user->dni = $request->dni;
             $user->name = $request->name;
             $user->gender = $request->gender;
             $user->email = $request->email;
@@ -153,7 +164,6 @@ class UserController extends Controller
             $user->delegation_code = $delegation->code;
             $user->quartile_id = $request->quartile_id;
             $user->save();
-            return 'ok';
         }
     }
 
@@ -163,15 +173,13 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
-    {
+    public function destroy(User $user) {
         //
     }
 
     /* API */
 
-    public function getAllUsers(Request $request)
-    {
+    public function getAllUsers(Request $request) {
 
         $users = User::select(
             'users.dni',
@@ -231,14 +239,12 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
-    {
+    public function delete(Request $request) {
         User::where('id', $request->id)->delete();
         return true;
     }
 
-    public function fileImport(Request $request)
-    {
+    public function fileImport(Request $request) {
         $import = new UsersImport;
         Excel::import($import, $request->file('file')->store('files'));
 
@@ -264,15 +270,12 @@ class UserController extends Controller
         /* return redirect()->back()->with('errors', $errors); */
     }
 
-    public function deleteImport(Request $request)
-    {
+    public function deleteImport(Request $request) {
         Excel::import(new DeleteUsersImport, $request->file('file')->store('files'));
         return redirect()->back();
     }
 
-    public function password(Request $request)
-    {
-        // return $request;
+    public function password(Request $request) {
         $validated = Validator::make($request->all(), [
             "email" => 'required|email|max:255|exists:users,email'
         ]);
@@ -284,16 +287,25 @@ class UserController extends Controller
             ];
         }
 
-        $emailExist = User::where('email', $request->email)->get();
+        $emailExist = User::where([
+            'email' => $request->email,
+            'deleted_at' => NULL
+        ])->first();
+
+        if(!$emailExist) {
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "errors" => ['email' => 'El usuario no se encuentra activo.'],
+            ];
+        }
 
         $data = [
-            "id" => $emailExist[0]->id,
-            "name" => $emailExist[0]->name,
-            "email" => $emailExist[0]->email,
-            "origin" => $request->origin
+            "id" => $emailExist->id,
+            "name" => $emailExist->name,
+            "email" => $emailExist->email,
         ];
 
-        $user = User::find($emailExist[0]->id);
+        $user = User::find($emailExist->id);
 
 
         $user->notify(new ResetPasswordNotification($data));
@@ -304,16 +316,14 @@ class UserController extends Controller
         ];
     }
 
-    public function newPassword($id)
-    {
+    public function newPassword($id) {
         $user = User::where('id', Crypt::decrypt($id))->get();
         $userId = Crypt::encrypt($user[0]->id);
 
         return view('pages.users.get_password', ['layout' => 'login', "user" => $userId]);
     }
 
-    public function resetPassword(Request $request)
-    {
+    public function resetPassword(Request $request) {
         $validated = Validator::make($request->all(), [
             'password' => [
                 'required',
@@ -324,10 +334,10 @@ class UserController extends Controller
                     ->symbols()
                     ->uncompromised()
             ],
-             "password_check" => "required|same:password",
+            "password_check" => "required|same:password",
         ]);
 
-        if($validated->fails()) {
+        if ($validated->fails()) {
             return [
                 "status" => Response::HTTP_BAD_REQUEST,
                 "errors" => $validated->errors()
@@ -347,5 +357,15 @@ class UserController extends Controller
             "message" => "Contraseña Actualizada",
             "affected" => $affected
         ];
+    }
+    public function changePassword(Request $request) {
+        $user = User::where('id', $request->user_id)->first();
+        // return $user;
+        $hasher = app('hash');
+        if (Hash::check($request->old_password, $user->getAuthPassword())) {
+            return "ok";
+        } else {
+            return "no";
+        }
     }
 }

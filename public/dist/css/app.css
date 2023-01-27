@@ -3362,6 +3362,9 @@ select{
 .justify-center{
     justify-content: center;
 }
+.justify-between{
+    justify-content: space-between;
+}
 .gap-4{
     gap: 1rem;
 }
@@ -17210,6 +17213,9 @@ html body{
 }
 .open {
   display: none;
+}
+.swal2-popup {
+  line-height: 30px !important;
 }
 .open-check {
   display: none;

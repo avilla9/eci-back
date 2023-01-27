@@ -163,6 +163,10 @@ class PageController extends Controller {
         ]);
     }
 
+    public function home() {
+        return view('pages/users/list');
+    }
+
     public function homeCreate() {
         $data = contentParameters();
         $sections = sectionParameters('Home');
@@ -320,10 +324,12 @@ class PageController extends Controller {
     }
 
     public function filesList() {
-        $files = File::where('media_type', 'like', '%image%')->latest()->get();
+        $files = File::all();
+        $files = File::orderBy('updated_at', 'desc')->get();
+        // File::where('media_type', 'like', '%pdf%')->get();
 
         return view('pages/files/list', [
-            'files' => $files,
+            'files' => $files
         ]);
     }
 

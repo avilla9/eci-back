@@ -191,7 +191,6 @@
 @section('script')
 <script>
   $('#campaign').change(function () {
-    console.log($(this).val());
     $('table, #add-data').removeClass('hidden');
 
     $.ajax({
@@ -238,7 +237,7 @@
         }
       },
       error: function error(_error) {
-        console.log('error', _error);
+        
 
         $('#alert').html();
         $('#alert').removeClass();
@@ -261,8 +260,6 @@
       campaign_id: $('#campaign_id').val()?.length ? parseInt($('#campaign_id').val()) : 0,
     };
 
-    console.log(data, !data.user_id || !data.campaign_id);
-
     if (!data.user_id || !data.campaign_id) {
       $('#manually-modal #alert').html();
       $('#manually-modal #alert').removeClass();
@@ -274,7 +271,6 @@
         url: "{{route('production.create')}}",
         data: data,
         success: function (data) {
-          console.log(data);
           if (!data) {
             $('#manually-modal #alert').html();
             $('#manually-modal #alert').removeClass();
@@ -332,7 +328,7 @@
               }
             },
             error: function error(_error) {
-              console.log('error', _error);
+              
 
               $('#manually-modal #alert').html();
               $('#manually-modal #alert').removeClass();
@@ -341,15 +337,11 @@
             }
           });
         },
-        error: function (error) {
-          console.log('error', error);
-        },
       });
     }
   });
 
   $(document).on('click', '.delete', function (e) {
-    console.log('delete', $(this).attr('campaign_id'));
     e.preventDefault();
     $.ajax({
       type: "POST",
@@ -366,7 +358,7 @@
         $('tr#' + data).remove();
       },
       error: function error(_error) {
-        console.log('error', _error);
+        
   
         $('#alert').html();
         $('#alert').removeClass();

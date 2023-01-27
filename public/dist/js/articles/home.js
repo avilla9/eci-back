@@ -146,7 +146,7 @@ $('#save').click(function (e) {
         $('#alert').html('Post creado con éxito');
       },
       error: function error(_error) {
-        console.log('error', _error);
+        
 
         $('#alert').html();
         $('#alert').removeClass();
