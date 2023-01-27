@@ -287,15 +287,25 @@ class UserController extends Controller {
             ];
         }
 
-        $emailExist = User::where('email', $request->email)->get();
+        $emailExist = User::where([
+            'email' => $request->email,
+            'deleted_at' => NULL
+        ])->first();
+
+        if(!$emailExist) {
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "errors" => ['email' => 'El usuario no se encuentra activo.'],
+            ];
+        }
 
         $data = [
-            "id" => $emailExist[0]->id,
-            "name" => $emailExist[0]->name,
-            "email" => $emailExist[0]->email,
+            "id" => $emailExist->id,
+            "name" => $emailExist->name,
+            "email" => $emailExist->email,
         ];
 
-        $user = User::find($emailExist[0]->id);
+        $user = User::find($emailExist->id);
 
 
         $user->notify(new ResetPasswordNotification($data));
@@ -347,5 +357,15 @@ class UserController extends Controller {
             "message" => "Contraseña Actualizada",
             "affected" => $affected
         ];
+    }
+    public function changePassword(Request $request) {
+        $user = User::where('id', $request->user_id)->first();
+        // return $user;
+        $hasher = app('hash');
+        if (Hash::check($request->old_password, $user->getAuthPassword())) {
+            return "ok";
+        } else {
+            return "no";
+        }
     }
 }
