@@ -352,6 +352,7 @@ class UserController extends Controller {
                 'password' => Hash::make($request->password)
             ]);
 
+
         return [
             "status" => Response::HTTP_ACCEPTED,
             "message" => "Contraseña Actualizada",
@@ -359,13 +360,40 @@ class UserController extends Controller {
         ];
     }
     public function changePassword(Request $request) {
-        $user = User::where('id', $request->user_id)->first();
-        // return $user;
-        $hasher = app('hash');
+        $user = User::where(['id' => $request->user_id])->first();
+
         if (Hash::check($request->old_password, $user->getAuthPassword())) {
-            return "ok";
+            $validator = Validator($request->all(), [
+                'new_password' => [
+                    'required',
+                    Password::min(8)
+                        ->letters()
+                        ->mixedCase()
+                        ->numbers()
+                        ->symbols()
+                        ->uncompromised()
+                ],
+            ]);
+
+            if ($validator->fails()) {
+                $error = $validator->errors();
+                return [
+                    "status" => Response::HTTP_BAD_REQUEST,
+                    "message" => $error->first()
+                ];    
+                // return response()->json($validator->errors()->error , 404);
+            }
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            return [
+                "status" => Response::HTTP_ACCEPTED,
+                "message" => "Contraseña actualizada correctamente.",
+            ];
         } else {
-            return "no";
+            return [
+                "status" => Response::HTTP_BAD_REQUEST,
+                "message" => "La contraseña anterior no es correcta.",
+            ];
         }
     }
 }
