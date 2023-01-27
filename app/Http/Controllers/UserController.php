@@ -366,12 +366,17 @@ class UserController extends Controller {
             ]);
 
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 404);
+                $error = $validator->errors();
+                return [
+                    "status" => Response::HTTP_BAD_REQUEST,
+                    "message" => $error->first()
+                ];    
+                // return response()->json($validator->errors()->error , 404);
             }
             $user->password = Hash::make($request->new_password);
             $user->save();
             return [
-                "status" => true,
+                "status" => Response::HTTP_ACCEPTED,
                 "message" => "Contraseña actualizada correctamente.",
             ];
         } else {
