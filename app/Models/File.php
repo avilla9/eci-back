@@ -17,7 +17,6 @@ class File extends Model {
         'media_type',
         'media_path',
         'media_size',
-        'media_path',
     ];
 
 }
