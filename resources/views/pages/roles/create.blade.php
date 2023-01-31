@@ -39,10 +39,14 @@
               <label for="regular-form-6" class="form-label">Descripción del rol</label>
               <textarea id="regular-form-6" name="description" class="form-control" placeholder="Descripción" minlength="10" required></textarea>
             </div>
-            <div class="mt-3">
+
+            <!-- Nivel de rol dentro de panel de creación-->
+
+            <!--<div class="mt-3">
               <label for="regular-form-4" class="form-label">Nivel del rol</label>
               <input id="regular-form-4" name="level" type="number" class="form-control" placeholder="Nivel del rol" required>
-            </div>
+            </div>-->
+
           </div>
           <div class="sm:ml-20 sm:pl-5 mt-5">
             <button type="submit" class="btn btn-primary">Crear Rol</button>
