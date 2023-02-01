@@ -391,8 +391,8 @@ import Tabulator from "tabulator-tables";
                         'justify-content': 'center'
                     });
                     setTimeout(function() {
-                        $('#alertUpdateSuccess').fadeOut(1500);
-                        data.password = $('#password').val("");
+                        $('#alertUpdateSuccess').fadeOut(4000);
+                        data.password = $('#password').html("");
                     }, 2000);
                     $.ajax({
                         type: "GET",
@@ -406,14 +406,28 @@ import Tabulator from "tabulator-tables";
                     });
                 },
                 error: function(error) {
-                    $('#alertUpdateFailed').css({
-                        'display': 'flex',
-                        'align-items': 'center',
-                        'justify-content': 'center'
-                    });
-                    console.log(error);
+                    console.log(error.responseJSON.password);
+                    // console.log(error);
+                    let errors = error.responseJSON.password[0];
+
+                    if (errors === undefined) {
+                        $("#alertUpdateFailed").html("Ha ocurrido un error al actualizar la contraseña, por favor intente de nuevo.");
+                        $('#alertUpdateFailed').css({
+                            'display': 'flex',
+                            'align-items': 'center',
+                            'justify-content': 'center'
+                        });
+
+                    } else {
+                        $("#alertUpdateFailed").html(errors);
+                        $('#alertUpdateFailed').css({
+                            'display': 'flex',
+                            'align-items': 'center',
+                            'justify-content': 'center'
+                        });
+                    }
                     setTimeout(function() {
-                        $('#alertUpdateFailed').fadeOut(1500);
+                        $('#alertUpdateFailed').fadeOut(4000);
                     }, 2000);
                 },
             });
