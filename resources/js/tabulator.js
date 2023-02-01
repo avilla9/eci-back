@@ -392,7 +392,7 @@ import Tabulator from "tabulator-tables";
                     });
                     setTimeout(function() {
                         $('#alertUpdateSuccess').fadeOut(4000);
-                        data.password = $('#password').html("");
+                        data.password = $('#password').val("");
                     }, 2000);
                     $.ajax({
                         type: "GET",
