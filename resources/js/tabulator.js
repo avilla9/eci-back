@@ -33,16 +33,16 @@ import Tabulator from "tabulator-tables";
 
       // For HTML table
       {
-        title: "DNI",
+        title: "Código de usuario",
         minWidth: 100,
         responsive: 0,
-        field: "dni",
+        field: "user_code",
         vertAlign: "left",
         print: false,
         download: false,
         formatter(cell, formatterParams) {
           return `<div>
-                            <div class="font-medium whitespace-nowrap">${cell.getData().dni
+                            <div class="font-medium whitespace-nowrap">${cell.getData().user_code
             }</div>
                         </div>`;
         },
@@ -89,24 +89,6 @@ import Tabulator from "tabulator-tables";
           return `<div>
                             <div class="font-medium whitespace-nowrap">${cell.getData().role_name
             }</div>
-                        </div>`;
-        },
-      },
-      {
-        title: "Estatus",
-        minWidth: 100,
-        field: "active",
-        hozAlign: "center",
-        vertAlign: "middle",
-        print: false,
-        download: false,
-        formatter(cell, formatterParams) {
-          return `<div class="flex items-center lg:justify-center ${cell.getData().active
-            ? "text-success"
-            : "text-danger"
-            }">
-                            <i data-feather="check-square" class="w-4 h-4 mr-2"></i> ${cell.getData().active ? "Activo" : "Inactivo"
-            }
                         </div>`;
         },
       },
@@ -158,11 +140,17 @@ import Tabulator from "tabulator-tables";
               $('#dni').val(cell.getData().dni);
               $('#dni').attr("placeholder", cell.getData().dni);
 
+              $('#user_code').val(cell.getData().user_code);
+              $('#user_code').attr("placeholder", cell.getData().user_code);
+
               $('#name').val(cell.getData().name);
               $('#name').attr("placeholder", cell.getData().name);
 
               $('#name').val(cell.getData().name);
               $('#name').attr("placeholder", cell.getData().name);
+
+              $('#last_name').val(cell.getData().last_name);
+              $('#last_name').attr("placeholder", cell.getData().last_name);
 
               if (cell.getData().gender == 'm') {
                 $('#male').attr("checked", true);

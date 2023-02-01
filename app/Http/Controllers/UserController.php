@@ -62,7 +62,9 @@ class UserController extends Controller {
         $request->validate(
             [
                 'dni' => 'required',
+                'user_code' => 'required',
                 'name' => 'required',
+                'last_name' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => [
                     'required',
@@ -73,7 +75,6 @@ class UserController extends Controller {
                         ->symbols()
                         ->uncompromised()
                 ],
-                'gender' => 'required',
                 'territorial' => 'required',
                 'role_id' => 'required|not_in:0',
                 'delegation_id' => 'required|not_in:0',
@@ -128,7 +129,9 @@ class UserController extends Controller {
     public function update(Request $request) {
         $validator = Validator($request->all(), [
             'dni' => 'required',
+            'user_code' => 'required',
             'name' => 'required',
+            'last_name' => 'required',
             'email' => 'required',
             'password' => [
                 'required',
@@ -139,7 +142,6 @@ class UserController extends Controller {
                     ->symbols()
                     ->uncompromised()
             ],
-            'gender' => 'required',
             'territorial' => 'required',
             'role_id' => 'required|not_in:0',
             'delegation_id' => 'required|not_in:0',
@@ -154,7 +156,8 @@ class UserController extends Controller {
             $user = User::where('id', $request->id)->first();
             $delegation = Delegation::where('id', $request->delegation_id)->first();
             $user->name = $request->name;
-            $user->gender = $request->gender;
+            $user->last_name = $request->last_name;
+            $user->user_code = $request->user_code;
             $user->email = $request->email;
             $user->territorial = $request->territorial;
             $user->secicoins = $request->secicoins;
@@ -183,14 +186,15 @@ class UserController extends Controller {
 
         $users = User::select(
             'users.dni',
+            'users.user_code',
             'users.active',
             'users.created_at',
             'users.deleted_at',
             'users.email',
             'users.email_verified_at',
-            'users.gender',
             'users.id',
             'users.name',
+            'users.last_name',
             'users.secicoins',
             'users.territorial as territorial',
             'users.role_id',
