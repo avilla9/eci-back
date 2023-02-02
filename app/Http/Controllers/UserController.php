@@ -131,7 +131,7 @@ class UserController extends Controller {
             'name' => 'required',
             'email' => 'required',
             'password' => [
-                'required',
+                'nullable',
                 Password::min(8)
                     ->letters()
                     ->mixedCase()
@@ -150,15 +150,18 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return response()->json($validator->errors(), 404);
         } else {
-            $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('id', $request->id)->first();
+            $user = User::where('dni', $request->dni)->first();
+            if ($request->password) {
+                $request->merge(['password' => Hash::make($request->password)]);
+                $user->password = $request->password;
+            }
+            $delegation = Delegation::where('id', $request->delegation_id)->first();
             $delegation = Delegation::where('id', $request->delegation_id)->first();
             $user->name = $request->name;
             $user->gender = $request->gender;
             $user->email = $request->email;
             $user->territorial = $request->territorial;
             $user->secicoins = $request->secicoins;
-            $user->password = $request->password;
             $user->group_id = $request->group_id;
             $user->role_id = $request->role_id;
             $user->delegation_code = $delegation->code;
