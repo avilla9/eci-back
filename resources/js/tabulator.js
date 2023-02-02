@@ -33,16 +33,16 @@ import Tabulator from "tabulator-tables";
 
       // For HTML table
       {
-        title: "DNI",
+        title: "Código de usuario",
         minWidth: 100,
         responsive: 0,
-        field: "dni",
+        field: "user_code",
         vertAlign: "left",
         print: false,
         download: false,
         formatter(cell, formatterParams) {
           return `<div>
-                            <div class="font-medium whitespace-nowrap">${cell.getData().dni
+                            <div class="font-medium whitespace-nowrap">${cell.getData().user_code
             }</div>
                         </div>`;
         },
@@ -140,11 +140,17 @@ import Tabulator from "tabulator-tables";
               $('#dni').val(cell.getData().dni);
               $('#dni').attr("placeholder", cell.getData().dni);
 
+              $('#user_code').val(cell.getData().user_code);
+              $('#user_code').attr("placeholder", cell.getData().user_code);
+
               $('#name').val(cell.getData().name);
               $('#name').attr("placeholder", cell.getData().name);
 
               $('#name').val(cell.getData().name);
               $('#name').attr("placeholder", cell.getData().name);
+
+              $('#last_name').val(cell.getData().last_name);
+              $('#last_name').attr("placeholder", cell.getData().last_name);
 
               if (cell.getData().gender == 'm') {
                 $('#male').attr("checked", true);
@@ -169,6 +175,25 @@ import Tabulator from "tabulator-tables";
 
               $('#quartile_id').val(cell.getData().quartile_id).attr("selected", "selected");
             });
+
+          // $(a)
+          //   .find(".update")
+          //   .on("click", function() {
+          //     fetch('/api/users/update', {
+          //       method: 'PUT',
+          //       headers: { "Content-type": "application/json;charset=UTF-8" },
+          //       body: JSON.stringify({
+          //         id: $('#id').val(),
+          //         user_code: $('#user_code').val(),
+          //         name: $('#name').val(),
+          //         last_name: $('#last_name').val(),
+          //         email: $('#email').val(),
+          //         territorial: $('#territorial').val(),
+          //         secicoins: $('#secicoins').val(),
+          //         secicoins: $('#secicoins').val(),
+          //       }),
+          //     }),
+          //   });
 
           $(a)
             .find(".delete")
@@ -334,7 +359,9 @@ import Tabulator from "tabulator-tables";
         "_token": $('meta[name="csrf-token"]').attr('content'),
         id: $('#id').val(),
         dni: $('#dni').attr('placeholder'),
+        user_code: $('#user_code').val(),
         name: $('#name').val(),
+        last_name: $('#last_name').val(),
         gender: $('#female').is(':checked') ? 'f' : 'm',
         email: $('#email').val(),
         territorial: $('#territorial').val(),
@@ -350,6 +377,7 @@ import Tabulator from "tabulator-tables";
         url: '/usuarios/update',
         data: data,
         success: function (data) {
+          console.log(data);
           $('#alertUpdateSuccess').css({
             'display': 'flex',
             'align-items': 'center',
