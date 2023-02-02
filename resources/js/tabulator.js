@@ -176,6 +176,25 @@ import Tabulator from "tabulator-tables";
               $('#quartile_id').val(cell.getData().quartile_id).attr("selected", "selected");
             });
 
+          // $(a)
+          //   .find(".update")
+          //   .on("click", function() {
+          //     fetch('/api/users/update', {
+          //       method: 'PUT',
+          //       headers: { "Content-type": "application/json;charset=UTF-8" },
+          //       body: JSON.stringify({
+          //         id: $('#id').val(),
+          //         user_code: $('#user_code').val(),
+          //         name: $('#name').val(),
+          //         last_name: $('#last_name').val(),
+          //         email: $('#email').val(),
+          //         territorial: $('#territorial').val(),
+          //         secicoins: $('#secicoins').val(),
+          //         secicoins: $('#secicoins').val(),
+          //       }),
+          //     }),
+          //   });
+
           $(a)
             .find(".delete")
             .on("click", function () {
@@ -350,7 +369,9 @@ import Tabulator from "tabulator-tables";
         "_token": $('meta[name="csrf-token"]').attr('content'),
         id: $('#id').val(),
         dni: $('#dni').attr('placeholder'),
+        user_code: $('#user_code').val(),
         name: $('#name').val(),
+        last_name: $('#last_name').val(),
         gender: $('#female').is(':checked') ? 'f' : 'm',
         email: $('#email').val(),
         territorial: $('#territorial').val(),
@@ -367,6 +388,7 @@ import Tabulator from "tabulator-tables";
         url: '/usuarios/update',
         data: data,
         success: function (data) {
+          console.log(data);
           $('#alertUpdateSuccess').css({
             'display': 'flex', 'align-items': 'center',
             'justify-content': 'center'

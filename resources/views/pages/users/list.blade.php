@@ -255,7 +255,7 @@
 
                     <button type="button" data-tw-dismiss="modal"
                       class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
-                    <button type="submit" class="btn btn-primary my-4">Actualizar
+                    <button type="submit" class="btn btn-primary my-4 update ">Actualizar
                       Usuario</button>
                     <div class="alert alert-success my-3" role="alert" style="display:none;"
                       id="alertUpdateSuccess">

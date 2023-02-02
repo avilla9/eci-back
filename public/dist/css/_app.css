@@ -2861,14 +2861,14 @@ select{
 .mt-1{
     margin-top: 0.25rem;
 }
-.mr-2{
-    margin-right: 0.5rem;
-}
 .mr-3{
     margin-right: 0.75rem;
 }
 .-ml-5{
     margin-left: -1.25rem;
+}
+.mr-2{
+    margin-right: 0.5rem;
 }
 .mt-2{
     margin-top: 0.5rem;
@@ -3949,13 +3949,13 @@ select{
     --tw-text-opacity: 1;
     color: rgb(75 85 99 / var(--tw-text-opacity));
 }
-.text-success{
-    --tw-text-opacity: 1;
-    color: rgb(var(--color-success) / var(--tw-text-opacity));
-}
 .text-slate-500{
     --tw-text-opacity: 1;
     color: rgb(var(--color-slate-500) / var(--tw-text-opacity));
+}
+.text-success{
+    --tw-text-opacity: 1;
+    color: rgb(var(--color-success) / var(--tw-text-opacity));
 }
 .text-white{
     --tw-text-opacity: 1;
