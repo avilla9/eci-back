@@ -373,13 +373,6 @@ import Tabulator from "tabulator-tables";
                 group_id: $('#group_id').val(),
                 quartile_id: $('#quartile_id').val(),
             };
-            if (data.password.length) {
-                if (confirm("¿Desea cambiar la contrasena?")) {
-                    console.log("");
-                } else {
-                    return data.password = $('#password').val("");
-                }
-            }
             $.ajax({
                 type: "PUT",
                 url: '/usuarios/update',
@@ -462,7 +455,7 @@ import Tabulator from "tabulator-tables";
 
                 // For HTML table
                 {
-                    title: "Nombre",
+                    title: "Codigo de Rol",
                     minWidth: 200,
                     responsive: 0,
                     field: "name",
@@ -487,21 +480,6 @@ import Tabulator from "tabulator-tables";
                     formatter(cell, formatterParams) {
                         return `<div>
                             <div class="font-medium whitespace-nowrap">${cell.getData().description
-            }</div>
-                        </div>`;
-                    },
-                },
-                {
-                    title: "Nivel",
-                    minWidth: 200,
-                    field: "level",
-                    hozAlign: "center",
-                    vertAlign: "middle",
-                    print: false,
-                    download: false,
-                    formatter(cell, formatterParams) {
-                        return `<div>
-                            <div class="font-medium whitespace-nowrap">${cell.getData().level
             }</div>
                         </div>`;
                     },
