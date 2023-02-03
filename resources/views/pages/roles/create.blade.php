@@ -33,7 +33,7 @@
           <div class="preview">
             <div>
               <label for="regular-form-1" class="form-label">Codigo de Rol</label>
-              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Título" required>
+              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Codigo de Rol" required>
             </div>
             <div class="mt-3">
               <label for="regular-form-6" class="form-label">Descripción del rol</label>
