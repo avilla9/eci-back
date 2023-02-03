@@ -992,7 +992,7 @@ function contentParameters() {
         'data' => $delegations
     ] : true;
     count($roles) > 0 ? $filters['roles'] = [
-        'name' => 'Roles',
+        'name' => 'Codigo de Rol',
         'data' => $roles
     ] : true;
     count($users) > 0 ? $filters['users'] = [

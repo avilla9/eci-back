@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="mt-3">
-            <label>Rol del usuario</label>
+            <label>Codigo de Rol del usuario</label>
             <div class="mt-2">
               <select data-placeholder="Seleccione un rol para el usuario" name="role_id" class="tom-select w-full">
                 <option disabled selected>Seleccione un rol para el usuario</option>

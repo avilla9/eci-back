@@ -32,7 +32,7 @@
         <div id="input" class="p-5">
           <div class="preview">
             <div>
-              <label for="regular-form-1" class="form-label">Título</label>
+              <label for="regular-form-1" class="form-label">Codigo de Rol</label>
               <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Título" required>
             </div>
             <div class="mt-3">
