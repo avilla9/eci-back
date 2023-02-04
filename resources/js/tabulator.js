@@ -1,6 +1,7 @@
 import xlsx from "xlsx";
 import feather from "feather-icons";
 import Tabulator from "tabulator-tables";
+import { isNull } from "lodash";
 
 (function () {
   "use strict";
@@ -104,9 +105,9 @@ import Tabulator from "tabulator-tables";
         formatter(cell, formatterParams) {
           let a =
             $(`<div class="flex lg:justify-center items-center">
-                    <a data-tw-target="#superlarge-modal-size-preview" data-tw-toggle="modal" class="view flex items-center mr-3" href="javascript:;">
+                    <button data-tw-target="#superlarge-modal-size-preview" data-tw-toggle="modal" class="view flex items-center mr-3" href="javascript:;">
                         <i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver
-                    </a>
+                    </button>
                     <a data-tw-target="#edit-user" data-tw-toggle="modal" data-backdrop="static" data-keyboard="false" class="edit flex items-center mr-3" href="javascript:;">
                         <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
                     </a>
@@ -118,18 +119,20 @@ import Tabulator from "tabulator-tables";
             .find(".view")
             .on("click", function () {
               $('#table-content').html('');
+              let genderList = ['m', 'M'];
+
               table = '';
               table += `<tr class="whitespace-nowrap"><th>Activo</th><td>${cell.getData().active == 1 ? 'Si' : 'No'}</td></tr>`;
-              let table = `<tr class="whitespace-nowrap"><th>DNI</th><td>${cell.getData().dni}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Nombre</th><td>${cell.getData().name}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Email</th><td>${cell.getData().email}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Sexo</th><td>${cell.getData().gender == 'm' ? 'Masculino' : 'femenino'}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>SECI Coins</th><td>${cell.getData().secicoins}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Rol</th><td>${cell.getData().role_name}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Cuartil</th><td>${cell.getData().quartile}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Grupo</th><td>${cell.getData().group}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Delegación</th><td>${cell.getData().delegation_name}</td></tr>`;
-              table += `<tr class="whitespace-nowrap"><th>Código Delegación</th><td>${cell.getData().delegation_code}</td></tr>`;
+              let table = `<tr class="whitespace-nowrap"><th>Código de usuario</th><td>${isNull(cell.getData().user_code) ? 'No especificado' : cell.getData().user_code}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Nombre</th><td>${isNull(cell.getData().name) ? 'No especificado' : cell.getData().name}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Apellido</th><td>${isNull(cell.getData().last_name) ? 'No especificado' : cell.getData().last_name}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Email</th><td>${isNull(cell.getData().email) ? 'No especificado' : cell.getData().email}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>SECI Coins</th><td>${isNull(cell.getData().secicoins) ? 'No especificado' : cell.getData().secicoins}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Rol</th><td>${isNull(cell.getData().role_name) ? 'No especificado' : cell.getData().role_name}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Cuartil</th><td>${isNull(cell.getData().quartile) ? 'No especificado' : cell.getData().quartile}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Grupo</th><td>${isNull(cell.getData().group) ? 'No especificado' : cell.getData().group}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Delegación</th><td>${isNull(cell.getData().delegation_name) ? 'No especificado' : cell.getData().delegation_name}</td></tr>`;
+              table += `<tr class="whitespace-nowrap"><th>Código Delegación</th><td>${isNull(cell.getData().delegation_code) ? 'No especificado' : cell.getData().delegation_code}</td></tr>`;
               $('#table-content').html(table);
             });
 

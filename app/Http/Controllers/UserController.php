@@ -190,6 +190,7 @@ class UserController extends Controller {
         $users = User::select(
             'users.dni',
             'users.user_code',
+            'users.gender',
             'users.active',
             'users.created_at',
             'users.deleted_at',
