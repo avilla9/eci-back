@@ -1,6 +1,7 @@
 import xlsx from "xlsx";
 import feather from "feather-icons";
 import Tabulator from "tabulator-tables";
+import { isNull } from "lodash";
 
 (function () {
 	"use strict";
@@ -60,7 +61,7 @@ import Tabulator from "tabulator-tables";
 				download: false,
 				formatter(cell, formatterParams) {
 					return `<div>
-                            <div class="font-medium whitespace-nowrap">${cell.getData().dni
+                            <div class="font-medium whitespace-nowrap">${cell.getData().user_code
 						}</div>
                         </div>`;
 				},
@@ -110,24 +111,6 @@ import Tabulator from "tabulator-tables";
                         </div>`;
 				},
 			},
-			/* {
-				title: "Estatus",
-				minWidth: 100,
-				field: "active",
-				hozAlign: "center",
-				vertAlign: "middle",
-				print: false,
-				download: false,
-				formatter(cell, formatterParams) {
-					return `<div class="flex items-center lg:justify-center ${cell.getData().active
-						? "text-success"
-						: "text-danger"
-						}">
-														<i data-feather="check-square" class="w-4 h-4 mr-2"></i> ${cell.getData().active ? "Activo" : "Inactivo"
-						}
-												</div>`;
-				},
-			}, */
 			{
 				title: "Funciones",
 				minWidth: 200,
@@ -140,9 +123,9 @@ import Tabulator from "tabulator-tables";
 				formatter(cell, formatterParams) {
 					let a =
 						$(`<div class="flex lg:justify-center items-center">
-                    <a data-tw-target="#superlarge-modal-size-preview" data-tw-toggle="modal" class="view flex items-center mr-3" href="javascript:;">
+                    <button data-tw-target="#superlarge-modal-size-preview" data-tw-toggle="modal" class="view flex items-center mr-3" href="javascript:;">
                         <i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver
-                    </a>
+                    </button>
                     <a data-tw-target="#edit-user" data-tw-toggle="modal" data-backdrop="static" data-keyboard="false" class="edit flex items-center mr-3" href="javascript:;">
                         <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
                     </a>
