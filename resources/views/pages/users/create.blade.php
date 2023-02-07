@@ -35,22 +35,17 @@
               <label for="regular-form-1" class="form-label">DNI</label>
               <input id="regular-form-1" name="dni" type="number" class="form-control" placeholder="DNI" value="{{ old('dni') }}">
             </div>
-            <div>
-              <label for="regular-form-1" class="form-label">Nombre completo</label>
+            <div class="mt-3">
+              <label for="regular-form-1" class="form-label">Código de usuario</label>
+              <input id="regular-form-1" name="user_code" type="text" class="form-control" placeholder="Código de usuario" value="{{ old('user_code') }}">
+            </div>
+            <div class="mt-3">
+              <label for="regular-form-1" class="form-label">Nombre</label>
               <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Nombres" value="{{ old('name') }}">
             </div>
             <div class="mt-3">
-              <label>Género</label>
-              <div class="flex flex-col sm:flex-row mt-2">
-                <div class="form-check mr-2">
-                  <input id="radio-switch-4" class="form-check-input" type="radio" name="gender" value="m">
-                  <label class="form-check-label" for="radio-switch-4">Masculino</label>
-                </div>
-                <div class="form-check mr-2 mt-2 sm:mt-0">
-                  <input id="radio-switch-5" class="form-check-input" type="radio" name="gender" value="f">
-                  <label class="form-check-label" for="radio-switch-5">Femenino</label>
-                </div>
-              </div>
+              <label for="regular-form-1" class="form-label">Apellido</label>
+              <input id="regular-form-1" name="last_name" type="text" class="form-control" placeholder="Apellido" value="{{ old('last_name') }}">
             </div>
             <div class="mt-3">
               <label for="regular-form-1" class="form-label">Correo</label>

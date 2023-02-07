@@ -51,10 +51,10 @@ import Tabulator from "tabulator-tables";
 				},
 			},
 			{
-				title: "DNI",
+				title: "Código de usuario",
 				minWidth: 100,
 				responsive: 0,
-				field: "dni",
+				field: "user_code",
 				vertAlign: "left",
 				print: false,
 				download: false,
@@ -156,10 +156,10 @@ import Tabulator from "tabulator-tables";
 							$('#table-content').html('');
 							table = '';
 							table += `<tr class="whitespace-nowrap"><th>Activo</th><td>${cell.getData().active == 1 ? 'Si' : 'No'}</td></tr>`;
-							let table = `<tr class="whitespace-nowrap"><th>DNI</th><td>${cell.getData().dni}</td></tr>`;
-							table += `<tr class="whitespace-nowrap"><th>Nombre</th><td>${cell.getData().name}</td></tr>`;
+							let table = `<tr class="whitespace-nowrap"><th>Código de usuario</th><td>${cell.getData().user_code}</td></tr>`;
+							table += `<tr class="whitespace-nowrap"><th>Nombre</th><td>${cell.getData().name}</td></tr>`
+							table += `<tr class="whitespace-nowrap"><th>Apellido</th><td>${cell.getData().last_name}</td></tr>`;
 							table += `<tr class="whitespace-nowrap"><th>Email</th><td>${cell.getData().email}</td></tr>`;
-							table += `<tr class="whitespace-nowrap"><th>Sexo</th><td>${cell.getData().gender == 'm' ? 'Masculino' : 'femenino'}</td></tr>`;
 							table += `<tr class="whitespace-nowrap"><th>SECI Coins</th><td>${cell.getData().secicoins}</td></tr>`;
 							table += `<tr class="whitespace-nowrap"><th>Rol</th><td>${cell.getData().role_name}</td></tr>`;
 							table += `<tr class="whitespace-nowrap"><th>Cuartil</th><td>${cell.getData().quartile}</td></tr>`;
@@ -176,17 +176,14 @@ import Tabulator from "tabulator-tables";
 							$('#dni').val(cell.getData().dni);
 							$('#dni').attr("placeholder", cell.getData().dni);
 
-							$('#name').val(cell.getData().name);
-							$('#name').attr("placeholder", cell.getData().name);
+							$('#user_code').val(cell.getData().user_code);
+							$('#user_code').attr("placeholder", cell.getData().user_code);
 
 							$('#name').val(cell.getData().name);
 							$('#name').attr("placeholder", cell.getData().name);
 
-							if (cell.getData().gender == 'm') {
-								$('#male').attr("checked", true);
-							} else {
-								$('#female').attr("checked", true);
-							}
+							$('#last_name').val(cell.getData().last_name);
+							$('#last_name').attr("placeholder", cell.getData().last_name);
 
 							$('#email').val(cell.getData().email);
 							$('#email').attr("placeholder", cell.getData().email);
@@ -216,7 +213,7 @@ import Tabulator from "tabulator-tables";
 								showCancelButton: true,
 								confirmButtonColor: '#3085d6',
 								cancelButtonColor: '#d33',
-								confirmButtonText: 'Si, seguro!',
+								confirmButtonText: 'Si, seguro',
 								cancelButtonText: 'No, cancelar'
 							}).then((result) => {
 								if (result.isConfirmed) {
@@ -381,7 +378,8 @@ import Tabulator from "tabulator-tables";
 				id: $('#id').val(),
 				dni: $('#dni').attr('placeholder'),
 				name: $('#name').val(),
-				gender: $('#female').is(':checked') ? 'f' : 'm',
+				user_code: $('#user_code').val(),
+				last_name: $('#last_name').val(),
 				email: $('#email').val(),
 				territorial: $('#territorial').val(),
 				secicoins: $('#secicoins').val(),
@@ -541,7 +539,7 @@ import Tabulator from "tabulator-tables";
 								showCancelButton: true,
 								confirmButtonColor: '#3085d6',
 								cancelButtonColor: '#d33',
-								confirmButtonText: 'Si, seguro!',
+								confirmButtonText: 'Si, seguro',
 								cancelButtonText: 'No, cancelar'
 							}).then((result) => {
 								if (result.isConfirmed) {
