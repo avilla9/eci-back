@@ -110,7 +110,7 @@ import Tabulator from "tabulator-tables";
                         </div>`;
 				},
 			},
-			{
+			/* {
 				title: "Estatus",
 				minWidth: 100,
 				field: "active",
@@ -127,7 +127,7 @@ import Tabulator from "tabulator-tables";
 						}
                         </div>`;
 				},
-			},
+			}, */
 			{
 				title: "Funciones",
 				minWidth: 200,
