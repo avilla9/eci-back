@@ -32,6 +32,24 @@ import Tabulator from "tabulator-tables";
       },
 
       // For HTML table
+			{
+				title: `<input id="checkAllUsers" type="checkbox" class="form-check-input">`,
+				maxWidth: 100,
+				headerSort: false,
+				responsive: 0,
+				field: "id",
+				vertAlign: "center",
+				headerHozAlign: "center",
+				hozAlign : "center",
+				print: false,
+				download: false,
+				formatter(cell, formatterParams) {
+					return `<div>
+													<input itemId= "${cell.getData().id
+						}" type="checkbox" class="checkElement form-check-input"></
+											</div>`;
+				},
+			},
       {
         title: "DNI",
         minWidth: 100,
@@ -354,6 +372,35 @@ import Tabulator from "tabulator-tables";
     $("#tabulator-print").on("click", function (event) {
       table.print();
     });
+
+		$("#deleteUserId").on("click", function () {
+			Swal.fire({
+				title: "¿Desea eliminar los usuarios seleccionados?",
+				text: "Esta accion es irreversible",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Si",
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$('.checkElement:checked').each(function (index) {
+						fetch("/api/users/delete", {
+							method: "POST",
+							headers: {
+								"Content-type": "application/json;charset=UTF-8",
+							},
+							body: JSON.stringify({
+								id: $(this).attr("itemId"),
+							}),
+						})
+					});
+				}
+				$("#checkAllUsers").prop('checked', false);
+				table.replaceData();
+			});
+		});
 
     $('#SubmitForm').on('submit', function (e) {
       e.preventDefault();

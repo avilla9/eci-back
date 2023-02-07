@@ -72,9 +72,9 @@
           <button id="deleteUserId" type="button" class="btn btn-danger w-full sm:w-16 mt-2 sm:mt-0 sm:ml-3">Eliminar
           </button>
 
-          <button id="checkAllUsers" type="button"
+          {{-- <button id="checkAllUsers" type="button"
             class="btn btn-success w-full sm:w-20 mt-2 sm:mt-0 sm:ml-3">Seleccionar todos
-          </button>
+          </button> --}}
         </div>
       </form>
       <div class="flex mt-5 sm:mt-0">
