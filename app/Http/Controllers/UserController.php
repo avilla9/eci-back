@@ -131,7 +131,7 @@ class UserController extends Controller {
             'name' => 'required',
             'email' => 'required',
             'password' => [
-                'required',
+                'nullable',
                 Password::min(8)
                     ->letters()
                     ->mixedCase()
@@ -150,20 +150,22 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return response()->json($validator->errors(), 404);
         } else {
-            $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('id', $request->id)->first();
+            if ($request->password) {
+                $request->merge(['password' => Hash::make($request->password)]);
+            }
             $delegation = Delegation::where('id', $request->delegation_id)->first();
-            $user->name = $request->name;
-            $user->gender = $request->gender;
-            $user->email = $request->email;
-            $user->territorial = $request->territorial;
-            $user->secicoins = $request->secicoins;
-            $user->password = $request->password;
-            $user->group_id = $request->group_id;
-            $user->role_id = $request->role_id;
-            $user->delegation_code = $delegation->code;
-            $user->quartile_id = $request->quartile_id;
-            $user->save();
+            $user = User::where('id', $request->id)->update([
+                'name' => $request->name,
+                'gender' => $request->gender,
+                'email' => $request->email,
+                'territorial' => $request->territorial,
+                'secicoins' => $request->secicoins,
+                'group_id' => $request->group_id,
+                'role_id' => $request->role_id,
+                'delegation_code' => $delegation->code,
+                'quartile_id' => $request->quartile_id,
+            ]);
+            return $user;
         }
     }
 
@@ -292,7 +294,7 @@ class UserController extends Controller {
             'deleted_at' => NULL
         ])->first();
 
-        if(!$emailExist) {
+        if (!$emailExist) {
             return [
                 "status" => Response::HTTP_BAD_REQUEST,
                 "errors" => ['email' => 'El usuario no se encuentra activo.'],
@@ -381,7 +383,7 @@ class UserController extends Controller {
                 return [
                     "status" => Response::HTTP_BAD_REQUEST,
                     "message" => $error->first()
-                ];    
+                ];
                 // return response()->json($validator->errors()->error , 404);
             }
             $user->password = Hash::make($request->new_password);

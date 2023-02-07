@@ -268,7 +268,6 @@
                       Usuario actualizado con exito!
                     </div>
                     <div class="alert alert-danger my-3" role="alert" style="display:none;" id="alertUpdateFailed">
-                      Error al actualizar usuario!
                     </div>
                   </div>
                 </div>
