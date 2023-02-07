@@ -32,16 +32,12 @@
         <div id="input" class="p-5">
           <div class="preview">
             <div>
-              <label for="regular-form-1" class="form-label">Título</label>
-              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Título" required>
+              <label for="regular-form-1" class="form-label">Codigo de Rol</label>
+              <input id="regular-form-1" name="name" type="text" class="form-control" placeholder="Codigo de Rol" required>
             </div>
             <div class="mt-3">
               <label for="regular-form-6" class="form-label">Descripción del rol</label>
               <textarea id="regular-form-6" name="description" class="form-control" placeholder="Descripción" minlength="10" required></textarea>
-            </div>
-            <div class="mt-3">
-              <label for="regular-form-4" class="form-label">Nivel del rol</label>
-              <input id="regular-form-4" name="level" type="number" class="form-control" placeholder="Nivel del rol" required>
             </div>
           </div>
           <div class="sm:ml-20 sm:pl-5 mt-5">
