@@ -59,6 +59,7 @@ Route::prefix('/users')->group(function () {
         Route::post('/password', 'password')->name('users.password');
         Route::put('/reset-password', 'resetPassword')->name('users.reset.password');
         Route::post('/change-password', 'changePassword');
+        Route::post('users-update-import', 'fileUpdateImport')->name('file.update.import');
     });
 });
 

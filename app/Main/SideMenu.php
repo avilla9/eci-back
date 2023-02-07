@@ -77,6 +77,14 @@ class SideMenu {
                         ],
                         'title' => 'Subir usuarios'
                     ],
+                    'update-upload-user' => [
+                        'icon' => '',
+                        'route_name' => 'actualizar.usuarios',
+                        'params' => [
+                            'layout' => 'side-menu'
+                        ],
+                        'title' => 'Actulizar usuarios'
+                    ],
                 ]
             ],
             'roles' => [

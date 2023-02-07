@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/crear', 'userCreate')->name('crear-usuarios');
             Route::get('/subir', 'userUpload')->name('subir-usuarios');
             Route::get('/eliminar', 'deleteUserUpload')->name('eliminar-usuarios');
+            Route::get('/actualizar-usuarios', 'updateUsers')->name('actualizar.usuarios');
         });
 
         Route::controller(UserController::class)->group(function () {

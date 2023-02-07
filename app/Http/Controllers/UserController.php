@@ -405,4 +405,30 @@ class UserController extends Controller {
             ];
         }
     }
+
+    public function fileUpdateImport(Request $request) {
+        $import = new UsersImport;
+        Excel::import($import, $request->file('file')->store('files'));
+
+        $errors = [];
+        foreach ($import->failures() as $failure) {
+            $errors[] = [
+                'row' => $failure->row(),
+                'attribute' => $failure->attribute(),
+                'errors' => $failure->errors(),
+                'values' => $failure->values(),
+            ];
+        }
+        if (count($errors) > 0) {
+            return $errors; /* redirect()->route('subir-usuarios')
+                ->with('errors', $errors)
+                ->send(); */
+            /* return view('pages/users/upload') */
+        } else {
+            return 'Usuarios insertados correctamente';
+        }
+
+        /* return view('pages/users/upload', $errors); */
+        /* return redirect()->back()->with('errors', $errors); */
+    }
 }

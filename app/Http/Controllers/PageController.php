@@ -968,6 +968,10 @@ class PageController extends Controller {
     public function getEmail() {
         return view('pages.users.get_email', ['layout' => 'login']);
     }
+
+    public function updateUsers() {
+        return view('pages.users.update_upload');
+    }
 }
 
 function contentParameters() {
