@@ -53,7 +53,7 @@ class ArticleController extends Controller {
 			];
 
 			$filters['article_id'] = $articleid;
-			DB::table('article_filters')->insert($filters);
+			ArticleFilter::create($filters);
 
 			$users = DB::table('users')
 				->select('users.*')
@@ -167,8 +167,8 @@ class ArticleController extends Controller {
 
 			
 			$filters['article_id'] = $articleid;
-
 			ArticleFilter::create($filters);
+
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -223,7 +223,8 @@ class ArticleController extends Controller {
 			];
 
 			$filters['article_id'] = $articleid;
-			DB::table('article_filters')->insert($filters);
+			ArticleFilter::create($filters);
+			
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -277,7 +278,7 @@ class ArticleController extends Controller {
 			];
 
 			$filters['article_id'] = $articleid;
-			DB::table('article_filters')->insert($filters);
+			ArticleFilter::create($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -331,7 +332,7 @@ class ArticleController extends Controller {
 			];
 
 			$filters['article_id'] = $articleid;
-			DB::table('article_filters')->insert($filters);
+			ArticleFilter::create($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -386,7 +387,7 @@ class ArticleController extends Controller {
 			];
 
 			$filters['article_id'] = $articleid;
-			DB::table('article_filters')->insert($filters);
+			ArticleFilter::create($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -440,7 +441,7 @@ class ArticleController extends Controller {
 			];
 
 			$filters['article_id'] = $articleid;
-			DB::table('article_filters')->insert($filters);
+			ArticleFilter::create($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
