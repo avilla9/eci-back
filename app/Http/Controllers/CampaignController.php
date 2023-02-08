@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Access;
 use App\Models\Campaign;
 use App\Models\Page;
 use App\Models\Productivity;
@@ -69,6 +70,11 @@ class CampaignController extends Controller {
         $page = $request->page;
         $campaign_id = $request->campaign_id;
 
+        /* return Access::where([
+            'campaign_id' => $campaign_id,
+            'user_id' => $user_id,
+        ]); */
+
         $sections = DB::table('sections')
             ->select('sections.*')
             ->join('pages', 'pages.id', '=', 'sections.page_id')
@@ -90,7 +96,7 @@ class CampaignController extends Controller {
                 ];
             } else {
                 $sectionId = $section->id;
-                $articles = DB::table('articles')
+                return DB::table('articles')
                     ->select('articles.*', 'files.media_path')
                     ->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
                     ->join('files', 'files.id', '=', 'articles.file_id')
@@ -110,8 +116,9 @@ class CampaignController extends Controller {
                     })
                     ->distinct()
                     ->orderBy('articles.id', 'desc')
-                    ->get();
+                    ->toSql();
 
+                    $articles = 1;
                 $data[] = [
                     'section' => $section->title,
                     'articles' => $articles,

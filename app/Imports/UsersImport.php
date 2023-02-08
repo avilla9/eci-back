@@ -64,21 +64,23 @@ class UsersImport implements
             $seci = 0;
         }
 
-        return new User([
-            'dni' => '000000',
-            'user_code' => $row['code'],
-            'name' => $row['name'],
-            'last_name' => $row['last_name'],
-            'role_id' => $role,
-            'email' => $row['email'],
-            'territorial' => $row['territorial'],
-            'password' => Hash::make($row['password']),
-            'active' => 1,
-            'secicoins' => $seci,
-            'delegation_code' => $delegation,
-            'quartile_id' => $quartile,
-            'group_id' => $group,
-        ]);
+        return User::updateOrCreate(
+            ['email' => $row['email']],
+            [
+                'dni' => '000000',
+                'user_code' => $row['code'],
+                'name' => $row['name'],
+                'last_name' => $row['last_name'],
+                'role_id' => $role,
+                'territorial' => $row['territorial'],
+                'password' => Hash::make($row['password']),
+                'active' => 1,
+                'secicoins' => $seci,
+                'delegation_code' => $delegation,
+                'quartile_id' => $quartile,
+                'group_id' => $group,
+            ]
+        );
     }
 
     public function rules(): array {
