@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ArticleFilterController;
 use App\Http\Controllers\CampaignController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,12 @@ Route::prefix('/posts')->group(function () {
             Route::post('/', 'showStories')->name('stories.list');
             Route::post('/view', 'viewStories')->name('viewStories');
         });
+    });
+});
+
+Route::prefix('/articles')->group(function () {
+    Route::controller(ArticleFilterController::class)->group(function () {
+        Route::get('/refresh', 'refresh');
     });
 });
 

@@ -9,6 +9,7 @@ use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
+use App\Models\ArticleFilter;
 use App\Models\User;
 
 use function PHPSTORM_META\map;
@@ -51,6 +52,8 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			$filters['article_id'] = $articleid;
+			DB::table('article_filters')->insert($filters);
 
 			$users = DB::table('users')
 				->select('users.*')
@@ -162,6 +165,10 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			
+			$filters['article_id'] = $articleid;
+
+			ArticleFilter::create($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -215,6 +222,8 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			$filters['article_id'] = $articleid;
+			DB::table('article_filters')->insert($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -267,6 +276,8 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			$filters['article_id'] = $articleid;
+			DB::table('article_filters')->insert($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -319,6 +330,8 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			$filters['article_id'] = $articleid;
+			DB::table('article_filters')->insert($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -372,6 +385,8 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			$filters['article_id'] = $articleid;
+			DB::table('article_filters')->insert($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -424,6 +439,8 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
+			$filters['article_id'] = $articleid;
+			DB::table('article_filters')->insert($filters);
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
