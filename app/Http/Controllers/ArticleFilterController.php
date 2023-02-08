@@ -24,15 +24,13 @@ class ArticleFilterController extends Controller {
                 ->get();
 
             foreach ($users as $key => $user) {
-                $haveAccess = Access::where([
+                Access::where([
                     'article_id' => $filter->article_id,
                 ])->delete();
-                if (is_null($haveAccess)) {
-                    $result[] = Access::create([
-                        'user_id' => $user->id,
-                        'article_id' => $filter->article_id,
-                    ]);
-                }
+                $result[] = Access::create([
+                    'user_id' => $user->id,
+                    'article_id' => $filter->article_id,
+                ]);
             }
         }
 
