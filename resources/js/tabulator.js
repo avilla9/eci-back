@@ -52,7 +52,7 @@ import { isNull } from "lodash";
 				},
 			},
 			{
-				title: "Código de usuario",
+				title: "Código",
 				minWidth: 100,
 				responsive: 0,
 				field: "user_code",
@@ -353,9 +353,52 @@ import { isNull } from "lodash";
 			table.print();
 		});
 
+		function updateUser(data) {
+			$.ajax({
+				type: "PUT",
+				url: '/usuarios/update',
+				data: data,
+				success: function (data) {
+					table.replaceData();
+					$('#alertUpdateSuccess').css({
+						'display': 'flex',
+						'align-items': 'center',
+						'justify-content': 'center'
+					});
+					setTimeout(function () {
+						$('#alertUpdateSuccess').fadeOut(4000);
+					}, 2000);
+				},
+				error: function (error) {
+					console.log(error.responseJSON.password);
+					// console.log(error);
+					let errors = error.responseJSON.password[0];
+
+					if (errors === undefined) {
+						$("#alertUpdateFailed").html("Ha ocurrido un error al actualizar la contraseña, por favor intente de nuevo.");
+						$('#alertUpdateFailed').css({
+							'display': 'flex',
+							'align-items': 'center',
+							'justify-content': 'center'
+						});
+
+					} else {
+						$("#alertUpdateFailed").html(errors);
+						$('#alertUpdateFailed').css({
+							'display': 'flex',
+							'align-items': 'center',
+							'justify-content': 'center'
+						});
+					}
+					setTimeout(function () {
+						$('#alertUpdateFailed').fadeOut(4000);
+					}, 2000);
+				},
+			});
+		}
+
 		$('#SubmitForm').on('submit', function (e) {
 			e.preventDefault();
-
 			let data = {
 				"_token": $('meta[name="csrf-token"]').attr('content'),
 				id: $('#id').val(),
@@ -372,7 +415,9 @@ import { isNull } from "lodash";
 				group_id: $('#group_id').val(),
 				quartile_id: $('#quartile_id').val(),
 			};
-			if (data.password.length) {
+			if (!data.password) {
+				updateUser(data);
+			} else {
 				Swal.fire({
 					title: '¿Desea actualizar la contraseña del usuario?',
 					text: "El campo password contiene información",
@@ -384,59 +429,9 @@ import { isNull } from "lodash";
 					cancelButtonText: 'Cerrar'
 				}).then((result) => {
 					if (result.isConfirmed) {
-						$.ajax({
-							type: "PUT",
-							url: '/usuarios/update',
-							data: data,
-							success: function (data) {
-								$('#alertUpdateSuccess').css({
-									'display': 'flex',
-									'align-items': 'center',
-									'justify-content': 'center'
-								});
-								setTimeout(function () {
-									$('#alertUpdateSuccess').fadeOut(4000);
-									data.password = $('#password').val("");
-								}, 2000);
-								$.ajax({
-									type: "GET",
-									url: '/api/users/getAllUsers',
-									data: {
-										"_token": $('meta[name="csrf-token"]').attr('content')
-									},
-									success: function (data) {
-										table.replaceData();
-									},
-								});
-							},
-							error: function (error) {
-								console.log(error.responseJSON.password);
-								// console.log(error);
-								let errors = error.responseJSON.password[0];
-
-								if (errors === undefined) {
-									$("#alertUpdateFailed").html("Ha ocurrido un error al actualizar la contraseña, por favor intente de nuevo.");
-									$('#alertUpdateFailed').css({
-										'display': 'flex',
-										'align-items': 'center',
-										'justify-content': 'center'
-									});
-
-								} else {
-									$("#alertUpdateFailed").html(errors);
-									$('#alertUpdateFailed').css({
-										'display': 'flex',
-										'align-items': 'center',
-										'justify-content': 'center'
-									});
-								}
-								setTimeout(function () {
-									$('#alertUpdateFailed').fadeOut(4000);
-								}, 2000);
-							},
-						});
+						updateUser(data)
 					} else {
-						return data.password = $('#password').val("");
+						data.password = $('#password').val("");
 					}
 				});
 			}
