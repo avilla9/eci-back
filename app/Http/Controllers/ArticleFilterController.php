@@ -29,7 +29,7 @@ class ArticleFilterController extends Controller {
                     'article_id' => $filter->article_id,
                 ])->first();
                 if (is_null($haveAccess)) {
-                    $result[] = new Access([
+                    $result[] = Access::create([
                         'user_id' => $user->id,
                         'article_id' => $filter->article_id,
                     ]);
