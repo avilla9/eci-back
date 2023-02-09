@@ -67,7 +67,7 @@ class UsersImport implements
         }
 
         if (userExist($row['email'])) {
-            return User::where('email', $row['email'])->update(
+            User::where('email', $row['email'])->update(
                 [
                     'dni' => '000000',
                     'user_code' => $row['code'],
