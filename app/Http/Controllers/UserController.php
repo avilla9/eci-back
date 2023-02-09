@@ -62,7 +62,9 @@ class UserController extends Controller {
         $request->validate(
             [
                 'dni' => 'required',
+                'user_code' => 'required',
                 'name' => 'required',
+                'last_name' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => [
                     'required',
@@ -73,7 +75,6 @@ class UserController extends Controller {
                         ->symbols()
                         ->uncompromised()
                 ],
-                'gender' => 'required',
                 'territorial' => 'required',
                 'role_id' => 'required|not_in:0',
                 'delegation_id' => 'required|not_in:0',
@@ -128,10 +129,12 @@ class UserController extends Controller {
     public function update(Request $request) {
         $validator = Validator($request->all(), [
             'dni' => 'required',
+            'user_code' => 'required',
             'name' => 'required',
+            'last_name' => 'required',
             'email' => 'required',
             'password' => [
-                'required',
+                'nullable',
                 Password::min(8)
                     ->letters()
                     ->mixedCase()
@@ -139,7 +142,6 @@ class UserController extends Controller {
                     ->symbols()
                     ->uncompromised()
             ],
-            'gender' => 'required',
             'territorial' => 'required',
             'role_id' => 'required|not_in:0',
             'delegation_id' => 'required|not_in:0',
@@ -150,20 +152,24 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return response()->json($validator->errors(), 404);
         } else {
-            $request->merge(['password' => Hash::make($request->password)]);
-            $user = User::where('id', $request->id)->first();
+            if ($request->password) {
+                $request->merge(['password' => Hash::make($request->password)]);
+            }
             $delegation = Delegation::where('id', $request->delegation_id)->first();
-            $user->name = $request->name;
-            $user->gender = $request->gender;
-            $user->email = $request->email;
-            $user->territorial = $request->territorial;
-            $user->secicoins = $request->secicoins;
-            $user->password = $request->password;
-            $user->group_id = $request->group_id;
-            $user->role_id = $request->role_id;
-            $user->delegation_code = $delegation->code;
-            $user->quartile_id = $request->quartile_id;
-            $user->save();
+            $user = User::where('id', $request->id)->update([
+                'name' => $request->name,
+                'gender' => $request->gender,
+                'email' => $request->email,
+                'territorial' => $request->territorial,
+                'secicoins' => $request->secicoins,
+                'group_id' => $request->group_id,
+                'role_id' => $request->role_id,
+                'delegation_code' => $delegation->code,
+                'quartile_id' => $request->quartile_id,
+                'last_name' => $request->last_name,
+                'user_code' => $request->user_code,
+            ]);
+            return $user;
         }
     }
 
@@ -183,14 +189,16 @@ class UserController extends Controller {
 
         $users = User::select(
             'users.dni',
+            'users.user_code',
+            'users.gender',
             'users.active',
             'users.created_at',
             'users.deleted_at',
             'users.email',
             'users.email_verified_at',
-            'users.gender',
             'users.id',
             'users.name',
+            'users.last_name',
             'users.secicoins',
             'users.territorial as territorial',
             'users.role_id',
@@ -292,7 +300,7 @@ class UserController extends Controller {
             'deleted_at' => NULL
         ])->first();
 
-        if(!$emailExist) {
+        if (!$emailExist) {
             return [
                 "status" => Response::HTTP_BAD_REQUEST,
                 "errors" => ['email' => 'El usuario no se encuentra activo.'],
@@ -381,7 +389,7 @@ class UserController extends Controller {
                 return [
                     "status" => Response::HTTP_BAD_REQUEST,
                     "message" => $error->first()
-                ];    
+                ];
                 // return response()->json($validator->errors()->error , 404);
             }
             $user->password = Hash::make($request->new_password);

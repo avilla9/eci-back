@@ -72,9 +72,9 @@
           <button id="deleteUserId" type="button" class="btn btn-danger w-full sm:w-16 mt-2 sm:mt-0 sm:ml-3">Eliminar
           </button>
 
-          <button id="checkAllUsers" type="button"
+          {{-- <button id="checkAllUsers" type="button"
             class="btn btn-success w-full sm:w-20 mt-2 sm:mt-0 sm:ml-3">Seleccionar todos
-          </button>
+          </button> --}}
         </div>
       </form>
       <div class="flex mt-5 sm:mt-0">
@@ -161,24 +161,18 @@
                       <input id="dni" name="dni" type="number" readonly class="form-control"
                         placeholder="DNI">
                     </div>
-                    <div>
-                      <label for="regular-form-1" class="form-label">Nombre completo</label>
-                      <input id="name" name="name" type="text" class="form-control" placeholder="Nombres">
+                    <div class="mt-3">
+                      <label for="regular-form-1" class="form-label">Código de usuario</label>
+                      <input id="user_code" name="user_code" type="text" class="form-control"
+                        placeholder="Código de usuario">
                     </div>
                     <div class="mt-3">
-                      <label>Género</label>
-                      <div class="flex flex-col sm:flex-row mt-2">
-                        <div class="form-check mr-2">
-                          <input id="male" class="form-check-input" type="radio" name="gender"
-                            value="m">
-                          <label class="form-check-label" for="radio-switch-4">Masculino</label>
-                        </div>
-                        <div class="form-check mr-2 mt-2 sm:mt-0">
-                          <input id="female" class="form-check-input" type="radio" name="gender"
-                            value="f">
-                          <label class="form-check-label" for="radio-switch-5">Femenino</label>
-                        </div>
-                      </div>
+                      <label for="regular-form-1" class="form-label">Nombre</label>
+                      <input id="name" name="name" type="text" class="form-control" placeholder="Nombre">
+                    </div>
+                    <div class="mt-3">
+                      <label for="regular-form-1" class="form-label">Apellido</label>
+                      <input id="last_name" name="last_name" type="text" class="form-control" placeholder="Apellido">
                     </div>
                     <div class="mt-3">
                       <label for="regular-form-1" class="form-label">Correo</label>
@@ -206,7 +200,7 @@
                     </div>
                   </div>
                   <div class="mt-3">
-                    <label>Rol del usuario</label>
+                    <label>Codigo Rol del usuario</label>
                     <div class="mt-2">
                       <select data-placeholder="Seleccione un rol para el usuario" name="role_id" id="role_id"
                         class="tom-select w-full">
@@ -261,14 +255,13 @@
 
                     <button type="button" data-tw-dismiss="modal"
                       class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
-                    <button type="submit" class="btn btn-primary my-4">Actualizar
+                    <button type="submit" class="btn btn-primary my-4 update ">Actualizar
                       Usuario</button>
                     <div class="alert alert-success my-3" role="alert" style="display:none;"
                       id="alertUpdateSuccess">
                       Usuario actualizado con exito!
                     </div>
                     <div class="alert alert-danger my-3" role="alert" style="display:none;" id="alertUpdateFailed">
-                      Error al actualizar usuario!
                     </div>
                   </div>
                 </div>

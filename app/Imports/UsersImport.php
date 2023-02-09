@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Validation\Rules\Password;
 
 class UsersImport implements
     ToModel,
@@ -32,9 +33,10 @@ class UsersImport implements
      * @return \Illuminate\Database\Eloquent\Model|null
      */
     public function model(array $row) {
+        $delegationComposition = explode(' - ', $row['delegation']);
         $delegation = validateDelegation([
-            'name' => ucwords(strtolower($row['delegation_name'])),
-            'code' => $row['delegation_code']
+            'name' => ucwords(strtolower($delegationComposition[0])),
+            'code' => $delegationComposition[1]
         ]);
 
         $role = validateRole([
@@ -56,26 +58,43 @@ class UsersImport implements
             $group = NULL;
         }
 
-        return new User([
-            'dni' => strval($row['dni']),
-            'name' => $row['name'],
-            'gender' => $row['gender'],
-            'role_id' => $role,
-            'email' => $row['email'],
-            'territorial' => $row['territorial'],
-            'password' => Hash::make($row['password']),
-            'active' => 1,
-            'secicoins' => $row['secicoins'],
-            'delegation_code' => $delegation,
-            'quartile_id' => $quartile,
-            'group_id' => $group,
-        ]);
+        if (strlen($row['secicoins'])) {
+            $seci = $row['secicoins'];
+        } else {
+            $seci = 0;
+        }
+
+        return User::updateOrCreate(
+            ['email' => $row['email']],
+            [
+                'dni' => '000000',
+                'user_code' => $row['code'],
+                'name' => $row['name'],
+                'last_name' => $row['last_name'],
+                'role_id' => $role,
+                'territorial' => $row['territorial'],
+                'password' => Hash::make($row['password']),
+                'active' => 1,
+                'secicoins' => $seci,
+                'delegation_code' => $delegation,
+                'quartile_id' => $quartile,
+                'group_id' => $group,
+            ]
+        );
     }
 
     public function rules(): array {
         return [
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
         ];
     }
 
