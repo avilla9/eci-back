@@ -23,10 +23,10 @@ class ArticleFilterController extends Controller {
                 ->orWhereIn('users.id', $filter->users)
                 ->get();
 
+            $delete = Access::where([
+                'article_id' => $filter->article_id,
+            ])->delete();
             foreach ($users as $key => $user) {
-                $delete = Access::where([
-                    'article_id' => $filter->article_id,
-                ])->delete();
 
                 $create = Access::create([
                     'user_id' => $user->id,

@@ -96,7 +96,7 @@ class CampaignController extends Controller {
                 ];
             } else {
                 $sectionId = $section->id;
-                return DB::table('articles')
+                $articles = DB::table('articles')
                     ->select('articles.*', 'files.media_path')
                     ->leftJoin('accesses', 'accesses.article_id', '=', 'articles.id')
                     ->join('files', 'files.id', '=', 'articles.file_id')
@@ -116,9 +116,8 @@ class CampaignController extends Controller {
                     })
                     ->distinct()
                     ->orderBy('articles.id', 'desc')
-                    ->toSql();
-
-                    $articles = 1;
+                    ->get();
+                    
                 $data[] = [
                     'section' => $section->title,
                     'articles' => $articles,
