@@ -411,6 +411,19 @@ class ArticleController extends Controller {
 		}
 	}
 
+	function validateAccess(Request $request) {
+		$access = Access::where([
+			'user_id' => $request->user_id,
+			'article_id' => $request->article_id,
+		])->first();
+
+		return $access ? 1 : 0;
+	}
+
+	function postDetails(Request $request, $post){
+		return Article::where('id', $post)->first();
+	}
+
 	function accessCreate(Request $request) {
 		$data = [
 			'title' => $request->title,

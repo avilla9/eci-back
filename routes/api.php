@@ -37,6 +37,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('/posts')->group(function () {
     Route::controller(ArticleController::class)->group(function () {
+        Route::get('/{post}', 'postDetails');
+        Route::post('/validate', 'validateAccess');
         Route::post('/list', 'list')->name('posts.list');
         Route::prefix('/stories')->group(function () {
             Route::post('/', 'showStories')->name('stories.list');
