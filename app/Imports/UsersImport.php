@@ -23,7 +23,8 @@ class UsersImport implements
     ToModel,
     WithHeadingRow,
     SkipsOnFailure,
-    WithValidation {
+    WithValidation
+{
 
     use Importable, SkipsErrors, SkipsFailures;
 
@@ -32,7 +33,8 @@ class UsersImport implements
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public function model(array $row) {
+    public function model(array $row)
+    {
         $delegationComposition = explode(' - ', $row['delegation']);
         $delegation = validateDelegation([
             'name' => ucwords(strtolower($delegationComposition[0])),
@@ -64,28 +66,48 @@ class UsersImport implements
             $seci = 0;
         }
 
-        return User::updateOrCreate(
-            ['email' => $row['email']],
-            [
-                'dni' => '000000',
-                'user_code' => $row['code'],
-                'name' => $row['name'],
-                'last_name' => $row['last_name'],
-                'role_id' => $role,
-                'territorial' => $row['territorial'],
-                'password' => Hash::make($row['password']),
-                'active' => 1,
-                'secicoins' => $seci,
-                'delegation_code' => $delegation,
-                'quartile_id' => $quartile,
-                'group_id' => $group,
-            ]
-        );
+        if (userExist($row['email'])) {
+            return User::where('email', $row['email'])->update(
+                [
+                    'dni' => '000000',
+                    'user_code' => $row['code'],
+                    'name' => $row['name'],
+                    'last_name' => $row['last_name'],
+                    'role_id' => $role,
+                    'territorial' => $row['territorial'],
+                    'password' => Hash::make($row['password']),
+                    'active' => 1,
+                    'secicoins' => $seci,
+                    'delegation_code' => $delegation,
+                    'quartile_id' => $quartile,
+                    'group_id' => $group,
+                ]
+            );
+        } else {
+            return new User(
+                [
+                    'dni' => '000000',
+                    'email', $row['email'],
+                    'user_code' => $row['code'],
+                    'name' => $row['name'],
+                    'last_name' => $row['last_name'],
+                    'role_id' => $role,
+                    'territorial' => $row['territorial'],
+                    'password' => Hash::make($row['password']),
+                    'active' => 1,
+                    'secicoins' => $seci,
+                    'delegation_code' => $delegation,
+                    'quartile_id' => $quartile,
+                    'group_id' => $group,
+                ]
+            );
+        }
     }
 
-    public function rules(): array {
+    public function rules(): array
+    {
         return [
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'password' => [
                 'required',
                 Password::min(8)
@@ -98,16 +120,18 @@ class UsersImport implements
         ];
     }
 
-    public function customValidationMessages() {
+    public function customValidationMessages()
+    {
         return [
             'email.required' => 'El campo email es requerido',
             'email.email' => 'El valor ingresado no corresponde a un formato de email válido',
-            'email.unique' => 'El email ingresado ya se encuentra asignado a otro usuario',
+            // 'email.unique' => 'El email ingresado ya se encuentra asignado a otro usuario',
         ];
     }
 }
 
-function validateDelegation($data) {
+function validateDelegation($data)
+{
     $delegation = Delegation::where('code', '=', $data['code'])->first();
     if (is_null($delegation)) {
         $id = DB::table('delegations')->insertGetId([
@@ -120,7 +144,8 @@ function validateDelegation($data) {
     }
 }
 
-function validateRole($data) {
+function validateRole($data)
+{
     $role = Role::where('name', '=', $data['name'])->first();
     if (is_null($role)) {
         $id = DB::table('roles')->insertGetId([
@@ -132,7 +157,8 @@ function validateRole($data) {
     }
 }
 
-function validateQuartile($data) {
+function validateQuartile($data)
+{
     $quartile = Quartile::where('name', '=', $data)->first();
     if (is_null($quartile)) {
         $id = DB::table('quartiles')->insertGetId([
@@ -144,7 +170,8 @@ function validateQuartile($data) {
     }
 }
 
-function validateGroup($data) {
+function validateGroup($data)
+{
     $group = Group::where('name', '=', $data['group'])->first();
     if (is_null($group)) {
         $id = DB::table('groups')->insertGetId([
@@ -154,5 +181,16 @@ function validateGroup($data) {
         return $id;
     } else {
         return $group->id;
+    }
+}
+
+function userExist($email)
+{
+    $user = User::where('email', $email)->first();
+
+    if (is_null($user)) {
+        return false;
+    } else {
+        return true;
     }
 }
