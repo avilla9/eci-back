@@ -66,42 +66,66 @@ class UsersImport implements
             $seci = 0;
         }
 
-        if (userExist($row['email'])) {
-            User::where('email', $row['email'])->update(
-                [
-                    'dni' => '000000',
-                    'user_code' => $row['code'],
-                    'name' => $row['name'],
-                    'last_name' => $row['last_name'],
-                    'role_id' => $role,
-                    'territorial' => $row['territorial'],
-                    'password' => Hash::make($row['password']),
-                    'active' => 1,
-                    'secicoins' => $seci,
-                    'delegation_code' => $delegation,
-                    'quartile_id' => $quartile,
-                    'group_id' => $group,
-                ]
-            );
-        } else {
-            return new User(
-                [
-                    'dni' => '000000',
-                    'email', $row['email'],
-                    'user_code' => $row['code'],
-                    'name' => $row['name'],
-                    'last_name' => $row['last_name'],
-                    'role_id' => $role,
-                    'territorial' => $row['territorial'],
-                    'password' => Hash::make($row['password']),
-                    'active' => 1,
-                    'secicoins' => $seci,
-                    'delegation_code' => $delegation,
-                    'quartile_id' => $quartile,
-                    'group_id' => $group,
-                ]
-            );
-        }
+        // $email = $row['email'];
+
+
+        return User::updateOrCreate(
+            [
+                'email' => $row['email']
+            ],
+            [
+                'dni' => '000000',
+                'email', $row['email'],
+                'user_code' => $row['code'],
+                'name' => $row['name'],
+                'last_name' => $row['last_name'],
+                'role_id' => $role,
+                'territorial' => $row['territorial'],
+                'password' => Hash::make($row['password']),
+                'active' => 1,
+                'secicoins' => $seci,
+                'delegation_code' => $delegation,
+                'quartile_id' => $quartile,
+                'group_id' => $group,
+            ]
+        );
+
+        // if (userExist($row['email'])) {
+        //     User::where('email', $row['email'])->update(
+        //         [
+        //             'dni' => '000000',
+        //             'user_code' => $row['code'],
+        //             'name' => $row['name'],
+        //             'last_name' => $row['last_name'],
+        //             'role_id' => $role,
+        //             'territorial' => $row['territorial'],
+        //             'password' => Hash::make($row['password']),
+        //             'active' => 1,
+        //             'secicoins' => $seci,
+        //             'delegation_code' => $delegation,
+        //             'quartile_id' => $quartile,
+        //             'group_id' => $group,
+        //         ]
+        //     );
+        // } else {
+        //     return new User(
+        //         [
+        //             'dni' => '000000',
+        //             'email', $email,
+        //             'user_code' => $row['code'],
+        //             'name' => $row['name'],
+        //             'last_name' => $row['last_name'],
+        //             'role_id' => $role,
+        //             'territorial' => $row['territorial'],
+        //             'password' => Hash::make($row['password']),
+        //             'active' => 1,
+        //             'secicoins' => $seci,
+        //             'delegation_code' => $delegation,
+        //             'quartile_id' => $quartile,
+        //             'group_id' => $group,
+        //         ]
+        //     );
+        // }
     }
 
     public function rules(): array
@@ -117,6 +141,15 @@ class UsersImport implements
                     ->symbols()
                     ->uncompromised()
             ],
+            'name' => 'required',
+            'last_name' => 'required',
+            'role' => 'required',
+            'territorial' => 'required',
+            'secicoins' => 'required',
+            'group' => 'required',
+            'quartile' => 'required',
+            'delegation' => 'required',
+            'code' => 'required',
         ];
     }
 
@@ -184,13 +217,13 @@ function validateGroup($data)
     }
 }
 
-function userExist($email)
-{
-    $user = User::where('email', $email)->first();
+// function userExist($email)
+// {
+//     $user = User::where('email', $email)->first();
 
-    if (is_null($user)) {
-        return false;
-    } else {
-        return true;
-    }
-}
+//     if (is_null($user)) {
+//         return false;
+//     } else {
+//         return true;
+//     }
+// }
