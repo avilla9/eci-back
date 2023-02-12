@@ -59,6 +59,14 @@ Route::controller(ArticleController::class)->group(function () {
     Route::post('/sendmail', 'sendMail');
 });
 
+Route::prefix('/posts')->group(function () {
+    Route::prefix('/home')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/lista', 'homeList')->name('home.get.list');
+        });
+    });
+});
+
 Route::prefix('/users')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/getAllUsers', 'getAllUsers')->name('get-all-users');

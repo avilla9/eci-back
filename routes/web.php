@@ -114,7 +114,7 @@ Route::middleware('auth')->group(function () {
         Route::prefix('/home')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'homeCreate')->name('home-create');
-                Route::get('/lista', 'homeList')->name('homes-list');
+                Route::get('/lista', 'homeArticlesView')->name('homes-list');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'homeCreate')->name('home.create');

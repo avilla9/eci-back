@@ -150,7 +150,8 @@ class PageController extends Controller {
 
     public function storieList() {
         $stories = DB::table('articles')
-            ->select('articles.*', 'files.media_path')
+            ->select('articles.*', 'files.media_path', 'sections.id as section_id', 'sections.title as section_title')
+            ->join('sections', 'sections.id', '=', 'articles.section_id')
             ->join('files', 'files.id', '=', 'articles.file_id')
             ->where('articles.post_type', 'story')
             ->whereRaw('DATEDIFF(CURDATE(), articles.created_at) <= 1')
@@ -174,10 +175,16 @@ class PageController extends Controller {
         return view('pages/content/home/create', $data);
     }
 
+    public function homeArticlesView() {
+        $data = contentParameters();
+        $sections = sectionParameters('Home');
+        $data['sections'] = $sections;
+        return view('pages.content.home.list', $data);
+    }
+
     public function homeList() {
-        return view('pages/content/home/list', [
-            'articles'  => articlesByPage('Home')
-        ]);
+        $articles = articlesByPage('Home');
+        return json_encode($articles);
     }
 
     public function contentCampaignCreate() {
