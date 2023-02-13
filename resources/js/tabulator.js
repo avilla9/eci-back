@@ -353,6 +353,37 @@ import { isNull } from "lodash";
 			table.print();
 		});
 
+		$('#deleteUserId').on("click", function () {
+			if ($('.checkElement:checkbox:checked').length) {
+				Swal.fire({
+					title: '¿Desea eliminar esta seleccion?',
+					text: "¡Esta accion es irreversible!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Si, seguro',
+					cancelButtonText: 'No, cancelar'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$('.checkElement:checkbox:checked').map(function () {
+							console.log($(this).attr("itemid"));
+							$.ajax({
+								type: "POST",
+								url: '/api/users/delete',
+								data: { "id": $(this).attr("itemid") },
+								success: function (data) {
+									console.log("response", data);
+								}
+							});
+						});
+						table.replaceData();
+					};
+				});
+			}
+		});
+
+
 		function updateUser(data) {
 			$.ajax({
 				type: "PUT",

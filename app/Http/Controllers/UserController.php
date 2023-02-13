@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller {
     /**
@@ -248,8 +249,7 @@ class UserController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function delete(Request $request) {
-        User::where('id', $request->id)->delete();
-        return true;
+        return User::where('id', $request->id)->update(['deleted_at' => Carbon::now()]);
     }
 
     public function fileImport(Request $request) {
