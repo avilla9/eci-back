@@ -183,7 +183,17 @@ class PageController extends Controller {
     }
 
     public function homeList() {
-        $articles = articlesByPage('Home');
+        $articles = DB::table('articles')
+            ->select('articles.*', 'sections.title as section_title', 'files.media_path')
+            ->join('sections', 'sections.id', '=', 'articles.section_id')
+            ->join('pages', 'pages.id', '=', 'sections.page_id')
+
+            ->join('files', 'files.id', '=', 'articles.file_id')
+
+            ->where('pages.title', 'Home')
+            ->orderBy('sections.title', 'asc')
+            ->orderBy('articles.id', 'desc')
+            ->get();
         return json_encode($articles);
     }
 
@@ -307,7 +317,7 @@ class PageController extends Controller {
             ->leftJoin('files', 'files.id', '=', 'sections.file_id')
             ->where('pages.title', 'Salas')
             ->get();
-            
+
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
 
         return view('pages/content/room/sections', [
