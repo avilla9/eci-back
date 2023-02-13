@@ -87,6 +87,7 @@ class UsersImport implements
                 'delegation_code' => $delegation,
                 'quartile_id' => $quartile,
                 'group_id' => $group,
+                'deleted_at' => NULL,
             ]
         );
 
