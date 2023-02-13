@@ -421,7 +421,8 @@ class ArticleController extends Controller {
 	}
 
 	function postDetails(Request $request, $post){
-		return Article::where('id', $post)->first();
+		return Article::select('articles.*', 'files.media_path')
+		->join('files', 'files.id', '=', 'articles.file_id')->where('articles.id', $post)->first();
 	}
 
 	function accessCreate(Request $request) {
