@@ -3173,6 +3173,9 @@ select{
 .w-1{
     width: 0.25rem;
 }
+.w-40{
+    width: 10rem;
+}
 .w-6{
     width: 1.5rem;
 }
@@ -3181,9 +3184,6 @@ select{
 }
 .w-5{
     width: 1.25rem;
-}
-.w-40{
-    width: 10rem;
 }
 .w-10{
     width: 2.5rem;

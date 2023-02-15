@@ -148,6 +148,9 @@ return [
 
     'attributes' => [
         'dni' => 'DNI',
+        'description'=> 'Descripcion',
+        'title'=> 'Titulo',
+        'image'=> 'Imagen',
         'name' => 'Nombre',
         'email' => 'Correo',
         'password' => 'Contraseña',

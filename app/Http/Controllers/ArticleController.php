@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
 use App\Models\ArticleFilter;
 use App\Models\User;
+use Dotenv\Validator;
+use Facade\FlareClient\Http\Response;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 
 use function PHPSTORM_META\map;
 
@@ -425,6 +429,16 @@ class ArticleController extends Controller {
 		->join('files', 'files.id', '=', 'articles.file_id')->where('articles.id', $post)->first();
 	}
 
+	public function sectionDetails(Request $request, $articles)
+    { 
+        return DB::table('pages')
+		->select('sections.*', 'files.media_path as img')
+		->join('sections', 'sections.page_id', '=', 'pages.id')
+		->leftJoin('files', 'files.id', '=', 'sections.file_id')
+		->where('sections.id', $articles)
+		->get();
+    }
+
 	function accessCreate(Request $request) {
 		$data = [
 			'title' => $request->title,
@@ -481,8 +495,10 @@ class ArticleController extends Controller {
 
 	function roomSection(Request $request) {
 		$data = [
-			'file_id' => $request->image,
 			'section_id' => $request->section,
+			'title' => $request->title,
+			'description' => $request->description,
+			'file_id' => $request->image
 		];
 
 		$sections = DB::table('sections')
@@ -492,8 +508,44 @@ class ArticleController extends Controller {
 				],
 				[
 					'file_id' => $data['file_id'],
-				]
+				],
 			);
+
+		if ($sections) {
+			return DB::table('pages')
+				->select('sections.*', 'files.media_path as img')
+				->join('sections', 'sections.page_id', '=', 'pages.id')
+				->leftJoin('files', 'files.id', '=', 'sections.file_id')
+				->where('pages.title', 'Salas')
+				->get();
+		} else {
+			return $sections;
+		}
+	}
+	function sectionUpdate(Request $request, $articles) {
+		$validator = FacadesValidator::make($request->all(), [
+			'section' => "required",
+			'title' => "required",
+			'description' => "required",
+			'image' => "required" 
+		]);
+		if ($validator->fails()) {
+			$error = $validator->errors();
+			return [
+				"status" => HttpResponse::HTTP_BAD_REQUEST,
+				"message" => $error->first()
+			];
+		}
+
+
+		$sections = DB::table('sections')
+		->where('id', $articles)
+		->update([
+			'title' => $request->title,
+			'description' => $request->description,
+			'file_id' => $request->image
+		]);
+			
 
 		if ($sections) {
 			return DB::table('pages')

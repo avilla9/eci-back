@@ -40,6 +40,8 @@ Route::prefix('/posts')->group(function () {
         Route::get('/{post}', 'postDetails');
         Route::post('/validate', 'validateAccess');
         Route::post('/list', 'list')->name('posts.list');
+        Route::get('/room/{articles}', 'sectionDetails');
+        Route::put('/room/{articles}', 'sectionUpdate');
         Route::prefix('/stories')->group(function () {
             Route::post('/', 'showStories')->name('stories.list');
             Route::post('/view', 'viewStories')->name('viewStories');
