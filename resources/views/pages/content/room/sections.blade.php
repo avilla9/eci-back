@@ -38,9 +38,9 @@
           <td><button article_id="{{$article->id}}" class="delete flex items-center text-danger">
               <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
             </button>
-            <button article_id="{{$article->id}}" class="edit flex items-center" id="editArticle">
+            <button article_id="{{$article->id}}" class="edit flex items-center" onclick="modalEdit(event)">
             <i data-feather="check-square" class="w-4 h-4 mr-1 my-4"></i> Editar
-            </button>
+          </button>
           </td>
         </tr>
         @endforeach
@@ -68,9 +68,26 @@
                           placeholder="Titulo...">
                       </div>
                       <div class="mt-3">
-                        <label for="regular-form-1" class="form-label">Seccion</label>
+                        <label for="regular-form-1" class="form-label">Descripcion</label>
                         <input id="description" type="text" class="form-control"
-                          placeholder="Seccion...">
+                          placeholder="Descripcion...">
+                      </div>
+                      <div class="mt-3">
+                      <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <label class="form-check-label" for="show-example-2">Visible para todos</label>
+                        <input name="select-all" id="show-example-2" data-target="#boxed-accordion"
+                          class="show-code form-check-input mr-0 ml-3" type="checkbox">
+                      </div>
+                      <div id="filters2" class="mt-2">
+                        @foreach ($filters as $key => $filter)
+                        <label class="form-label">{{$filter['name']}}</label>
+                        <select name="{{$key}}" data-placeholder="Añadir a la visibilidad" autocomplete="off" class="selector-{{$key}} tom-select w-full mb-2" multiple>
+                          @foreach ($filter['data'] as $item)
+                          <option value="{{$item['id']}}" >{{$item['name']}}</option>
+                          @endforeach
+                        </select>
+                        @endforeach
+                      </div>
                       </div>
                       <div class="mt-3">
                         <label for="regular-form-1" class="form-label">Imagen de perfil</label>
@@ -154,7 +171,7 @@
                           <div class="mt-3">
                             <label for="regular-form-1" class="form-label">Descripcion</label>
                             <input id="description-create" type="text" class="form-control"
-                              placeholder="Seccion...">
+                              placeholder="Descripcion...">
                           </div>
                           <div>
                             <label for="post-form-2" class="form-label">Fecha de carga</label>
@@ -243,5 +260,97 @@
 @endsection
 
 @section('script')
-<script src="{{ asset('dist/js/articles/room.js') }}"></script>
+{{-- <script src="{{ asset('dist/js/articles/room.js') }}"></script> --}}
+<script>
+  const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#edit-section"));
+  const modalEdit = async(e) => {
+   
+    
+    let idTarget = e.currentTarget
+    id = parseInt($(idTarget).attr("article_id"))
+    $.ajax({
+        type: "GET",
+        url: "/api/posts/sections-filters/" + id,
+        success: function(response) {
+            console.log(response.sectionsFilters[0].groups);
+            $.each(response.sectionsFilters[0].groups, function(index, value) {
+                $('.selector-groups').find('option[value="' + value + '"]').attr("selected", "selected");
+            });
+            $.each(response.sectionsFilters[0].delegations, function(index, value) {
+              $('.selector-delegations').find('option[value="' + value + '"]').attr("selected", "selected");
+            });
+            $.each(response.sectionsFilters[0].roles, function(index, value) {
+                $('.selector-roles').find('option[value="' + value + '"]').attr("selected", "selected");
+            });
+            $.each(response.sectionsFilters[0].users, function(index, value) {
+                $('.selector-users').find('option[value="' + value + '"]').attr("selected", "selected");
+            });
+            $.each(response.sectionsFilters[0].quartiles, function(index, value) {
+                $('.selector-quartiles').find('option[value="' + value + '"]').attr("selected", "selected");
+                // $("select-quartiles").ultiselect();
+            });
+            myModal.show()
+        },
+        error: function error(_error) {
+            console.log(_error.responseJSON.message);
+            // console.log(error);
+            let errors = _error.responseJSON.message;
+
+            if (errors === undefined) {
+                $('#alert').html();
+                $('#alert').removeClass();
+                $('#alert').addClass('alert alert-danger show mb-2 my-3');
+                $('#alert').html('Ha ocurrido un error al consultar la seccion');
+
+            } else {
+                $('#alert').html();
+                $('#alert').removeClass();
+                $('#alert').addClass('alert alert-danger show mb-2 my-3');
+                $('#alert').html(errors);
+            }
+            setTimeout(function() {
+                $('#alert').fadeOut(4000);
+            }, 2000);
+        }
+    });
+    $.ajax({
+        type: "GET",
+        url: `/api/posts/room/${id}`,
+        success: function success(data) {
+            $("#id").val(data[0].id)
+            $("#title").val(data[0].title)
+            $("#description").val(data[0].description)
+            $('input[name=image]').each(function() {
+                if ($(this).val() == data[0].file_id) {
+                    $(this).attr("checked", "true")
+                }
+            })
+            
+        },
+        error: function error(_error) {
+            console.log(_error.responseJSON.message);
+            // console.log(error);
+            let errors = _error.responseJSON.message;
+
+            if (errors === undefined) {
+                $('#alert').html();
+                $('#alert').removeClass();
+                $('#alert').addClass('alert alert-danger show mb-2 my-3');
+                $('#alert').html('Ha ocurrido un error al consultar la seccion');
+
+            } else {
+                $('#alert').html();
+                $('#alert').removeClass();
+                $('#alert').addClass('alert alert-danger show mb-2 my-3');
+                $('#alert').html(errors);
+            }
+            setTimeout(function() {
+                $('#alert').fadeOut(4000);
+            }, 2000);
+
+        }
+    });
+}
+
+</script>
 @endsection

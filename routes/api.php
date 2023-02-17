@@ -39,6 +39,7 @@ Route::prefix('/posts')->group(function () {
     Route::controller(ArticleController::class)->group(function () {
         Route::post('/room/creation', 'sectionCreate');
         Route::post('/validate', 'validateAccess');
+        Route::get('/sections-filters/{id}', 'sectionsFilters');
         // Route::post('/validation', 'validateSection');
         Route::post('/list', 'list')->name('posts.list');
         Route::get('/{post}', 'postDetails');

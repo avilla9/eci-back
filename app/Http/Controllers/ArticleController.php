@@ -575,6 +575,14 @@ class ArticleController extends Controller {
 			return $sections;
 		}
 	}
+	public function sectionsFilters($id) {
+		$sectionsFilters = ArticleFilter::where('article_id', $id)->get();
+	  
+		return [
+		  'sectionsFilters' =>	$sectionsFilters
+		];
+	  }
+
 	function sectionUpdate(Request $request, $articles) {
 		$validator = FacadesValidator::make($request->all(), [
 			'section' => "required",
