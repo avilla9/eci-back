@@ -753,6 +753,7 @@ class ArticleController extends Controller {
 		return true;
 	}
 
+	// CON ESTA FUNCIÓN OBTENGO LOS FILTROS DE MI ARTICULO
 	public function articleFilters($id) {
 		$articleFilters = ArticleFilter::where('article_id', $id)->get();
 

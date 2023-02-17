@@ -5,15 +5,11 @@
 @endsection
 
 @section('subcontent')
-{{ $article->unrestricted }}
-{{-- @foreach ($articleFilters[0]->groups as  $key )
-    {{ $key }}
-@endforeach --}}
 <div id="alert" class="hidden"></div>
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Crear contenido para Home</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-    <button id="save" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
+    <button id="update" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
       Guardar <i class="w-4 h-4 ml-2" data-feather="database"></i>
     </button>
   </div>
@@ -61,18 +57,37 @@
       <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link interno</label>
       <input name="internal_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link interno">
     </div>
-    <div class="form-inline mb-2 external hidden">
-      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
-      <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo">
-    </div>
-    <div class="form-inline mb-2 custom_post hidden">
-      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
-      <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)" value="">
-    </div>
-    <div class="form-inline mb-2 custom_post hidden">
-      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
-      <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)">
-    </div>
+    @if (is_null($article->external_link))
+      <div class="form-inline mb-2 external hidden">
+        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
+        <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo" value="{{ $article->external_link }}">
+      </div>
+    @else
+      <div class="form-inline mb-2 external">
+        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
+        <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo" value="{{ $article->external_link }}">
+      </div>    
+    @endif
+    @if (is_null($article->button_name) && is_null($article->button_link))
+      <div class="form-inline mb-2 custom_post hidden">
+        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
+        <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)" value="{{ $article->button_name }}">
+      </div>
+      <div class="form-inline mb-2 custom_post hidden">
+        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
+        <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)" value="{{ $article->button_link }}">
+      </div>
+      
+    @else
+        <div class="form-inline mb-2 custom_post">
+          <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
+          <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)" value="{{ $article->button_name }}">
+        </div>
+        <div class="form-inline mb-2 custom_post">
+          <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
+          <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)" value="{{ $article->button_link }}">
+        </div>
+    @endif
 
     <div class="mb-3 overflow-y-auto" style="max-height: calc(100vh - 300px); overflow-y: auto; overflow-x: hidden;">
       @if (count($files))
@@ -153,15 +168,22 @@
   $(document).ready(function () {
     // $('#section').val('{{ $article->section_id }}').change();
     console.log("{{ $article->unrestricted }}")
+
+    // AQUI TIENES PARA RELLENAR LOS CAMPOS QUE SEAN SELECTED
    function haveFilters(unrestricted) {
+    // ALMACENAS EL ID DEL ARTICULO O LA SECCION PARA FILTRAR SU DATA EN ARTICLEFILTERS
     let id = "{{ $article->id }}";
+    // SI ES UNRESTRICTED NO TIENES QUE HACER NADA PORQUE ES VISIBLE PARA TODOS
       if(unrestricted == 1) {
         return 0;
       } else {
+        // CASO CONTRARIO LLAMAS A UNA FUNCION DEL CONTROLADOR QUE TE RETORNE LOS FILTROS DE ESE ARTICULO O SECCIÓN
         $.ajax({
           type: "GET",
+          // PARA ESTE CASO MANDE EL ID EN LA RUTA
           url: "/api/posts/home/article-filters/" + id,
           success: function (response) {
+            // A CADA SELECT LE PONES UNA CLASE PARA IDENTIFICAR SUS OPCIONES Y APLICAS UN FOREACH POR CADA SELECT QUE TENGAS
             $.each(response.articleFilters[0].groups, function (index, value) { 
               $('.select-groups').find('option[value="'+ value +'"]').attr("selected", "true");
               // $("select-groups").multiselect();

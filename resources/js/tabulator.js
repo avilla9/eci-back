@@ -730,7 +730,7 @@ import { isNull } from "lodash";
             printStyled: true,
             pagination: "local",
             paginationSize: 10,
-            /* paginationSizeSelector: [10, 25, 50, 100], */
+            paginationSizeSelector: [10, 25, 50, 100],
             layout: "fitColumns",
             responsiveLayout: "collapse",
             placeholder: "No matching records found",
