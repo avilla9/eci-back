@@ -67,6 +67,7 @@ Route::prefix('/posts')->group(function () {
         });
         Route::controller(ArticleController::class)->group(function() {
             Route::get('/article-filters/{id}', 'articleFilters')->name('home.get.article.filters');
+            Route::put('/article-update', 'updateArticle')->name('home.update.article');
         });
     });
 });

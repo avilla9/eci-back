@@ -167,7 +167,6 @@
 <script>
   $(document).ready(function () {
     // $('#section').val('{{ $article->section_id }}').change();
-    console.log("{{ $article->unrestricted }}")
 
     // AQUI TIENES PARA RELLENAR LOS CAMPOS QUE SEAN SELECTED
    function haveFilters(unrestricted) {
@@ -211,8 +210,50 @@
 
    haveFilters("{{ $article->unrestricted }}");
 
-   $(selector).on(events, function () {
-    
+   $('#update').on('click', function (e) {
+    let id = '{{ $article->id }}';
+
+    var d = new Date($('#form-body input[name=upload-date]').val())
+    var year = d.getFullYear();
+    var month = ("0" + (d.getMonth() + 1)).slice(-2);
+    var day = ("0" + d.getDate()).slice(-2);
+    var hour = ("0" + d.getHours()).slice(-2);
+    var minutes = ("0" + d.getMinutes()).slice(-2);
+    var seconds = ("0" + d.getSeconds()).slice(-2);
+    let timestamp = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+
+    e.preventDefault();
+    let data = {
+      "_token": $('meta[name="csrf-token"]').attr('content'),
+      id: id,
+      section: $('select[name=section]').val(),
+      title: $('input[name=title]').val(),
+      short_description: $('input[name=short_description]').val(),
+      post_type: $('input[name=post_type]:checked').val(),
+      internal_link: $('input[name=internal_link]').val(),
+      external_link: $('input[name=external_link]').val(),
+      button_name: $('input[name=button_name]').val(),
+      button_link: $('input[name=button_link]').val(),
+      image: $('input[name=image]:checked').val(),
+      description: $('#custom_content').html(),
+      date: timestamp,
+      groups: $('#form-body select[name=groups]').val(),
+      quartiles: $('#form-body select[name=quartiles]').val(),
+      delegations: $('#form-body select[name=delegations]').val(),
+      roles: $('#form-body select[name=roles]').val(),
+      users: $('#form-body select[name=users]').val(),
+      grant_all: $('input[name=select-all]:checked').is(':checked') ? 1 : 0,
+    };
+
+    $.ajax({
+      type: "PUT",
+      url: "{{ route('home.update.article') }}",
+      data: data,
+      dataType: "JSON",
+      success: function (response) {
+        console.log("🚀 ~ file: update.blade.php:248 ~ response", response)
+      }
+    });
    });
   });
 </script>

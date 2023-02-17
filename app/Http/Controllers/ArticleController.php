@@ -761,4 +761,8 @@ class ArticleController extends Controller {
 			'articleFilters' =>	$articleFilters
 		];
 	}
+
+	public function updateArticle(Request $request) {
+		return $request;
+	}
 }
