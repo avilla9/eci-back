@@ -46,6 +46,7 @@
         @endforeach
       </tbody>
     </table>
+    
     <!--EDIT Modal -->
     <div id="edit-section" class="modal fade" tabindex="-1" aria-hidden="true" data-tw-backdrop="static">
       <div class="modal-dialog modal-xl" style="overflow-y: initial !important;">
@@ -216,11 +217,12 @@
                       <button type="button" data-tw-dismiss="modal"
                         class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
                       <button type="submit" class="btn btn-primary my-4" id="send-create">Crear seccion</button>
+                      <div id="alert2" class="hidden"></div>
                       <div class="alert alert-success my-3" role="alert" style="display:none;"
-                        id="alertUpdateSuccess">
+                        id="alertCreateSuccess">
                         ¡Seccion creada con exito!
                       </div>
-                      <div class="alert alert-danger my-3" role="alert" style="display:none;" id="alertUpdateFailed">
+                      <div class="alert alert-danger my-3" role="alert" style="display:none;" id="alertCreateFailed">
                       </div>
                     </div>
                   </div>
@@ -241,5 +243,5 @@
 @endsection
 
 @section('script')
-
+<script src="{{ asset('dist/js/articles/room.js') }}"></script>
 @endsection
