@@ -416,11 +416,11 @@ class ArticleController extends Controller {
 	}
 	function sectionCreate(Request $request) {
 		$data = [
-			'id' => Article::all()->sortBy('id')->last()->id +3,
 			'title' => $request->title,
 			'description' => $request->description,
 			'created_at' => $request->date,
 			'file_id' => $request->image,
+			'page_id' => $request->page_id
 		];
 	
 
