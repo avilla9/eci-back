@@ -35,7 +35,7 @@
           <td>{{$article->title}}</td>
           <td>{{$article->description}}</td>
           <td>{{$article->created_at}}</td>
-          <td><button article_id="{{$article->id}}" class="delete flex items-center text-danger">
+          <td><button article_id="{{$article->id}}" class="delete flex items-center text-danger" id="deleteSection">
               <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
             </button>
             <button article_id="{{$article->id}}" class="edit flex items-center" onclick="modalEdit(event)">

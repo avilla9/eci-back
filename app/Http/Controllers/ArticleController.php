@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
 use App\Models\ArticleFilter;
+use App\Models\Section;
 use App\Models\User;
 use Dotenv\Validator;
 use Facade\FlareClient\Http\Response;
@@ -457,6 +458,13 @@ class ArticleController extends Controller {
 
 			return $users;
 		
+	}
+
+	public function sectionsDelete(Request $request) {
+		Section::where('id', $request->id)->delete();
+
+		ArticleFilter::where('article_id', $request->id)->delete();
+		return $request->id;
 	}
 
 	function validateAccess(Request $request) {

@@ -3,7 +3,53 @@ $("#open-create").on("click", function(e) {
     const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#create-section"));
     myModal.show();
 })
+$("#deleteSection").on("click", function(e) {
+    let idTarget = e.currentTarget
+    id = parseInt($(idTarget).attr("article_id"))
+    Swal.fire({
+        title: '¿Desea eliminar esta seccion?',
+        text: "¡Esta accion es irreversible!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, seguro',
+        cancelButtonText: 'No, cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "DELETE",
+                url: `/api/posts/delete-section/${id}`,
+                success: function success(data) {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    swalWithBootstrapButtons.fire(
+                        '¡Eliminado!',
+                        'La seccion se ha eliminado con exito.',
+                        'success'
+                    )
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                },
+                error: function error(error) {
+                    console.log(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ERROR',
+                        text: 'Ha ocurrido un error al eliminar, intente mas tarde.',
+                    })
 
+                }
+            });
+        }
+    })
+})
 $("#send-create").on("click", function(e) {
     e.preventDefault();
     var d = new Date($('#create-section input[name=create-date]').val())
