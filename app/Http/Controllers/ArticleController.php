@@ -752,4 +752,12 @@ class ArticleController extends Controller {
 		new MailController($data);
 		return true;
 	}
+
+	public function articleFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+		return [
+			'articleFilters' =>	$articleFilters
+		];
+	}
 }

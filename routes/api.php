@@ -10,6 +10,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
+use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,10 @@ Route::controller(ArticleController::class)->group(function () {
 Route::prefix('/posts')->group(function () {
     Route::prefix('/home')->group(function () {
         Route::controller(PageController::class)->group(function () {
-            Route::get('/lista', 'homeList')->name('home.get.list');
+            Route::get('/list', 'homeList')->name('home.get.list');
+        });
+        Route::controller(ArticleController::class)->group(function() {
+            Route::get('/article-filters/{id}', 'articleFilters')->name('home.get.article.filters');
         });
     });
 });
