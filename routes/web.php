@@ -169,6 +169,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'roomCreate')->name('room.create');
                 Route::post('/section', 'roomSection')->name('room.section');
+                Route::post('/creation', 'sectionCreate');
                 
             });
         });

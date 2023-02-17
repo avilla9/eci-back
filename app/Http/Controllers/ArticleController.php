@@ -414,6 +414,50 @@ class ArticleController extends Controller {
 			return $users;
 		}
 	}
+	function sectionCreate(Request $request) {
+		$data = [
+			'id' => Article::all()->sortBy('id')->last()->id +3,
+			'title' => $request->title,
+			'description' => $request->description,
+			'created_at' => $request->date,
+			'file_id' => $request->image,
+		];
+	
+
+		$articleid = DB::table('sections')->insertGetId($data);
+
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			$filters['article_id'] = $articleid;
+			ArticleFilter::create($filters);
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleid,
+					]);
+			}
+
+			return $users;
+		
+	}
 
 	function validateAccess(Request $request) {
 		$access = Access::where([
@@ -423,6 +467,15 @@ class ArticleController extends Controller {
 
 		return $access ? 1 : 0;
 	}
+
+	// function validateSection(Request $request) {
+	// 	$access = Access::where([
+	// 		'user_id' => $request->user_id,
+	// 		'article_id' => $request->article_id,
+	// 	])->first();
+
+	// 	return $access ? 1 : 0;
+	// }
 
 	function postDetails(Request $request, $post){
 		return Article::select('articles.*', 'files.media_path')
