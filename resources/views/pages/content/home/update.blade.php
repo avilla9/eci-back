@@ -166,6 +166,14 @@
 <script src="{{ asset('dist/js/articles/home.js') }}"></script>
 <script>
   $(document).ready(function () {
+    var settings = {};
+    
+    // $('.select-groups').removeAttr('selected').prop('selected', false);
+    // $('.select-delegations').removeAttr('selected').prop('selected', false);
+    // $('.select-roles').removeAttr('selected').prop('selected', false);
+    // $('.select-users').removeAttr('selected').prop('selected', false);
+    // $('.select-quartiles').removeAttr('selected').prop('selected', false);
+    
     // $('#section').val('{{ $article->section_id }}').change();
 
     // AQUI TIENES PARA RELLENAR LOS CAMPOS QUE SEAN SELECTED
@@ -184,22 +192,38 @@
           success: function (response) {
             // A CADA SELECT LE PONES UNA CLASE PARA IDENTIFICAR SUS OPCIONES Y APLICAS UN FOREACH POR CADA SELECT QUE TENGAS
             $.each(response.articleFilters[0].groups, function (index, value) { 
+              if($('.select-groups').find('option[value="'+ value +'"]')) {
+                $('.select-groups').removeClass("tomselected");
+                // $('.select-groups').removeAttr("id", "tomselect-2");
+              }
               $('.select-groups').find('option[value="'+ value +'"]').attr("selected", "true");
               // $("select-groups").multiselect();
             });
-            $.each(response.articleFilters[0].delegations, function (index, value) { 
+            $.each(response.articleFilters[0].delegations, function (index, value) {
+              if($('.select-delegations').find('option[value="'+ value +'"]')) {
+                $('.select-delegations').removeClass("tomselected")
+              }
               $('.select-delegations').find('option[value="'+ value +'"]').attr("selected", "true");
               // $("select-delegations").multiselect();
             });
-            $.each(response.articleFilters[0].roles, function (index, value) { 
+            $.each(response.articleFilters[0].roles, function (index, value) {
+              if($('.select-roles').find('option[value="'+ value +'"]')) {
+                $('.select-roles').removeClass("tomselected");
+              }
               $('.select-roles').find('option[value="'+ value +'"]').attr("selected", "true");
               // $("select-roles").multiselect();
             });
             $.each(response.articleFilters[0].users, function (index, value) { 
+              if($('.select-users').find('option[value="'+ value +'"]')) {
+                $('.select-users').removeClass("tomselected");
+              }
               $('.select-users').find('option[value="'+ value +'"]').attr("selected", "true");
               // $("select-users").multiselect();
             });
             $.each(response.articleFilters[0].quartiles, function (index, value) { 
+              if($('.select-quartiles').find('option[value="'+ value +'"]')) {
+                $('.select-quartiles').removeClass("tomselected");
+              }
               $('.select-quartiles').find('option[value="'+ value +'"]').attr("selected", "true");
               // $("select-quartiles").ultiselect();
             });
