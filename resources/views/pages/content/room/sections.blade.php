@@ -264,17 +264,20 @@
 <script>
   const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#edit-section"));
   const modalEdit = async(e) => {
-   
-    
     let idTarget = e.currentTarget
     id = parseInt($(idTarget).attr("article_id"))
     $.ajax({
         type: "GET",
         url: "/api/posts/sections-filters/" + id,
         success: function(response) {
+          // console.log(response.sectionsFilters);
+          if (response.sectionsFilters) {
+            myModal.show()
+            // console.log("no filters");
+          } else {
             console.log(response.sectionsFilters[0].groups);
             $.each(response.sectionsFilters[0].groups, function(index, value) {
-                $('.selector-groups').find('option[value="' + value + '"]').attr("selected", "selected");
+              // $('.selector-groups').find('option[value="' + value + '"]').prop("selected");
             });
             $.each(response.sectionsFilters[0].delegations, function(index, value) {
               $('.selector-delegations').find('option[value="' + value + '"]').attr("selected", "selected");
@@ -290,6 +293,7 @@
                 // $("select-quartiles").ultiselect();
             });
             myModal.show()
+          }
         },
         error: function error(_error) {
             console.log(_error.responseJSON.message);

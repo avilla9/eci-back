@@ -35,7 +35,7 @@ $("#deleteSection").on("click", function(e) {
                     )
                     setTimeout(function() {
                         location.reload();
-                    }, 1500);
+                    }, 2000);
                 },
                 error: function error(error) {
                     console.log(error);
