@@ -32,7 +32,12 @@
                                     <td><button article_id="{{ $article->id }}"
                                             class="delete flex items-center text-danger">
                                             <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
-                                        </button></td>
+                                        </button>
+                                        <button article_id="{{ $article->id }}"
+                                            class="copy flex items-center text-light" style="width: 100px;">
+                                            <i data-feather="paperclip" class="w-4 h-4 mr-1 my-4"></i> Copiar Link
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -88,5 +93,17 @@
 
 
         });
+        $(".copy").click(function (e) { 
+        e.preventDefault();
+        let idTarget = e.currentTarget
+        id = parseInt($(idTarget).attr("article_id"));
+        let copyText = "/post/" + id
+        navigator.clipboard.writeText(copyText);
+        Swal.fire(
+        '¡Enlace copiado al portapapeles!',
+        "",
+        'success'
+        )
+  });
     </script>
 @endsection
