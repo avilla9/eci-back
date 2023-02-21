@@ -606,6 +606,37 @@ class ArticleController extends Controller {
 			];
 		}
 
+		$filters = [
+			'groups' => !is_null($request->groups) ? $request->groups : [0],
+			'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+			'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+			'roles' => !is_null($request->roles) ? $request->roles : [0],
+			'users' => !is_null($request->users) ? $request->users : [0],
+		];
+
+		ArticleFilter::where('article_id', $articles)->update(
+			$filters
+		);
+	
+		$users = DB::table('users')
+			->select('users.*')
+			->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+			->whereIn('delegations.id', $filters['delegations'])
+			->orWhereIn('users.role_id', $filters['roles'])
+			->orWhereIn('users.quartile_id', $filters['quartiles'])
+			->orWhereIn('users.group_id', $filters['groups'])
+			->orWhereIn('users.id', $filters['users'])
+			->get();
+
+		foreach ($users as $key => $user) {
+			DB::table('accesses')
+				->where('article_id', $articles)
+				->update([
+					'user_id' => $user->id,
+				]);
+		}
+
+
 
 		$sections = DB::table('sections')
 		->where('id', $articles)

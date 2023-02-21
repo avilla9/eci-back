@@ -2,6 +2,7 @@ $("#open-create").on("click", function(e) {
     e.preventDefault();
     const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#create-section"));
     myModal.show();
+
 })
 $("#deleteSection").on("click", function(e) {
     let idTarget = e.currentTarget
@@ -50,22 +51,14 @@ $("#deleteSection").on("click", function(e) {
         }
     })
 })
+
 $("#send-create").on("click", function(e) {
     e.preventDefault();
-    var d = new Date($('#create-section input[name=create-date]').val())
-    var year = d.getFullYear();
-    var month = ("0" + (d.getMonth() + 1)).slice(-2);
-    var day = ("0" + d.getDate()).slice(-2);
-    var hour = ("0" + d.getHours()).slice(-2);
-    var minutes = ("0" + d.getMinutes()).slice(-2);
-    var seconds = ("0" + d.getSeconds()).slice(-2);
-    let timestamp = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
     let data = {
         "_token": $('meta[name="csrf-token"]').attr('content'),
         title: $("#create-title").val(),
         description: $("#description-create").val(),
         image: $('input[name=image]:checked').val(),
-        date: timestamp,
         groups: $('#filters select[name=groups]').val(),
         quartiles: $('#filters select[name=quartiles]').val(),
         delegations: $('#filters select[name=delegations]').val(),
@@ -80,18 +73,17 @@ $("#send-create").on("click", function(e) {
     let error = false;
     let message = [];
     if (!$('input[name=select-all]').is(":checked")) {
-        if (!$('#form-body select[name=groups]').val() &&
-            !$('#form-body select[name=delegations]').val() &&
-            !$('#form-body select[name=quartiles]').val() &&
-            !$('#form-body select[name=roles]').val() &&
-            !$('#form-body select[name=users]').val()
+        if (!$('#filters select[name=groups] :selected').length &&
+            !$('#filters select[name=delegations] :selected').length &&
+            !$('#filters select[name=quartiles] :selected').length &&
+            !$('#filters select[name=roles] :selected').length &&
+            !$('#filters select[name=users] :selected').length
         ) {
             error = true;
             message.push('Debe seleccionar al menos un grupo objetivo');
         }
-    } else {
-        data.grant_all = 1
     }
+
 
     if (!data.image) {
         error = true;
@@ -123,7 +115,7 @@ $("#send-create").on("click", function(e) {
         $('#alert2').html(value);
 
     } else {
-        console.log(data);
+        // console.log(data);
         $('#alert2').html(" ");
         $.ajax({
             type: "POST",
@@ -159,17 +151,24 @@ $("#send-create").on("click", function(e) {
 
 $("#updateSection").on("click", function(e) {
     e.preventDefault();
+    let id = $("#id").val();
+    // console.log(id);
     let data = {
         "_token": $('meta[name="csrf-token"]').attr('content'),
         section: $("#id").val(),
         title: $("#title").val(),
         description: $("#description").val(),
         image: $('input[name=image]:checked').val(),
+        groups: $('#filters2 select[name=groups]').val(),
+        quartiles: $('#filters2 select[name=quartiles]').val(),
+        delegations: $('#filters2 select[name=delegations]').val(),
+        roles: $('#filters2 select[name=roles]').val(),
+        users: $('#filters2 select[name=users]').val(),
     };
-    console.log(data);
+    // console.log(data);
     $.ajax({
         type: "PUT",
-        url: `/api/posts/room/create`,
+        url: `/api/posts/room/${id}`,
         data: data,
         success: function success(data) {
             // console.log('success', data)

@@ -18,7 +18,7 @@
 <div id="form-body2" class="pos intro-y grid grid-cols-12 gap-5 mt-5">
   <!-- BEGIN: Post Content -->
   <div class="intro-y col-span-12 lg:col-span-12">
-    <table class="table">
+    <table class="table mb-5">
       <thead class="table-dark">
         <tr>
           <th class="whitespace-nowrap">Imagen</th>
@@ -28,9 +28,9 @@
           <th class="whitespace-nowrap">Opciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="mb-5">
         @foreach ($articles as $article)
-        <tr id={{$article->id}}>
+        <tr id={{$article->id}} class="mb-5">
           <td><img src="{{$article->img}}" class="w-40"></td>
           <td>{{$article->title}}</td>
           <td>{{$article->description}}</td>
@@ -75,7 +75,7 @@
                       <div class="mt-3">
                       <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
                         <label class="form-check-label" for="show-example-2">Visible para todos</label>
-                        <input name="select-all" id="show-example-2" data-target="#boxed-accordion"
+                        <input name="edit-select-all" id="show-example-2" data-target="#boxed-accordion"
                           class="show-code form-check-input mr-0 ml-3" type="checkbox">
                       </div>
                       <div id="filters2" class="mt-2">
@@ -125,7 +125,7 @@
                     <div class="modal-footer my-5">
   
                       <button type="button" data-tw-dismiss="modal"
-                        class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
+                        class="btn btn-outline-secondary w-20 mr-1" id="closeUpdate">Cerrar</button>
                       <button type="submit" class="btn btn-primary my-4" id="updateSection">Actualizar
                         seccion</button>
                       <div class="alert alert-success my-3" role="alert" style="display:none;"
@@ -173,21 +173,17 @@
                             <input id="description-create" type="text" class="form-control"
                               placeholder="Descripcion...">
                           </div>
-                          <div>
-                            <label for="post-form-2" class="form-label">Fecha de carga</label>
-                            <input name="create-date" type="text" class="datepicker form-control" id="post-form-2" data-single-mode="true">
-                          </div>
                           <div class="mt-3">
                             <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
                               <label class="form-check-label" for="show-example-2">Visible para todos</label>
-                              <input name="select-all" id="show-example-2" data-target="#boxed-accordion"
+                              <input name="select-all" id="selectAll" data-target="#boxed-accordion"
                                 class="show-code form-check-input mr-0 ml-3" type="checkbox">
                             </div>
                     
                             <div id="filters" class="mt-2">
                               @foreach ($filters as $key => $filter)
                               <label class="form-label">{{$filter['name']}}</label>
-                              <select name="{{$key}}" data-placeholder="Añadir a la visibilidad" class="tom-select w-full mb-2" multiple>
+                              <select name="{{$key}}" data-placeholder="Añadir a la visibilidad" class=" {{$key}} tom-select w-full mb-2" multiple>
                                 @foreach ($filter['data'] as $item)
                                 <option value="{{$item['id']}}">{{$item['name']}}</option>
                                 @endforeach
@@ -232,7 +228,7 @@
                 
                     <div class="modal-footer my-5">
                       <button type="button" data-tw-dismiss="modal"
-                        class="btn btn-outline-secondary w-20 mr-1">Cerrar</button>
+                        class="btn btn-outline-secondary w-20 mr-1" id="closeEdit">Cerrar</button>
                       <button type="submit" class="btn btn-primary my-4" id="send-create">Crear seccion</button>
                       <div id="alert2" class="hidden"></div>
                       <div class="alert alert-success my-3" role="alert" style="display:none;"
@@ -261,6 +257,7 @@
 
 @section('script')
 {{-- <script src="{{ asset('dist/js/articles/room.js') }}"></script> --}}
+
 <script>
   const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#edit-section"));
   const modalEdit = async(e) => {
@@ -271,28 +268,28 @@
         url: "/api/posts/sections-filters/" + id,
         success: function(response) {
           // console.log(response.sectionsFilters);
-          if (response.sectionsFilters) {
-            myModal.show()
-            // console.log("no filters");
-          } else {
-            console.log(response.sectionsFilters[0].groups);
+          if (response.sectionsFilters[0]) {
+            // console.log(response.sectionsFilters[0].groups);
             $.each(response.sectionsFilters[0].groups, function(index, value) {
-              // $('.selector-groups').find('option[value="' + value + '"]').prop("selected");
+              document.querySelector(".selector-groups").tomselect.addItem(value)
             });
             $.each(response.sectionsFilters[0].delegations, function(index, value) {
-              $('.selector-delegations').find('option[value="' + value + '"]').attr("selected", "selected");
+              document.querySelector(".selector-delegations").tomselect.addItem(value)
             });
             $.each(response.sectionsFilters[0].roles, function(index, value) {
-                $('.selector-roles').find('option[value="' + value + '"]').attr("selected", "selected");
+                document.querySelector(".selector-roles").tomselect.addItem(value)
             });
             $.each(response.sectionsFilters[0].users, function(index, value) {
-                $('.selector-users').find('option[value="' + value + '"]').attr("selected", "selected");
+                document.querySelector(".selector-users").tomselect.addItem(value)
             });
             $.each(response.sectionsFilters[0].quartiles, function(index, value) {
-                $('.selector-quartiles').find('option[value="' + value + '"]').attr("selected", "selected");
-                // $("select-quartiles").ultiselect();
+                document.querySelector(".selector-quartiles").tomselect.addItem(value)
             });
             myModal.show()
+          } else {
+            myModal.show()
+            console.log("no filters");
+            
           }
         },
         error: function error(_error) {
@@ -355,6 +352,49 @@
         }
     });
 }
+$("#closeUpdate").on("click", function (e) { 
+  e.preventDefault();
+  document.querySelector(".selector-groups").tomselect.clear();
+  document.querySelector(".selector-delegations").tomselect.clear();
+  document.querySelector(".selector-roles").tomselect.clear();
+  document.querySelector(".selector-users").tomselect.clear();
+  document.querySelector(".selector-quartiles").tomselect.clear();
+});
+$('input[name=select-all]').on("change", function() {
+    if ($('input[name=select-all]').is(":checked")) {
+        $('#filters').addClass('hidden');
+        document.querySelector(".groups").tomselect.clear();
+        document.querySelector(".delegations").tomselect.clear();
+        document.querySelector(".roles").tomselect.clear();
+        document.querySelector(".users").tomselect.clear();
+        document.querySelector(".quartiles").tomselect.clear();
+    } else {
+        $('#filters').removeClass('hidden');
+    }
+});
+$('input[name=edit-select-all]').on("change", function() {
+    if ($('input[name=edit-select-all]').is(":checked")) {
+        $('#filters2').addClass('hidden');
+        document.querySelector(".selector-groups").tomselect.clear();
+        document.querySelector(".selector-delegations").tomselect.clear();
+        document.querySelector(".selector-roles").tomselect.clear();
+        document.querySelector(".selector-users").tomselect.clear();
+        document.querySelector(".selector-quartiles").tomselect.clear();
+    } else {
+        $('#filters2').removeClass('hidden');
+    }
+});
 
+$("#closeEdit").on("click", function (e) { 
+  e.preventDefault();
+  document.querySelector(".groups").tomselect.clear();
+  document.querySelector(".delegations").tomselect.clear();
+  document.querySelector(".roles").tomselect.clear();
+  document.querySelector(".users").tomselect.clear();
+  document.querySelector(".quartiles").tomselect.clear();
+  $("#create-title").val("");
+  $("#description-create").val("");
+  $('input[name=image]').prop('checked', false);
+});
 </script>
 @endsection
