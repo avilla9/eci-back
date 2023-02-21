@@ -3,6 +3,7 @@ import feather from "feather-icons";
 import Tabulator from "tabulator-tables";
 import $ from 'jquery'
 import { isNull } from "lodash";
+// import Swal from 'sweetalert2';
 
 (function () {
     "use strict";
