@@ -3,7 +3,7 @@ import feather from "feather-icons";
 import Tabulator from "tabulator-tables";
 import $ from 'jquery'
 import { isNull } from "lodash";
-// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 (function () {
     "use strict";
@@ -880,7 +880,7 @@ import { isNull } from "lodash";
                                     cancelButtonText: "No, cancelar",
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        fetch("/api/users/delete", {
+                                        fetch("/api/posts/home/article-delete", {
                                             method: "POST",
                                             headers: {
                                                 "Content-type":

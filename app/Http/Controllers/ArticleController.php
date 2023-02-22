@@ -193,7 +193,6 @@ class ArticleController extends Controller {
 	}
 
 	public function homeUpdate(Request $request) {
-		return $request;
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -250,6 +249,8 @@ class ArticleController extends Controller {
 
 	public function homeDelete(Request $request) {
 		Article::where('id', $request->id)->delete();
+		ArticleFilter::where('article_id', $request->id)->delete();
+		Access::where('article_id', $request->id)->delete();
 	}
 
 	public function campaignCreate(Request $request) {

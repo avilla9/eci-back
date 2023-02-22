@@ -133,7 +133,7 @@
     <div class="intro-y box p-5">
       <div>
         <label for="post-form-2" class="form-label">Fecha de carga</label>
-        <input name="upload-date" type="text" class="datepicker form-control" id="post-form-2" data-single-mode="true" value="{{date('Y-m-d', strtotime($article->created_at))}}">
+        <input name="upload-date" type="text" class="datepicker form-control" id="post-form-2" data-single-mode="true">
       </div>
       <div class="mt-3">
         <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -165,6 +165,7 @@
 <script>
   $(document).ready(function () {
     var settings = {};
+    $('.datepicker').val("{{date('Y-m-d', strtotime($article->created_at))}}");
     
     // $('.select-groups').removeAttr('selected').prop('selected', false);
     // $('.select-delegations').removeAttr('selected').prop('selected', false);
@@ -332,6 +333,7 @@
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-success show mb-2');
         $('#alert').html('Post actualizado con éxito');
+        window.location.href = '{{ route("homes-list") }}'
       },
       error: function (error) {
         $('#alert').html();
