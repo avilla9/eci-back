@@ -153,11 +153,8 @@ class UserController extends Controller {
         if ($validator->fails()) {
             return response()->json($validator->errors(), 404);
         } else {
-            if ($request->password) {
-                $request->merge(['password' => Hash::make($request->password)]);
-            }
             $delegation = Delegation::where('id', $request->delegation_id)->first();
-            $user = User::where('id', $request->id)->update([
+            $data = [
                 'name' => $request->name,
                 'gender' => $request->gender,
                 'email' => $request->email,
@@ -169,8 +166,11 @@ class UserController extends Controller {
                 'quartile_id' => $request->quartile_id,
                 'last_name' => $request->last_name,
                 'user_code' => $request->user_code,
-            ]);
-            return $user;
+            ];
+            if ($request->password) {
+                $data['password'] = Hash::make($request->password);
+            }
+            return User::where('id', $request->id)->update($data);
         }
     }
 
