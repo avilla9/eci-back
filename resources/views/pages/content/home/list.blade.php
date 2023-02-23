@@ -35,7 +35,7 @@
                                             <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
                                         </button>
                                         <button article_id="{{ $article->id }}"
-                                            class="copy flex items-center text-light">
+                                            class="copy flex items-center text-dark">
                                             <i data-feather="paperclip" class="w-4 h-4 mr-1 my-4"></i> Copiar Link
                                         </button>
                                     </td>
