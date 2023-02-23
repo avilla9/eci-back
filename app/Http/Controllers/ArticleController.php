@@ -209,9 +209,13 @@ class ArticleController extends Controller {
 		];
 
 		$articleid = DB::table('articles')->where('id', $request->id)->update($data);
+		$article = DB::table('articles')->where('id', $request->id)->first();
 
 		if ($data['unrestricted']) {
-			return $articleid;
+			return [
+				"article" => $articleid,
+				'message' => "Por aquí pasó"
+			];
 		} else {
 			$filters = [
 				'groups' => !is_null($request->groups) ? $request->groups : [0],
@@ -222,7 +226,19 @@ class ArticleController extends Controller {
 			];
 
 			
-			ArticleFilter::where('article_id', $request->id)->update($filters);
+			ArticleFilter::updateOrCreate(
+				[
+					"article_id" => $request->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],	
+				]
+			);
+			$articleFilters = ArticleFilter::where('article_id', $request->id)->first();
 
 			$users = DB::table('users')
 				->select('users.*')
@@ -243,7 +259,11 @@ class ArticleController extends Controller {
 				]);
 			}
 
-			return $users;
+			return [
+				'users' => $users,
+				'article' => $article,
+				'articleFilters' => $articleFilters
+			];
 		}
 	}
 

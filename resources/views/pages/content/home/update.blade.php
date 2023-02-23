@@ -189,23 +189,34 @@
           // PARA ESTE CASO MANDE EL ID EN LA RUTA
           url: "/api/posts/home/article-filters/" + id,
           success: function (response) {
+            console.log("🚀 ~ file: update.blade.php:222 ~ haveFilters ~ response:", response)
             // A CADA SELECT LE PONES UNA CLASE PARA IDENTIFICAR SUS OPCIONES Y APLICAS UN FOREACH POR CADA SELECT QUE TENGAS
-            $.each(response.articleFilters[0].groups, function (index, value) { 
-              document.querySelector('.select-groups').tomselect.addItem(value);
-              // $("select-groups").multiselect();
-            });
-            $.each(response.articleFilters[0].delegations, function (index, value) {
-              document.querySelector('.select-delegations').tomselect.addItem(value);
-            });
-            $.each(response.articleFilters[0].roles, function (index, value) {
-              document.querySelector('.select-roles').tomselect.addItem(value);
-            });
-            $.each(response.articleFilters[0].users, function (index, value) { 
-              document.querySelector('.select-users').tomselect.addItem(value);
-            });
-            $.each(response.articleFilters[0].quartiles, function (index, value) { 
-              document.querySelector('.select-quartiles').tomselect.addItem(value);
-            });
+            if(response.articleFilters[0].groups) {
+              $.each(response.articleFilters[0].groups, function (index, value) { 
+                document.querySelector('.select-groups').tomselect.addItem(value);
+                // $("select-groups").multiselect();
+              });
+            }
+            if(response.articleFilters[0].delegations) {
+              $.each(response.articleFilters[0].delegations, function (index, value) {
+                document.querySelector('.select-delegations').tomselect.addItem(value);
+              });
+            }
+            if(response.articleFilters[0].roles) {
+              $.each(response.articleFilters[0].roles, function (index, value) {
+                document.querySelector('.select-roles').tomselect.addItem(value);
+              });
+            }
+            if(response.articleFilters[0].users) {
+              $.each(response.articleFilters[0].users, function (index, value) { 
+                document.querySelector('.select-users').tomselect.addItem(value);
+              });
+            }
+            if(response.articleFilters[0].quartiles) {
+              $.each(response.articleFilters[0].quartiles, function (index, value) { 
+                document.querySelector('.select-quartiles').tomselect.addItem(value);
+              });
+            }
           }
         });
       }
