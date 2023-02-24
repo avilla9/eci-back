@@ -29,10 +29,16 @@
                                     <td>{{ $article->title }}</td>
                                     <td>{{ $article->section_title }}</td>
                                     <td>{{ $article->created_at }}</td>
-                                    <td><button article_id="{{ $article->id }}"
-                                            class="delete flex items-center text-danger">
+                                    <td class="flex h-fit">
+                                        <a campaign_id="{{ $article->id }}" href="{{ route('content.campaign.details', $article->id) }}"
+                                            class="flex items-center mx-2">
+                                            <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
+                                        </a>
+                                        <button article_id="{{ $article->id }}"
+                                            class="delete flex items-center text-danger mx-2">
                                             <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
-                                        </button></td>
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

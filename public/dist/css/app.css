@@ -3158,6 +3158,11 @@ select{
 .h-\[70px\]{
     height: 70px;
 }
+.h-fit{
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    height: fit-content;
+}
 .max-h-full{
     max-height: 100%;
 }

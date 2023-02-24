@@ -124,6 +124,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentCampaignCreate')->name('content-campaign-create');
                 Route::get('/lista', 'contentCampaignList')->name('content-campaign-list');
+                Route::get('/details/{id}', 'contentCampaignDetails')->name('content.campaign.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'campaignCreate')->name('campaign.create');

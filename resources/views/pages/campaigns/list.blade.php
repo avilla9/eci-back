@@ -31,10 +31,16 @@
                                     <td>{{ $campaign->description }}</td>
                                     <td>{{ $campaign->page_title }}</td>
                                     <td>{{ $campaign->created_at }}</td>
-                                    <td><button campaign_id="{{ $campaign->id }}"
+                                    <td>
+                                        <button campaign_id="{{ $campaign->id }}"
+                                            class="delete flex items-center text-danger mx-2">
+                                            <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
+                                        </button>
+                                        <button campaign_id="{{ $campaign->id }}"
                                             class="delete flex items-center text-danger">
                                             <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
-                                        </button></td>
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
