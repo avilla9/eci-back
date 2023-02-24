@@ -976,7 +976,9 @@ function contentParameters() {
     $delegations = Delegation::all();
     $roles = Role::all();
     $users = User::all();
-    $files = File::where('media_type', 'like', '%image%')->latest()->get();
+    $files = File::all();
+    $files = File::orderBy('updated_at', 'desc')->get();
+    // $files = File::where('media_type', 'like', '%image%')->latest()->get();
 
     $filters = [];
     count($groups) > 0 ? $filters['groups'] = [
