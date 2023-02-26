@@ -37,9 +37,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('/posts')->group(function () {
     Route::controller(ArticleController::class)->group(function () {
-        Route::get('/{post}', 'postDetails');
+        Route::post('/room/creation', 'sectionCreate');
         Route::post('/validate', 'validateAccess');
+        Route::get('/sections-filters/{id}', 'sectionsFilters');
+        Route::delete('/delete-section/{id}', 'sectionsDelete');
+        // Route::post('/validation', 'validateSection');
         Route::post('/list', 'list')->name('posts.list');
+        Route::get('/{post}', 'postDetails');
+        Route::get('/room/{articles}', 'sectionDetails');
+        Route::put('/room/{articles}', 'sectionUpdate');
         Route::prefix('/stories')->group(function () {
             Route::post('/', 'showStories')->name('stories.list');
             Route::post('/view', 'viewStories')->name('viewStories');

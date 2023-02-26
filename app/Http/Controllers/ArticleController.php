@@ -10,7 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
 use App\Models\ArticleFilter;
+use App\Models\Section;
 use App\Models\User;
+use Dotenv\Validator;
+use Facade\FlareClient\Http\Response;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 
 use function PHPSTORM_META\map;
 
@@ -410,6 +415,57 @@ class ArticleController extends Controller {
 			return $users;
 		}
 	}
+	function sectionCreate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'created_at' => $request->date,
+			'file_id' => $request->image,
+			'page_id' => $request->page_id
+		];
+	
+
+		$articleid = DB::table('sections')->insertGetId($data);
+
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			$filters['article_id'] = $articleid;
+			ArticleFilter::create($filters);
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleid,
+					]);
+			}
+
+			return $users;
+		
+	}
+
+	public function sectionsDelete(Request $request) {
+		Section::where('id', $request->id)->delete();
+
+		ArticleFilter::where('article_id', $request->id)->delete();
+		return $request->id;
+	}
 
 	function validateAccess(Request $request) {
 		$access = Access::where([
@@ -420,10 +476,29 @@ class ArticleController extends Controller {
 		return $access ? 1 : 0;
 	}
 
+	// function validateSection(Request $request) {
+	// 	$access = Access::where([
+	// 		'user_id' => $request->user_id,
+	// 		'article_id' => $request->article_id,
+	// 	])->first();
+
+	// 	return $access ? 1 : 0;
+	// }
+
 	function postDetails(Request $request, $post){
 		return Article::select('articles.*', 'files.media_path')
 		->join('files', 'files.id', '=', 'articles.file_id')->where('articles.id', $post)->first();
 	}
+
+	public function sectionDetails(Request $request, $articles)
+    { 
+        return DB::table('pages')
+		->select('sections.*', 'files.media_path as img')
+		->join('sections', 'sections.page_id', '=', 'pages.id')
+		->leftJoin('files', 'files.id', '=', 'sections.file_id')
+		->where('sections.id', $articles)
+		->get();
+    }
 
 	function accessCreate(Request $request) {
 		$data = [
@@ -481,8 +556,10 @@ class ArticleController extends Controller {
 
 	function roomSection(Request $request) {
 		$data = [
-			'file_id' => $request->image,
 			'section_id' => $request->section,
+			'title' => $request->title,
+			'description' => $request->description,
+			'file_id' => $request->image
 		];
 
 		$sections = DB::table('sections')
@@ -492,8 +569,83 @@ class ArticleController extends Controller {
 				],
 				[
 					'file_id' => $data['file_id'],
-				]
+				],
 			);
+
+		if ($sections) {
+			return DB::table('pages')
+				->select('sections.*', 'files.media_path as img')
+				->join('sections', 'sections.page_id', '=', 'pages.id')
+				->leftJoin('files', 'files.id', '=', 'sections.file_id')
+				->where('pages.title', 'Salas')
+				->get();
+		} else {
+			return $sections;
+		}
+	}
+	public function sectionsFilters($id) {
+		$sectionsFilters = ArticleFilter::where('article_id', $id)->get();
+	  
+		return [
+		  'sectionsFilters' =>	$sectionsFilters
+		];
+	  }
+
+	function sectionUpdate(Request $request, $articles) {
+		$validator = FacadesValidator::make($request->all(), [
+			'section' => "required",
+			'title' => "required",
+			'description' => "required",
+			'image' => "required" 
+		]);
+		if ($validator->fails()) {
+			$error = $validator->errors();
+			return [
+				"status" => HttpResponse::HTTP_BAD_REQUEST,
+				"message" => $error->first()
+			];
+		}
+
+		$filters = [
+			'groups' => !is_null($request->groups) ? $request->groups : [0],
+			'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+			'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+			'roles' => !is_null($request->roles) ? $request->roles : [0],
+			'users' => !is_null($request->users) ? $request->users : [0],
+		];
+
+		ArticleFilter::where('article_id', $articles)->update(
+			$filters
+		);
+	
+		$users = DB::table('users')
+			->select('users.*')
+			->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+			->whereIn('delegations.id', $filters['delegations'])
+			->orWhereIn('users.role_id', $filters['roles'])
+			->orWhereIn('users.quartile_id', $filters['quartiles'])
+			->orWhereIn('users.group_id', $filters['groups'])
+			->orWhereIn('users.id', $filters['users'])
+			->get();
+
+		foreach ($users as $key => $user) {
+			DB::table('accesses')
+				->where('article_id', $articles)
+				->update([
+					'user_id' => $user->id,
+				]);
+		}
+
+
+
+		$sections = DB::table('sections')
+		->where('id', $articles)
+		->update([
+			'title' => $request->title,
+			'description' => $request->description,
+			'file_id' => $request->image
+		]);
+			
 
 		if ($sections) {
 			return DB::table('pages')

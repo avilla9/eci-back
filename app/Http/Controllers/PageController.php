@@ -289,11 +289,16 @@ class PageController extends Controller {
     }
 
     function contentroomSections() {
+        $groups = Group::all();
+        $quartiles = Quartile::all();
+        $delegations = Delegation::all();
+        $roles = Role::all();
+        $users = User::all();
+
         $sections = DB::table('pages')
             ->join('sections', 'sections.page_id', '=', 'pages.id')
             ->where('pages.title', 'Salas')
             ->get();
-
         $articles = DB::table('pages')
             ->select('sections.*', 'files.media_path as img')
             ->join('sections', 'sections.page_id', '=', 'pages.id')
@@ -302,11 +307,34 @@ class PageController extends Controller {
             ->get();
             
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
+        $filters = [];
+            count($groups) > 0 ? $filters['groups'] = [
+                'name' => 'Grupos',
+                'data' => $groups
+            ] : true;
+            count($quartiles) > 0 ? $filters['quartiles'] = [
+                'name' => 'Cuartiles',
+                'data' => $quartiles
+            ] : true;
+            count($delegations) > 0 ? $filters['delegations'] = [
+                'name' => 'Delegaciones',
+                'data' => $delegations
+            ] : true;
+            count($roles) > 0 ? $filters['roles'] = [
+                'name' => 'Codigo de Rol',
+                'data' => $roles
+            ] : true;
+            count($users) > 0 ? $filters['users'] = [
+                'name' => 'Usuarios',
+                'data' => $users
+            ] : true;
 
         return view('pages/content/room/sections', [
             'sections' => $sections,
             'articles'  => $articles,
-            'files' => $files
+            'files' => $files,
+            'filters' => $filters
+
         ]);
     }
 
