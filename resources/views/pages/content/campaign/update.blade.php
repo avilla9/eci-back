@@ -5,6 +5,7 @@
 @endsection
 
 @section('subcontent')
+{{ $article->file_id }}
 <div id="alert" class="hidden"></div>
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Crear contenido para Campaña</h2>

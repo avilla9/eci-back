@@ -223,9 +223,9 @@ class PageController extends Controller {
             ->where('pages.title', 'Campaña')
             ->orderBy('created_at', 'desc')
             ->get();
-        $data['article'] = Article::where('id', $id)->first();
+        $data['article'] = DB::table('articles')->where('id', $id)->first();
 
-        return view('pages/content/campaign/create', $data);
+        return view('pages/content/campaign/update', $data);
     }
 
     public function contentAdoptionCreate() {
