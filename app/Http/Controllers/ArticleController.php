@@ -170,7 +170,7 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
-			
+
 			$filters['article_id'] = $articleid;
 			ArticleFilter::create($filters);
 
@@ -229,7 +229,7 @@ class ArticleController extends Controller {
 
 			$filters['article_id'] = $articleid;
 			ArticleFilter::create($filters);
-			
+
 			$users = DB::table('users')
 				->select('users.*')
 				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -423,41 +423,40 @@ class ArticleController extends Controller {
 			'file_id' => $request->image,
 			'page_id' => $request->page_id
 		];
-	
+
 
 		$articleid = DB::table('sections')->insertGetId($data);
 
-			$filters = [
-				'groups' => !is_null($request->groups) ? $request->groups : [0],
-				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
-				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
-				'roles' => !is_null($request->roles) ? $request->roles : [0],
-				'users' => !is_null($request->users) ? $request->users : [0],
-			];
+		$filters = [
+			'groups' => !is_null($request->groups) ? $request->groups : [0],
+			'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+			'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+			'roles' => !is_null($request->roles) ? $request->roles : [0],
+			'users' => !is_null($request->users) ? $request->users : [0],
+		];
 
-			$filters['article_id'] = $articleid;
-			ArticleFilter::create($filters);
-			$users = DB::table('users')
-				->select('users.*')
-				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
-				->whereIn('delegations.id', $filters['delegations'])
-				->orWhereIn('users.role_id', $filters['roles'])
-				->orWhereIn('users.quartile_id', $filters['quartiles'])
-				->orWhereIn('users.group_id', $filters['groups'])
-				->orWhereIn('users.id', $filters['users'])
-				->get();
+		$filters['article_id'] = $articleid;
+		ArticleFilter::create($filters);
+		$users = DB::table('users')
+			->select('users.*')
+			->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+			->whereIn('delegations.id', $filters['delegations'])
+			->orWhereIn('users.role_id', $filters['roles'])
+			->orWhereIn('users.quartile_id', $filters['quartiles'])
+			->orWhereIn('users.group_id', $filters['groups'])
+			->orWhereIn('users.id', $filters['users'])
+			->get();
 
 
-			foreach ($users as $key => $user) {
-				DB::table('accesses')
-					->insert([
-						'user_id' => $user->id,
-						'article_id' => $articleid,
-					]);
-			}
+		foreach ($users as $key => $user) {
+			DB::table('accesses')
+				->insert([
+					'user_id' => $user->id,
+					'article_id' => $articleid,
+				]);
+		}
 
-			return $users;
-		
+		return $users;
 	}
 
 	public function sectionsDelete(Request $request) {
@@ -474,7 +473,7 @@ class ArticleController extends Controller {
 			$access = Access::where([
 				'user_id' => $request->user_id,
 				'article_id' => $request->article_id,
-			])->first();	
+			])->first();
 		}
 		return $access ? 1 : 0;
 	}
@@ -488,20 +487,33 @@ class ArticleController extends Controller {
 	// 	return $access ? 1 : 0;
 	// }
 
-	function postDetails(Request $request, $post){
-		return Article::select('articles.*', 'files.media_path')
-		->join('files', 'files.id', '=', 'articles.file_id')->where('articles.id', $post)->first();
+	function postDetails(Request $request) {
+		$article = Article::select('articles.*', 'files.media_path')
+			->join('files', 'files.id', '=', 'articles.file_id')->where('articles.id', $request->postId)->first();
+
+		$reactions = DB::table('reactions')
+			->select('reactions.*')
+			->join('actions', 'actions.id', '=', 'reactions.action_id')
+			->where([
+				['article_id', $request->postId],
+				['user_id', $request->userId],
+				['actions.id', 1]
+			])
+			->first();
+
+		$article['reactions'] = $reactions ? 1 : 0;
+
+		return $article;
 	}
 
-	public function sectionDetails(Request $request, $articles)
-    { 
-        return DB::table('pages')
-		->select('sections.*', 'files.media_path as img')
-		->join('sections', 'sections.page_id', '=', 'pages.id')
-		->leftJoin('files', 'files.id', '=', 'sections.file_id')
-		->where('sections.id', $articles)
-		->get();
-    }
+	public function sectionDetails(Request $request, $articles) {
+		return DB::table('pages')
+			->select('sections.*', 'files.media_path as img')
+			->join('sections', 'sections.page_id', '=', 'pages.id')
+			->leftJoin('files', 'files.id', '=', 'sections.file_id')
+			->where('sections.id', $articles)
+			->get();
+	}
 
 	function accessCreate(Request $request) {
 		$data = [
@@ -588,18 +600,18 @@ class ArticleController extends Controller {
 	}
 	public function sectionsFilters($id) {
 		$sectionsFilters = ArticleFilter::where('article_id', $id)->get();
-	  
+
 		return [
-		  'sectionsFilters' =>	$sectionsFilters
+			'sectionsFilters' =>	$sectionsFilters
 		];
-	  }
+	}
 
 	function sectionUpdate(Request $request, $articles) {
 		$validator = FacadesValidator::make($request->all(), [
 			'section' => "required",
 			'title' => "required",
 			'description' => "required",
-			'image' => "required" 
+			'image' => "required"
 		]);
 		if ($validator->fails()) {
 			$error = $validator->errors();
@@ -620,7 +632,7 @@ class ArticleController extends Controller {
 		ArticleFilter::where('article_id', $articles)->update(
 			$filters
 		);
-	
+
 		$users = DB::table('users')
 			->select('users.*')
 			->join('delegations', 'delegations.code', '=', 'users.delegation_code')
@@ -642,13 +654,13 @@ class ArticleController extends Controller {
 
 
 		$sections = DB::table('sections')
-		->where('id', $articles)
-		->update([
-			'title' => $request->title,
-			'description' => $request->description,
-			'file_id' => $request->image
-		]);
-			
+			->where('id', $articles)
+			->update([
+				'title' => $request->title,
+				'description' => $request->description,
+				'file_id' => $request->image
+			]);
+
 
 		if ($sections) {
 			return DB::table('pages')

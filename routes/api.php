@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleFilterController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
@@ -43,7 +44,7 @@ Route::prefix('/posts')->group(function () {
         Route::delete('/delete-section/{id}', 'sectionsDelete');
         // Route::post('/validation', 'validateSection');
         Route::post('/list', 'list')->name('posts.list');
-        Route::get('/{post}', 'postDetails');
+        Route::post('/postDetails', 'postDetails');
         Route::get('/room/{articles}', 'sectionDetails');
         Route::put('/room/{articles}', 'sectionUpdate');
         Route::prefix('/stories')->group(function () {
@@ -91,8 +92,11 @@ Route::prefix('/roles')->group(function () {
     });
 });
 
-/* Route::prefix('/stories')->group(function () {
-    Route::controller(StoryController::class)->group(function () {
-        Route::get('/', 'show')->name('all.stories');
+Route::prefix('/notification')->group(function () {
+    Route::controller(NotificationController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::post('/store', 'store');
+        Route::post('/show', 'show');        
+        Route::put('/update', 'update');
     });
-}); */
+});
