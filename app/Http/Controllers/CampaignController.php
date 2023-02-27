@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Access;
+use App\Models\Article;
+use App\Models\ArticleFilter;
 use App\Models\Campaign;
 use App\Models\Page;
 use App\Models\Productivity;
@@ -127,5 +129,17 @@ class CampaignController extends Controller {
         }
 
         return $data;
+    }
+
+    public function campaignFilters($id) {
+        $articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+        return [
+            'articleFilters' => $articleFilters
+        ];
+    }
+
+    public function campaignUpdate(Request $request) {
+        return $request;
     }
 }

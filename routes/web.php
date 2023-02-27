@@ -91,7 +91,6 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(CampaignController::class)->group(function () {
             Route::post('/store', 'store')->name('campaign.store');
-            Route::put('/update', 'update')->name('campaign.update');
             Route::post('/delete', 'delete')->name('campaign.delete');
         });
     });
