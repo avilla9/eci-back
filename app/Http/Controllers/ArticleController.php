@@ -248,6 +248,62 @@ class ArticleController extends Controller {
 		}
 	}
 
+	public function campaignUpdate(Request $request) {
+        $data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'campaign_id' => $request->campaign,
+			'post_type' => $request->post_type,
+		];
+
+		$article = DB::table('articles')->where('id', $request->id)->update($data);
+
+		if ($data['unrestricted']) {
+			return $article;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			$filters['article_id'] = $article;
+			ArticleFilter::create($filters);
+			
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $article,
+					]);
+			}
+
+			return $users;
+    }
+}
+
 	function knowledgeCreate(Request $request) {
 		$data = [
 			'title' => $request->title,
