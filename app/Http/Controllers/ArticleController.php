@@ -266,6 +266,7 @@ class ArticleController extends Controller {
 		];
 
 		$article = DB::table('articles')->where('id', $request->id)->update($data);
+		$updateArticle = DB::table('articles')->where('id', $request->id)->first();
 
 		if ($data['unrestricted']) {
 			return $article;
@@ -278,8 +279,18 @@ class ArticleController extends Controller {
 				'users' => !is_null($request->users) ? $request->users : [0],
 			];
 
-			$filters['article_id'] = $article;
-			ArticleFilter::create($filters);
+			ArticleFilter::updateOrCreate(
+				[
+					'article_id' => $updateArticle->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],
+				]
+			);
 			
 			$users = DB::table('users')
 				->select('users.*')
@@ -291,18 +302,24 @@ class ArticleController extends Controller {
 				->orWhereIn('users.id', $filters['users'])
 				->get();
 
+			$delete = Access::where('article_id', $updateArticle->id)->delete();
+
 
 			foreach ($users as $key => $user) {
 				DB::table('accesses')
 					->insert([
 						'user_id' => $user->id,
-						'article_id' => $article,
+						'article_id' => $updateArticle->id,
 					]);
 			}
 
-			return $users;
+			return [
+				'users' => $users,
+				'deleted' => $delete,
+				'updateArticle' => $updateArticle
+			];
+		}
     }
-}
 
 	function knowledgeCreate(Request $request) {
 		$data = [

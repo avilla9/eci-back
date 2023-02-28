@@ -187,7 +187,6 @@
           // PARA ESTE CASO MANDE EL ID EN LA RUTA
           url: "/api/campaign/filters/" + id,
           success: function (response) {
-            console.log("🚀 ~ file: update.blade.php:222 ~ haveFilters ~ response:", response)
             // A CADA SELECT LE PONES UNA CLASE PARA IDENTIFICAR SUS OPCIONES Y APLICAS UN FOREACH POR CADA SELECT QUE TENGAS
             if(response.articleFilters[0].groups) {
               $.each(response.articleFilters[0].groups, function (index, value) { 
@@ -344,7 +343,11 @@
         data: data,
         dataType: "JSON",
         success: function (response) {
-          console.log("🚀 ~ file: update.blade.php:356 ~ response:", response)
+          $('#alert').html();
+          $('#alert').removeClass();
+          $('#alert').addClass('alert alert-success show mb-2');
+          $('#alert').html('Post actualizado con éxito');
+          window.location.href = '{{ route("content-campaign-create") }}'
         },
         error: function(error) {
           $('#alert').html();
