@@ -62,3 +62,4 @@ import "./side-menu-tooltip";
 import "./dark-mode-switcher";
 import "./custom-script";
 import "./rooms"
+import "./story"
