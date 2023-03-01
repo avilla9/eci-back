@@ -3995,9 +3995,9 @@ select{
     --tw-text-opacity: 1;
     color: rgb(185 28 28 / var(--tw-text-opacity));
 }
-.text-light{
+.text-dark{
     --tw-text-opacity: 1;
-    color: rgb(var(--color-light) / var(--tw-text-opacity));
+    color: rgb(var(--color-dark) / var(--tw-text-opacity));
 }
 .text-opacity-70{
     --tw-text-opacity: 0.7;
@@ -17670,9 +17670,6 @@ html body{
     }
     .sm\:gap-6{
         gap: 1.5rem;
-    }
-    .sm\:gap-4{
-        gap: 1rem;
     }
     .sm\:overflow-x-visible{
         overflow-x: visible;

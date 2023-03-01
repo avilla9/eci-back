@@ -51,6 +51,9 @@ Route::prefix('/posts')->group(function () {
             Route::post('/', 'showStories')->name('stories.list');
             Route::post('/view', 'viewStories')->name('viewStories');
         });
+        Route::prefix('/room')->group(function() {
+            Route::get('filter/{id}', 'roomFilters')->name('content.room.filters');
+        });
     });
 });
 

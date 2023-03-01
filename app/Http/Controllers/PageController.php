@@ -282,6 +282,15 @@ class PageController extends Controller {
         return view('pages/content/room/create', $data);
     }
 
+    public function contentRoomDetails($id) {
+        $article = Article::where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Salas');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/room/update', $data);
+    }
+
     function contentroomList() {
         return view('pages/content/room/list', [
             'articles'  => articlesByPage('Salas')

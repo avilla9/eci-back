@@ -415,6 +415,14 @@ class ArticleController extends Controller {
 			return $users;
 		}
 	}
+
+	public function roomFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+		return [
+			'articleFilters' => $articleFilters
+		];
+	}
 	function sectionCreate(Request $request) {
 		$data = [
 			'title' => $request->title,

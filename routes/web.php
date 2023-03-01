@@ -165,6 +165,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/crear', 'contentroomCreate')->name('content-room-create');
                 Route::get('/lista', 'contentroomList')->name('content-room-list');
                 Route::get('/secciones', 'contentroomSections')->name('section-room-create');
+                Route::get('details/{id}', 'contentRoomDetails')->name('content.room.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'roomCreate')->name('room.create');
