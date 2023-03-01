@@ -9,7 +9,7 @@
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Crear contenido para la sección Salas</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-    <button id="update-room" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
+    <button id="update-room"  class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
       Actualizar <i class="w-4 h-4 ml-2" data-feather="database"></i>
     </button>
   </div>
@@ -358,7 +358,7 @@
         $.ajax({
           type: "GET",
           // PARA ESTE CASO MANDE EL ID EN LA RUTA
-          url: "/api/posts/room/filter/" + id,
+          url: "/api/posts/rooms/filter/" + id,
           success: function (response) {
             // A CADA SELECT LE PONES UNA CLASE PARA IDENTIFICAR SUS OPCIONES Y APLICAS UN FOREACH POR CADA SELECT QUE TENGAS
             if(response.articleFilters[0].groups) {
@@ -393,6 +393,142 @@
    }
 
    haveFilters("{{ $article->unrestricted }}");
+
+   $('#update-room').on('click', function (e) {
+    e.preventDefault();
+    let id = '{{ $article->id }}';
+    var d = new Date($('#form-body input[name=upload-date]').val())
+    var year = d.getFullYear();
+    var month = ("0" + (d.getMonth() + 1)).slice(-2);
+    var day = ("0" + d.getDate()).slice(-2);
+    var hour = ("0" + d.getHours()).slice(-2);
+    var minutes = ("0" + d.getMinutes()).slice(-2);
+    var seconds = ("0" + d.getSeconds()).slice(-2);
+    let timestamp = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+
+  let data = {
+    "_token": $('meta[name="csrf-token"]').attr('content'),
+    id: id,
+    section: $('select[name=section]').val(),
+    title: $('input[name=title]').val(),
+    short_description: $('input[name=short_description]').val(),
+    post_type: $('input[name=post_type]:checked').val(),
+    internal_link: $('input[name=internal_link]').val(),
+    external_link: $('input[name=external_link]').val(),
+    button_name: $('input[name=button_name]').val(),
+    button_link: $('input[name=button_link]').val(),
+    image: $('input[name=image]:checked').val(),
+    description: $('#custom_content').html(),
+    date: timestamp,
+    groups: $('#form-body select[name=groups]').val(),
+    quartiles: $('#form-body select[name=quartiles]').val(),
+    delegations: $('#form-body select[name=delegations]').val(),
+    roles: $('#form-body select[name=roles]').val(),
+    users: $('#form-body select[name=users]').val(),
+    grant_all: $('input[name=select-all]:checked').is(':checked') ? 1 : 0,
+  };
+
+
+  $('#alert').html();
+  $('#alert').removeClass();
+  let error = false;
+  let message = [];
+
+  if (data.button_link.length) {
+    if (!data.button_name.length) {
+      error = true;
+      message.push('Debe añadir un nombre para el botón del link');
+    } else {
+      data.button_name = $('#form-body input[name=button_name]').val();
+    }
+  }
+
+  if (!$('input[name=select-all]').is(":checked")) {
+    if (
+      !$('#form-body select[name=groups]').val().length
+      && !$('#form-body select[name=delegations]').val().length
+      && !$('#form-body select[name=quartiles]').val().length
+      && !$('#form-body select[name=roles]').val().length
+      && !$('#form-body select[name=users]').val().length
+    ) {
+      error = true;
+      message.push('Debe seleccionar al menos un grupo objetivo');
+    }
+  } else {
+    data.grant_all = 1
+  }
+
+  if (!data.image?.length) {
+    error = true;
+    message.push('Debe seleccionar una imagen');
+  }
+
+  if (!data.post_type) {
+    error = true;
+    message.push('Debe seleccionar un tipo de contenido');
+  } else if (data.post_type == 'post') {
+    if (data.description == '<p><br data-cke-filler="true"></p>') {
+      error = true;
+      message.push('Debe redactar contenido para mostrar en el post');
+    }
+  } else if (data.post_type == 'external') {
+    if (!data.external_link?.length) {
+      error = true;
+      message.push('Debe añadir un enlace');
+    }
+  } else if (data.post_type == 'internal') {
+    if (!data.internal_link?.length) {
+      error = true;
+      message.push('Debe añadir un enlace');
+    }
+  }
+
+  if (!data.title?.length) {
+    error = true;
+    message.push('Debe añadir un título');
+  }
+
+  if (!data.short_description?.length) {
+    error = true;
+    message.push('Debe añadir una descripción corta');
+  }
+
+  if (error) {
+    $('#alert').html();
+    $('#alert').removeClass();
+    $('#alert').addClass('alert alert-danger show mb-2');
+    let value = '';
+    for (var i = 0; i < message.length; i++) {
+      value += message[i];
+      if (i + 1 != message.length) {
+        value += '<br>';
+      }
+    }
+    $('#alert').html(value);
+  } else {
+    // console.log(data);
+    console.log("por aqui paso")
+    $.ajax({
+      type: "PUT",
+      url: "/api/posts/rooms/update",
+      data: data,
+      dataType: "JSON",
+      success: function (response) {
+        console.log("🚀 ~ file: update.blade.php:519 ~ response:", response)
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-success show mb-2');
+        $('#alert').html('Post actualizado con éxito');
+      },
+      error: function(error) {
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-danger show mb-2');
+        $('#alert').html('Ha ocurrido un error al actualizar el Post');
+      }
+    });
+  }
+   });
 
   const openFilesPath = () => {
     const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#getFileModal"));
