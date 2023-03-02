@@ -154,6 +154,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentrewardCreate')->name('content-reward-create');
                 Route::get('/lista', 'contentrewardList')->name('content-reward-list');
+                Route::get('details/{id}', 'contentRewardDetails')->name('content.reward.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'rewardCreate')->name('reward.create');

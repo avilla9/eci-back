@@ -55,6 +55,11 @@ Route::prefix('/posts')->group(function () {
             Route::get('filter/{id}', 'roomFilters')->name('content.room.filters');
             Route::put('/update', 'roomUpdate');
         });
+
+        Route::prefix('/reward')->group(function() {
+            Route::get('filters/{id}', 'contentRewardFilters');
+            Route::put('update', 'contentRewardUpdate');
+        });
     });
 });
 

@@ -275,6 +275,15 @@ class PageController extends Controller {
         ]);
     }
 
+    public function contentRewardDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Recompensas');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/reward/update', $data);
+    }
+
     public function contentroomCreate() {
         $data = contentParameters();
         $sections = sectionParameters('Salas');
