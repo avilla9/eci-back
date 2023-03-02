@@ -6,7 +6,7 @@ $('input[name=select-all]').on("change", (function() {
     }
 }));
 
-$('#save').on("click", (function(e) {
+$('#save-story').on("click", (function(e) {
     e.preventDefault();
     let uploadDate = $('input[name=upload-date]').val();
     let uploadTime = $('input[name=upload-time]').val();

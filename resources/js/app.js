@@ -63,3 +63,10 @@ import "./dark-mode-switcher";
 import "./custom-script";
 import "./rooms"
 import "./story"
+import "./home"
+import "./campaign"
+import "./adoption"
+import "./knowledge"
+import "./reward"
+import "./room"
+import "./access"

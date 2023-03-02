@@ -9,11 +9,8 @@
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Crear contenido para Story</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-    <button id="save" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
-      Publicar <i class="w-4 h-4 ml-2" data-feather="database"></i>
-    </button>
-    <button id="save-later" class="btn btn-primary shadow-md flex items-center" aria-expanded="false" style="display:none;">
-      Publicar!<i class="w-4 h-4 ml-2" data-feather="database"></i>
+    <button id="save-story" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
+      Guardar <i class="w-4 h-4 ml-2" data-feather="database"></i>
     </button>
   </div>
 </div>
@@ -276,7 +273,6 @@
 
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
-{{-- <script src="{{ asset('dist/js/articles/story.js') }}"></script> --}}
 <script>
   const openFilesPath = () => {
     const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#getFileModal"));
