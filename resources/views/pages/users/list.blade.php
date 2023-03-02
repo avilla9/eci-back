@@ -40,14 +40,15 @@
           <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Campo</label>
           <select id="tabulator-html-filter-field" class="form-select w-full 2xl:w-full mt-2 sm:mt-0 sm:w-auto">
             <option value="name">Nombre</option>
-            <option value="rol">Rol</option>
-            <option value="email">Correo</option>
+            <option value="role_name">Rol</option>
+            <option value="email">Email</option>
+            <option value="user_code">Codigo</option>
           </select>
         </div>
         <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
-          <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Type</label>
+          <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Tipo</label>
           <select id="tabulator-html-filter-type" class="form-select w-full mt-2 sm:mt-0 sm:w-auto">
-            <option value="like">like</option>
+            <option value="like">Parecido a</option>
             <option value="=">=</option>
             <option value="<">&lt;</option>
             <option value="<=">&lt;=</option>
