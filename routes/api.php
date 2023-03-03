@@ -60,6 +60,10 @@ Route::prefix('/posts')->group(function () {
             Route::get('filters/{id}', 'contentRewardFilters');
             Route::put('update', 'contentRewardUpdate');
         });
+        Route::prefix('/access')->group(function() {
+            Route::get('filters/{id}', 'contentAccessFilters');
+            Route::put('/update', 'contentAccessUpdate');
+        });
     });
 });
 

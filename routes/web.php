@@ -180,6 +180,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentaccessCreate')->name('content-access-create');
                 Route::get('/lista', 'contentaccessList')->name('content-access-list');
+                Route::get('/details/{id}', 'contentAccessDetails')->name('content.access.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'accessCreate')->name('access.create');

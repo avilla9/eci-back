@@ -369,6 +369,15 @@ class PageController extends Controller {
         ]);
     }
 
+    public function contentAccessDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Accesos');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/access/update', $data);
+    }
+
     public function filesList() {
         $files = File::all();
         $files = File::orderBy('updated_at', 'desc')->get();
