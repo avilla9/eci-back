@@ -53,7 +53,11 @@
                   class="view flex items-center text-primary"><i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver</a>
                 @endif
               </td>
-              <td><button article_id="{{$article->id}}" class="delete flex items-center text-danger">
+              <td>
+                <a class="edit flex items-center mr-3" href="{{ route('content.story.details', $article->id) }}">
+                  <i data-feather="check-square" class="w-4 h-4 mr-1 my-4"></i> Editar
+              </a>
+                <button article_id="{{$article->id}}" class="delete flex items-center text-danger">
                   <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
                 </button>
                 <button article_id="{{ $article->id }}"

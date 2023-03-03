@@ -105,6 +105,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'storieCreate')->name('create-storie');
                 Route::get('/lista', 'storieList')->name('stories-list');
+                Route::get('/details/{id}', 'contentStoryDetails')->name('content.story.details');
             });
 
             Route::controller(ArticleController::class)->group(function () {

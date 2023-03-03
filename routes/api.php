@@ -72,6 +72,10 @@ Route::prefix('/posts')->group(function () {
             Route::get('filters/{id}', 'contentKnowledgeFilters');
             Route::put('/update', 'contentKnowledgeUpdate');
         });
+        Route::prefix('story')->group(function() {
+            Route::get('filters/{id}', 'contentStoryFilters');
+            Route::put('update', 'contentStoryUpdate');
+        });
     });
 });
 

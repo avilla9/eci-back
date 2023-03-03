@@ -148,6 +148,13 @@ class PageController extends Controller {
         return view('pages/content/stories/create', $data);
     }
 
+    public function contentStoryDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $data['article'] = $article;
+        return view('pages/content/stories/update', $data);
+    }
+
     public function storieList() {
         $stories = DB::table('articles')
             ->select('articles.*', 'files.media_path')
