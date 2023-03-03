@@ -10,7 +10,7 @@
   <h2 class="text-lg font-medium mr-auto">Crear contenido para Campaña</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
     <button id="update-campaign" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
-      Guardar <i class="w-4 h-4 ml-2" data-feather="database"></i>
+      Actualizar <i class="w-4 h-4 ml-2" data-feather="database"></i>
     </button>
   </div>
 </div>
@@ -146,10 +146,10 @@
         <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
           <label class="form-check-label" for="show-example-2">Visible para todos</label>
           <input name="select-all" id="show-example-2" data-target="#boxed-accordion"
-            class="show-code form-check-input mr-0 ml-3" type="checkbox">
+            class="show-code form-check-input mr-0 ml-3" type="checkbox" {{ $article->unrestricted == 1 ? 'checked' : '' }}>
         </div>
 
-        <div id="filters" class="mt-2">
+        <div id="filters" class="mt-2 {{ $article->unrestricted == 1 ? 'hidden' : '' }}">
           @foreach ($filters as $key => $filter)
           <label class="form-label">{{$filter['name']}}</label>
           <select name="{{$key}}" data-placeholder="Añadir a la visibilidad" class="select-{{ $key }} tom-select w-full mb-2" multiple>
@@ -335,7 +335,6 @@
       }
       $('#alert').html(value);
     } else {
-      console.log(data);
       
       $.ajax({
         type: "PUT",
@@ -347,13 +346,12 @@
           $('#alert').removeClass();
           $('#alert').addClass('alert alert-success show mb-2');
           $('#alert').html('Post actualizado con éxito');
-          window.location.href = '{{ route("content-campaign-create") }}'
         },
         error: function(error) {
           $('#alert').html();
           $('#alert').removeClass();
           $('#alert').addClass('alert alert-danger show mb-2');
-          $('#alert').html('Ha ocurrido un error al crear el Post');
+          $('#alert').html('Ha ocurrido un error al actualizar el Post');
         }
       });
     }
