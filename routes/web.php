@@ -145,6 +145,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentknowledgeCreate')->name('content-knowledge-create');
                 Route::get('/lista', 'contentknowledgeList')->name('content-knowledge-list');
+                Route::get('/details/{id}', 'contentKnowledgeDetails')->name('content.knowledge.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'knowledgeCreate')->name('knowledge.create');

@@ -68,6 +68,10 @@ Route::prefix('/posts')->group(function () {
             Route::get('filters/{id}', 'contentAdoptionFilters');
             Route::put('update', 'contentAdoptionUpdate');
         });
+        Route::prefix('knowledge')->group(function() {
+            Route::get('filters/{id}', 'contentKnowledgeFilters');
+            Route::put('/update', 'contentKnowledgeUpdate');
+        });
     });
 });
 

@@ -278,6 +278,15 @@ class PageController extends Controller {
         return view('pages/content/knowledge/create', $data);
     }
 
+    public function contentKnowledgeDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Conocimiento');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/knowledge/update', $data);
+    }
+
     function contentknowledgeList() {
         return view('pages/content/knowledge/list', [
             'articles'  => articlesByPage('Conocimiento')
