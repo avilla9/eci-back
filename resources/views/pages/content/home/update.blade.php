@@ -1,7 +1,7 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-<title>Crear contenido - Home</title>
+<title>Actualizar contenido - Home</title>
 @endsection
 
 @section('subcontent')
@@ -10,7 +10,7 @@
   <h2 class="text-lg font-medium mr-auto">Crear contenido para Home</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
     <button id="update-home" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
-      Guardar <i class="w-4 h-4 ml-2" data-feather="database"></i>
+      Actualizar <i class="w-4 h-4 ml-2" data-feather="database"></i>
     </button>
   </div>
 </div>
@@ -142,7 +142,7 @@
             class="show-code form-check-input mr-0 ml-3" type="checkbox" {{ $article->unrestricted == 0 ? 'checked' : '' }}>
         </div>
 
-        <div id="filters" class="mt-2">
+        <div id="filters" class="mt-2 {{ $article->unrestricted == 1 ? 'hidden' : '' }}">
           @foreach ($filters as $key => $filter)
           <label class="form-label">{{$filter['name']}}</label>
           <select name="{{$key}}" data-placeholder="Añadir a la visibilidad" class="select-{{$key}} tom-select w-full mb-2" multiple>
@@ -339,18 +339,16 @@
       data: data,
       dataType: "JSON",
       success: function (response) {
-        console.log("🚀 ~ file: update.blade.php:248 ~ response", response)
         $('#alert').html();
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-success show mb-2');
         $('#alert').html('Post actualizado con éxito');
-        window.location.href = '{{ route("homes-list") }}'
       },
       error: function (error) {
         $('#alert').html();
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al crear el Post');
+        $('#alert').html('Ha ocurrido un error al actualizar el Post');
       }
     });
   }
