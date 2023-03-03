@@ -528,7 +528,7 @@
         $('#alert').html();
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-danger show mb-2');
-        $('#alert').html('Ha ocurrido un error al crear el Post');
+        $('#alert').html('Ha ocurrido un error al actualizar el Post');
       }
     });
   }

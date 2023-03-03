@@ -514,7 +514,6 @@
       data: data,
       dataType: "JSON",
       success: function (response) {
-        console.log("🚀 ~ file: update.blade.php:519 ~ response:", response)
         $('#alert').html();
         $('#alert').removeClass();
         $('#alert').addClass('alert alert-success show mb-2');
