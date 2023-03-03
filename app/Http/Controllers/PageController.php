@@ -226,6 +226,28 @@ class PageController extends Controller {
         return view('pages/content/adoption/create', $data);
     }
 
+    public function contentAdoptionDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Adopción');
+        $data['sections'] = $sections;
+        $data['campaigns'] = DB::table('campaigns')
+            ->select(
+                'campaigns.id as id',
+                'campaigns.title as title',
+                'campaigns.description as description',
+                'campaigns.created_at as created_at',
+                'pages.id as page_id',
+                'pages.title as page_title',
+            )
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->where('pages.title', 'Adopción')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $data['article'] = $article;
+        return view('pages/content/adoption/update', $data);
+    }
+
     public function contentAdoptionList() {
         return view('pages/content/adoption/list', [
             'articles'  => articlesByPage('Adopción')

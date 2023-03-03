@@ -64,6 +64,10 @@ Route::prefix('/posts')->group(function () {
             Route::get('filters/{id}', 'contentAccessFilters');
             Route::put('/update', 'contentAccessUpdate');
         });
+        Route::prefix('/adoption')->group(function() {
+            Route::get('filters/{id}', 'contentAdoptionFilters');
+            Route::put('update', 'contentAdoptionUpdate');
+        });
     });
 });
 

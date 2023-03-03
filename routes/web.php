@@ -134,6 +134,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentadoptionCreate')->name('content-adoption-create');
                 Route::get('/lista', 'contentadoptionList')->name('content-adoption-list');
+                Route::get('/details/{id}', 'contentAdoptionDetails')->name('content.adoption.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'adoptionCreate')->name('adoption.create');
