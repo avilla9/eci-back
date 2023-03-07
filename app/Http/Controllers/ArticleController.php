@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
 use App\Models\ArticleFilter;
+use App\Models\File;
 use App\Models\User;
 
 use function PHPSTORM_META\map;
@@ -137,6 +138,9 @@ class ArticleController extends Controller {
 	}
 
 	public function homeCreate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -147,7 +151,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -193,6 +197,9 @@ class ArticleController extends Controller {
 	}
 
 	public function homeUpdate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -203,7 +210,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
