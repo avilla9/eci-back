@@ -65,31 +65,37 @@
       <input name="internal_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link interno">
     </div>
     @if ($article->post_type == 'post')
-      <div class="form-inline mb-2 external hidden">
-        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
-        <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo">
-      </div>
-      <div class="form-inline mb-2 custom_post">
-        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
-        <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)" value="{{ $article->button_name }}">
-      </div>
-      <div class="form-inline mb-2 custom_post">
-        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
-        <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)" value="{{ $article->button_link }}">
-      </div>
+    <div class="form-inline mb-2 external hidden">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
+      <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo">
+    </div>
+    <div class="form-inline mb-2 custom_post">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
+      <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)" value="{{ $article->button_name }}">
+    </div>
+    <div class="form-inline mb-2 custom_post">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
+      <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)" value="{{ $article->button_link }}">
+      <button id="getFile" class="btn btn-primary shadow-md flex items-center ml-3" aria-expanded="false" onclick="openFilesPath()">
+        Adjuntar archivo <i class="w-4 h-4 ml-2" data-feather="plus-square"></i>
+      </button>
+    </div>
     @else
-      <div class="form-inline mb-2 external">
-        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
-        <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo" value="{{ $article->external_link }}">
-      </div>
-      <div class="form-inline mb-2 custom_post hidden">
-        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
-        <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)">
-      </div>
-      <div class="form-inline mb-2 custom_post hidden">
-        <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
-        <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)">
-      </div>
+    <div class="form-inline mb-2 external">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link externo</label>
+      <input name="external_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link externo" value="{{ $article->external_link }}">
+    </div>
+    <div class="form-inline mb-2 custom_post hidden">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">CTA</label>
+      <input name="button_name" id="horizontal-form-2" type="text" class="form-control" placeholder="CTA (opcional)">
+    </div>
+    <div class="form-inline mb-2 custom_post hidden">
+      <label for="horizontal-form-2" class="form-label font-bold sm:w-20">Link CTA</label>
+      <input name="button_link" id="horizontal-form-2" type="text" class="form-control" placeholder="Link CTA (opcional)">
+      <button id="getFile" class="btn btn-primary shadow-md flex items-center ml-3" aria-expanded="false" onclick="openFilesPath()">
+        Adjuntar archivo <i class="w-4 h-4 ml-2" data-feather="plus-square"></i>
+      </button>
+    </div>
     @endif
 
     <div class="mb-3 overflow-y-auto" style="max-height: calc(100vh - 300px); overflow-y: auto; overflow-x: hidden;">
