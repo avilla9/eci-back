@@ -90,6 +90,9 @@ Route::controller(ArticleController::class)->group(function () {
     Route::post('/like', 'like');
     Route::post('/view', 'view');
     Route::post('/sendmail', 'sendMail');
+    Route::prefix('campaign')->group(function() {
+        Route::put('update', 'campaignUpdate')->name('campaign.update');
+    });
 });
 
 Route::prefix('/posts')->group(function () {
@@ -121,6 +124,7 @@ Route::prefix('/campaign')->group(function () {
     Route::controller(CampaignController::class)->group(function () {
         Route::post('/list', 'campaignList');
         Route::post('/data', 'campaignData');
+        Route::get('/filters/{id}', 'campaignFilters')->name('get.campaign.filters');
     });
 });
 

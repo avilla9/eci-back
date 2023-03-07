@@ -91,7 +91,6 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(CampaignController::class)->group(function () {
             Route::post('/store', 'store')->name('campaign.store');
-            Route::put('/update', 'update')->name('campaign.update');
             Route::post('/delete', 'delete')->name('campaign.delete');
         });
     });
@@ -126,6 +125,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentCampaignCreate')->name('content-campaign-create');
                 Route::get('/lista', 'contentCampaignList')->name('content-campaign-list');
+                Route::get('/details/{id}', 'contentCampaignDetails')->name('content.campaign.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'campaignCreate')->name('campaign.create');
