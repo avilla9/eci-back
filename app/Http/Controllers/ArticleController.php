@@ -34,16 +34,13 @@ class ArticleController extends Controller {
 	}
 
 	public function storyCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => 'story',
 			'button_name' => $request->button_name,
 			'button_link' => $request->button_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => 'story',
 		];
@@ -95,16 +92,13 @@ class ArticleController extends Controller {
 	}
 
 	public function contentStoryUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => 'story',
 			'button_name' => $request->button_name,
 			'button_link' => $request->button_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => 'story',
 		];
@@ -225,9 +219,6 @@ class ArticleController extends Controller {
 	}
 
 	public function homeCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -238,7 +229,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -284,9 +275,6 @@ class ArticleController extends Controller {
 	}
 
 	public function homeUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -297,7 +285,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -368,9 +356,6 @@ class ArticleController extends Controller {
 	}
 
 	public function campaignCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -383,7 +368,7 @@ class ArticleController extends Controller {
 			'unrestricted' => $request->grant_all,
 			'file_id' => $request->image,
 			'section_id' => $request->section,
-			'campaign_id' => $file[0]->id,
+			'campaign_id' => $request->image,
 			'post_type' => $request->post_type,
 		];
 
@@ -428,9 +413,6 @@ class ArticleController extends Controller {
 	}
 
 	public function campaignUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
         $data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -441,7 +423,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'campaign_id' => $request->campaign,
 			'post_type' => $request->post_type,
@@ -504,9 +486,6 @@ class ArticleController extends Controller {
     }
 
 	function knowledgeCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -517,7 +496,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -569,9 +548,6 @@ class ArticleController extends Controller {
 	}
 
 	public function contentKnowledgeUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -582,7 +558,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -643,9 +619,6 @@ class ArticleController extends Controller {
 	}
 
 	function rewardCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -656,7 +629,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -707,9 +680,6 @@ class ArticleController extends Controller {
 	}
 
 	public function contentRewardUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -720,7 +690,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -781,9 +751,6 @@ class ArticleController extends Controller {
 	}
 
 	function roomCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -794,7 +761,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -846,9 +813,6 @@ class ArticleController extends Controller {
 	}
 
 	public function roomUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -859,7 +823,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -1020,9 +984,6 @@ class ArticleController extends Controller {
 	}
 
 	function accessCreate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -1033,7 +994,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -1084,9 +1045,6 @@ class ArticleController extends Controller {
 	}
 
 	public function contentAccessUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -1097,7 +1055,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $file[0]->id,
+			'file_id' => $request->image,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -1167,9 +1125,6 @@ class ArticleController extends Controller {
 	}
 
 	public function contentAdoptionUpdate(Request $request) {
-		$file = File::where('id', $request->image)
-				->orWhere('media_path', $request->image)
-				->get();
 			$data = [
 				'title' => $request->title,
 				'description' => $request->description,
@@ -1180,7 +1135,7 @@ class ArticleController extends Controller {
 				'external_link' => $request->external_link,
 				'created_at' => $request->date,
 				'unrestricted' => $request->grant_all,
-				'file_id' => $file[0]->id,
+				'file_id' => $request->image,
 				'section_id' => $request->section,
 				'campaign_id' => $request->campaign,
 				'post_type' => $request->post_type,
