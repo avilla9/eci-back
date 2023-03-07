@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
 use App\Models\ArticleFilter;
+use App\Models\File;
 use App\Models\Section;
 use App\Models\User;
 use Dotenv\Validator;
@@ -33,13 +34,16 @@ class ArticleController extends Controller {
 	}
 
 	public function storyCreate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => 'story',
 			'button_name' => $request->button_name,
 			'button_link' => $request->button_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => 'story',
 		];
@@ -91,13 +95,16 @@ class ArticleController extends Controller {
 	}
 
 	public function contentStoryUpdate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => 'story',
 			'button_name' => $request->button_name,
 			'button_link' => $request->button_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => 'story',
 		];
@@ -290,6 +297,7 @@ class ArticleController extends Controller {
 			'post_type' => $request->post_type,
 		];
 
+
 		$articleid = DB::table('articles')->insertGetId($data);
 
 		if ($data['unrestricted']) {
@@ -330,6 +338,9 @@ class ArticleController extends Controller {
 	}
 
 	function knowledgeCreate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -340,7 +351,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -392,6 +403,9 @@ class ArticleController extends Controller {
 	}
 
 	public function contentKnowledgeUpdate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -402,7 +416,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -463,6 +477,9 @@ class ArticleController extends Controller {
 	}
 
 	function rewardCreate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -473,7 +490,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -524,6 +541,9 @@ class ArticleController extends Controller {
 	}
 
 	public function contentRewardUpdate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -534,7 +554,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -595,6 +615,9 @@ class ArticleController extends Controller {
 	}
 
 	function roomCreate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -605,7 +628,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -657,6 +680,9 @@ class ArticleController extends Controller {
 	}
 
 	public function roomUpdate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -667,7 +693,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -828,6 +854,9 @@ class ArticleController extends Controller {
 	}
 
 	function accessCreate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -838,7 +867,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -889,6 +918,9 @@ class ArticleController extends Controller {
 	}
 
 	public function contentAccessUpdate(Request $request) {
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
 		$data = [
 			'title' => $request->title,
 			'description' => $request->description,
@@ -899,7 +931,7 @@ class ArticleController extends Controller {
 			'external_link' => $request->external_link,
 			'created_at' => $request->date,
 			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
+			'file_id' => $file[0]->id,
 			'section_id' => $request->section,
 			'post_type' => $request->post_type,
 		];
@@ -969,21 +1001,24 @@ class ArticleController extends Controller {
 	}
 
 	public function contentAdoptionUpdate(Request $request) {
-		$data = [
-			'title' => $request->title,
-			'description' => $request->description,
-			'short_description' => $request->short_description,
-			'button_name' => $request->button_name,
-			'button_link' => $request->button_link,
-			'internal_link' => $request->internal_link,
-			'external_link' => $request->external_link,
-			'created_at' => $request->date,
-			'unrestricted' => $request->grant_all,
-			'file_id' => $request->image,
-			'section_id' => $request->section,
-			'campaign_id' => $request->campaign,
-			'post_type' => $request->post_type,
-		];
+		$file = File::where('id', $request->image)
+				->orWhere('media_path', $request->image)
+				->get();
+			$data = [
+				'title' => $request->title,
+				'description' => $request->description,
+				'short_description' => $request->short_description,
+				'button_name' => $request->button_name,
+				'button_link' => $request->button_link,
+				'internal_link' => $request->internal_link,
+				'external_link' => $request->external_link,
+				'created_at' => $request->date,
+				'unrestricted' => $request->grant_all,
+				'file_id' => $file[0]->id,
+				'section_id' => $request->section,
+				'campaign_id' => $request->campaign,
+				'post_type' => $request->post_type,
+			];
 
 		$articleid = DB::table('articles')->where('id', $request->id)->update($data);
 		$articleUpdate = DB::table('articles')->where('id', $request->id)->first();

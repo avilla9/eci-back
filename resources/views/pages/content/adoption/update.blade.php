@@ -441,6 +441,8 @@ $('#alert').removeClass();
 let error = false;
 let message = [];
 
+ console.log(data);
+
 if (data.button_link.length) {
   if (!data.button_name.length) {
     error = true;
