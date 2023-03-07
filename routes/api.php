@@ -11,6 +11,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
+use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +90,19 @@ Route::controller(ArticleController::class)->group(function () {
     Route::post('/like', 'like');
     Route::post('/view', 'view');
     Route::post('/sendmail', 'sendMail');
+});
+
+Route::prefix('/posts')->group(function () {
+    Route::prefix('/home')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            Route::get('/list', 'homeList')->name('home.get.list');
+        });
+        Route::controller(ArticleController::class)->group(function() {
+            Route::get('/article-filters/{id}', 'articleFilters')->name('home.get.article.filters');
+            Route::put('/article-update', 'homeUpdate')->name('home.update.article');
+            Route::post('/article-delete', 'homeDelete')->name('home.delete.article');
+        });
+    });
 });
 
 Route::prefix('/users')->group(function () {
