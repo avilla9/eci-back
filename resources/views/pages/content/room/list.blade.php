@@ -21,6 +21,7 @@
                                 <th class="whitespace-nowrap">Título</th>
                                 <th class="whitespace-nowrap">Sección</th>
                                 <th class="whitespace-nowrap">Creación</th>
+                                <th class="whitespace-nowrap">Usuarios</th>
                                 <th class="whitespace-nowrap">Opciones</th>
                             </tr>
                         </thead>
@@ -37,6 +38,14 @@
                                     <td>{{ $article->title }}</td>
                                     <td>{{ $article->section_title }}</td>
                                     <td>{{ $article->created_at }}</td>
+                                    <td>
+                                        @if ($article->unrestricted)
+                                        Todos
+                                        @else
+                                        <a href="javascript:;" data-tw-toggle="modal" article_id="{{$article->id}}" data-tw-target="#user-list"
+                                          class="view flex items-center text-primary"><i data-feather="eye" class="w-4 h-4 mr-1"></i> Ver</a>
+                                        @endif
+                                      </td>
                                     <td>
                                         <a class="edit flex items-center mr-3" href="{{ route('content.room.details', $article->id) }}">
                                         <i data-feather="check-square" class="w-4 h-4 mr-1 my-4"></i> Editar
@@ -61,10 +70,69 @@
     <!-- END: Table Head Options -->
 
     <!-- END: HTML Table Data -->
+    <div id="user-list" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="font-medium text-base mr-auto">Lista de usuarios con acceso a la story</h2>
+              <button type="button" class="btn btn-outline-secondary mr-1 mb-2" data-tw-dismiss="modal">X</button>
+            </div>
+            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+              <div class="intro-y col-span-12 lg:col-span-12">
+                <table class="table">
+                  <thead class="table-dark">
+                    <th>#</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                  </thead>
+                  <tbody id="access-details">
+      
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary w-20 mr-1" data-tw-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 @endsection
 
 @section('script')
     <script>
+        $('.view').click(function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: "{{route('article.access')}}",
+      data: {
+        "_token": $('meta[name="csrf-token"]').attr('content'),
+        id: $(this).attr('article_id'),
+      },
+      success: function success(data) {
+        $('#access-details').html('');
+        $.map(data, function (val, index) {
+          $('#access-details').append(`
+          <tr>
+            <td class="whitespace-nowrap">${index + 1}</td>
+            <td class="whitespace-nowrap">${val.dni}</td>
+            <td class="whitespace-nowrap">${val.name}</td>
+            <td class="whitespace-nowrap">${val.email}</td>
+          </tr>
+          `);
+        });
+      },
+      error: function error(_error) {
+        
+        $('#alert').html();
+        $('#alert').removeClass();
+        $('#alert').addClass('alert alert-danger show mb-2');
+        $('#alert').html('Ha ocurrido un error');
+      }
+    });
+  });
         $('.delete').click(function(e) {
             e.preventDefault();
             Swal.fire({

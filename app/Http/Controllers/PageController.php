@@ -171,8 +171,8 @@ class PageController extends Controller
             ->join('files', 'files.id', '=', 'articles.file_id')
             ->where('articles.post_type', 'story')
             ->whereRaw('DATEDIFF(CURDATE(), articles.created_at) <= 1')
-            ->orderBy('articles.created_at', 'desc')
             ->orderBy('articles.id', 'desc')
+            ->orderBy('articles.updated_at', 'asc')
             ->get();
 
         return view('pages/content/stories/list', [
