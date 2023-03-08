@@ -7,7 +7,7 @@
 @section('subcontent')
 <div id="alert" class="hidden"></div>
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-  <h2 class="text-lg font-medium mr-auto">Crear contenido para la sección Salas</h2>
+  <h2 class="text-lg font-medium mr-auto">Actualizar contenido para la sección Salas</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
     <button id="update-room"  class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
       Actualizar <i class="w-4 h-4 ml-2" data-feather="database"></i>
