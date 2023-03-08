@@ -15,8 +15,9 @@
             <div class="preview">
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <thead class="table-dark">
+                        <thead class="table-dark">|
                             <tr>
+                                <th class="whitespace-nowrap">Archivo</th>
                                 <th class="whitespace-nowrap">Título</th>
                                 <th class="whitespace-nowrap">Sección</th>
                                 <th class="whitespace-nowrap">Creación</th>
@@ -26,6 +27,13 @@
                         <tbody>
                             @foreach ($articles as $article)
                                 <tr id={{ $article->id }}>
+                                    <td>
+                                        <div class="w-3/5 file__icon file__icon--image mx-auto">
+                                          <div class="file__icon--image__preview image-fit h-12">
+                                            <img alt="Imagen" src="{{$article->media_path}}" data-action="zoom">
+                                          </div>
+                                        </div>
+                                      </td>
                                     <td>{{ $article->title }}</td>
                                     <td>{{ $article->section_title }}</td>
                                     <td>{{ $article->created_at }}</td>
