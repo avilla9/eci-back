@@ -9,7 +9,7 @@
 <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
   <h2 class="text-lg font-medium mr-auto">Crear contenido para la sección Recompensas</h2>
   <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-    <button id="save" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
+    <button id="save-reward" class="btn btn-primary shadow-md flex items-center" aria-expanded="false">
       Guardar <i class="w-4 h-4 ml-2" data-feather="database"></i>
     </button>
   </div>
@@ -122,6 +122,8 @@
       <div>
         <label for="post-form-2" class="form-label">Fecha de carga</label>
         <input name="upload-date" type="text" class="datepicker form-control" id="post-form-2" data-single-mode="true">
+        <label for="post-form-2" class="form-label mt-3 mb-3">Hora de carga</label>
+        <input type="time" id="upload-time" name="upload-time" class="form-control">
       </div>
       <div class="mt-3">
         <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -323,7 +325,6 @@
 
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
-<script src="{{ asset('dist/js/articles/reward.js') }}"></script>
 <script>
   const openFilesPath = () => {
     const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#getFileModal"));
