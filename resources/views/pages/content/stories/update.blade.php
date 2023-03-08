@@ -68,7 +68,9 @@
     <div class="intro-y box p-5">
       <div>
         <label for="post-form-2" class="form-label">Fecha de carga</label>
-        <input name="upload-date" type="text" class="datepicker form-control" id="post-form-2" data-single-mode="true" value="{{date('Y-m-d', strtotime($article->created_at))}}">
+        <input name="upload-date" type="text" class="datepicker form-control" id="post-form-2" data-single-mode="true" value="{{$article->created_at}}">
+        <label for="post-form-2" class="form-label mt-3 mb-3">Hora de carga</label>
+        <input type="time" id="upload-time" name="upload-time" class="form-control">
       </div>
       <div class="mt-3">
         <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -272,7 +274,13 @@
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
 <script>
-    function haveFilters(unrestricted) {
+  let timeSet = document.getElementById("upload-time")  
+  let transform = "{{$article->created_at}}"
+  var hours = transform.split(" ")[1];
+  // console.log(hours, "horas");
+  timeSet.defaultValue = hours;
+  // console.log(transform, "blade");
+  function haveFilters(unrestricted) {
     // ALMACENAS EL ID DEL ARTICULO O LA SECCION PARA FILTRAR SU DATA EN ARTICLEFILTERS
     let id = "{{ $article->id }}";
     // SI ES UNRESTRICTED NO TIENES QUE HACER NADA PORQUE ES VISIBLE PARA TODOS
@@ -323,14 +331,22 @@
     e.preventDefault();
 
     let id = '{{ $article->id }}';
-  var d = new Date($('#form-body input[name=upload-date]').val())
-  var year = d.getFullYear();
-  var month = ("0" + (d.getMonth() + 1)).slice(-2);
-  var day = ("0" + d.getDate()).slice(-2);
-  var hour = ("0" + d.getHours()).slice(-2);
-  var minutes = ("0" + d.getMinutes()).slice(-2);
-  var seconds = ("0" + d.getSeconds()).slice(-2);
-  let timestamp = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+    let uploadDate = $('input[name=upload-date]').val();
+    let uploadTime = $('input[name=upload-time]').val();
+    var hours = uploadTime.split(":")[0];
+    var minutes = uploadTime.split(":")[1];
+    let tDate = new Date(uploadDate)
+    tDate.setHours(hours);
+    tDate.setMinutes(minutes);
+    tDate.setSeconds(0);
+    tDate.setMilliseconds(500);
+    var year = tDate.getFullYear();
+    var month = ("0" + (tDate.getMonth() + 1)).slice(-2);
+    var day = ("0" + tDate.getDate()).slice(-2);
+    var hour = ("0" + tDate.getHours()).slice(-2);
+    var minutes = ("0" + tDate.getMinutes()).slice(-2);
+    var seconds = ("0" + tDate.getSeconds()).slice(-2);
+    let timestamp = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
 
   let data = {
     "_token": $('meta[name="csrf-token"]').attr('content'),
