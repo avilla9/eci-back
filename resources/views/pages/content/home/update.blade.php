@@ -94,10 +94,11 @@
     <div class="mb-3 overflow-y-auto" style="max-height: calc(100vh - 300px); overflow-y: auto; overflow-x: hidden;">
       @if (count($files))
       <div class="text-center font-bold mb-3">Seleccionar imagen</div>
-      <div class="intro-y grid gap-6 grid-cols-6 sm:gap-4">
+      <div class="intro-y grid grid-cols-6 gap-3 sm:gap-6">
         @foreach ($files as $file)
+        @if (explode('/', $file['media_type'])[0] == 'image')
         <div class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-          <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+          <div class="file box rounded-md px-5 pt-8 pb-5 sm:px-5 relative zoom-in">
             <div class="absolute left-0 top-0 mt-3 ml-3">
               <input id="image" class="form-check-input" type="radio" name="image" value="{{$file['id']}}" {{ $article->file_id == $file['id'] ? 'checked' : '' }}>
             </div>
@@ -114,6 +115,7 @@
               ) }} Mb</div>
           </div>
         </div>
+        @endif
         @endforeach
       </div>
       @else
@@ -340,7 +342,6 @@
 
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
-<script src="{{ asset('dist/js/articles/home.js') }}"></script>
 <script>
   $(document).ready(function () {
     var settings = {};

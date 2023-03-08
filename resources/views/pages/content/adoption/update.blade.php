@@ -242,7 +242,7 @@
                               class="image intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
                               <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
                                   <div class="absolute left-0 top-0 mt-3 ml-3">
-                                      <input class="form-check-input border border-slate-500" type="radio" name="image" value="{{ $file['media_path'] }}">
+                                      <input class="form-check-input border border-slate-500" type="radio" name="geturl" value="{{ $file['media_path'] }}">
                                   </div>
                                   <div class="w-3/5 file__icon file__icon--image mx-auto">
                                       <div class="file__icon--image__preview image-fit">
@@ -262,7 +262,7 @@
                               class="application intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
                               <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
                                   <div class="absolute left-0 top-0 mt-3 ml-3">
-                                      <input class="form-check-input border border-slate-500" type="radio" name="image"
+                                      <input class="form-check-input border border-slate-500" type="radio" name="geturl"
                                       value="{{ $file['media_path'] }}">
                                   </div>
                                   <div class="w-3/5 file__icon file__icon--file mx-auto">
@@ -283,7 +283,7 @@
                               class="video intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
                               <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
                                   <div class="absolute left-0 top-0 mt-3 ml-3">
-                                      <input class="form-check-input border border-slate-500" type="radio" name="image"
+                                      <input class="form-check-input border border-slate-500" type="radio" name="geturl"
                                       value="{{ $file['media_path'] }}">
                                   </div>
                                   <div class="w-3/5 file__icon file__icon--file mx-auto">
@@ -303,7 +303,7 @@
                               class="audio intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
                               <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
                                   <div class="absolute left-0 top-0 mt-3 ml-3">
-                                      <input class="form-check-input border border-slate-500" type="radio" name="image"
+                                      <input class="form-check-input border border-slate-500" type="radio" name="geturl"
                                       value="{{ $file['media_path'] }}">
                                   </div>
                                   <div class="w-3/5 file__icon file__icon--file mx-auto">
@@ -322,7 +322,7 @@
                               class="else intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
                               <div class="file box rounded-md pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
                                   <div class="absolute left-0 top-0 mt-3 ml-3">
-                                      <input class="form-check-input border border-slate-500" type="radio" name="image"
+                                      <input class="form-check-input border border-slate-500" type="radio" name="geturl"
                                       value="{{ $file['media_path'] }}">
                                   </div>
                                   <div class="w-3/5 file__icon file__icon--file mx-auto">
@@ -349,7 +349,6 @@
 
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
-<script src="{{ asset('dist/js/articles/campaign.js') }}"></script>
 <script>
        document.querySelector('.campaign-adoption-select').tomselect.addItem('{{ $article->campaign_id }}');
        document.querySelector('.section-adoption-select').tomselect.addItem('{{ $article->section_id }}');
@@ -591,13 +590,13 @@ if (error) {
         }
         $("#getPath").click(function (e) { 
           e.preventDefault();
-          if ($('input[name=image]:checked').val() == undefined) {
+          if ($('input[name=geturl]:checked').val() == undefined) {
             Swal.fire({
               icon: 'error',
               title: '¡Por favor seleccione una imagen!'
             })
           } else {
-            console.log($('input[name=image]:checked').val());
+            console.log($('input[name=geturl]:checked').val());
             Swal.fire(
               'Archivo adjuntado con exito',
               '',
@@ -605,7 +604,7 @@ if (error) {
             )
             const closeMyModal = tailwind.Modal.getInstance(document.querySelector("#getFileModal"));
             closeMyModal.toggle();
-            let filePath = $('input[name=image]:checked').val();
+            let filePath = $('input[name=geturl]:checked').val();
             $('input[name=button_link]').val(filePath);
           }
         });

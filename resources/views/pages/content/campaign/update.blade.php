@@ -103,10 +103,11 @@
       <div class="text-center font-bold mb-3">Seleccionar imagen</div>
       <div class="intro-y grid grid-cols-6 gap-3 sm:gap-6">
         @foreach ($files as $file)
+        @if (explode('/', $file['media_type'])[0] == 'image')
         <div class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-          <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+          <div class="file box rounded-md px-5 pt-8 pb-5 sm:px-5 relative zoom-in">
             <div class="absolute left-0 top-0 mt-3 ml-3">
-              <input id="image" class="form-check-input" type="radio" name="image" value="{{$file['id']}}"  {{ $article->file_id == $file['id'] ? 'checked' : '' }}>
+              <input id="image" class="form-check-input" type="radio" name="image" value="{{$file['id']}}" {{ $article->file_id == $file['id'] ? 'checked' : '' }}>
             </div>
 
             <div class="w-3/5 file__icon file__icon--image mx-auto">
@@ -121,6 +122,7 @@
               ) }} Mb</div>
           </div>
         </div>
+        @endif
         @endforeach
       </div>
       @else
@@ -347,7 +349,6 @@
 
 @section('script')
 <script src="{{ asset('dist/js/ckeditor-document.js') }}"></script>
-<script src="{{ asset('dist/js/articles/campaign.js') }}"></script>
 <script>
   $(document).ready(function () {
     document.querySelector('.campaign_title').tomselect.addItem('{{ $article->campaign_id }}');
