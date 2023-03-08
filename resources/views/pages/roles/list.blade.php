@@ -38,16 +38,15 @@
     <form id="tabulator-html-filter-form" class="xl:flex sm:mr-auto">
       <div class="sm:flex items-center sm:mr-4">
         <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Campo</label>
-        <select id="tabulator-html-filter-field" class="form-select w-full sm:w-32 2xl:w-full mt-2 sm:mt-0 sm:w-auto">
-          <option value="name">Nombre</option>
-          <option value="rol">Rol</option>
-          <option value="email">Correo</option>
+        <select id="tabulator-html-filter-field" class="form-select w-full 2xl:w-full mt-2 sm:mt-0 sm:w-auto">
+          <option value="name">Codigo de Rol</option>
+          <option value="description">Descripcion</option>
         </select>
       </div>
       <div class="sm:flex items-center sm:mr-4 mt-2 xl:mt-0">
-        <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Type</label>
+        <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Tipo</label>
         <select id="tabulator-html-filter-type" class="form-select w-full mt-2 sm:mt-0 sm:w-auto">
-          <option value="like" selected>like</option>
+          <option value="like" selected>Parecido a</option>
           <option value="=">=</option>
           <option value="<">&lt;</option>
           <option value="<=">&lt;=</option>
@@ -66,12 +65,12 @@
           Buscar
         </button>
         <button id="tabulator-html-filter-reset" type="button"
-          class="btn btn-secondary w-full sm:w-16 mt-2 sm:mt-0 sm:ml-1">Reiniciar</button>
+          class="btn btn-secondary w-full sm:w-16 sm:mt-0 sm:ml-1">Reiniciar</button>
       </div>
     </form>
     <div class="flex mt-5 sm:mt-0">
       <button id="tabulator-print" class="btn btn-outline-secondary w-1/2 sm:w-auto mr-2">
-        <i data-feather="printer" class="w-4 h-4 mr-2"></i> Imprimir
+        <i data-feather="printer" class="w-4 h-4"></i>
       </button>
       <div class="dropdown w-1/2 sm:w-auto">
         <button class="dropdown-toggle btn btn-outline-secondary w-full sm:w-auto" aria-expanded="false"
