@@ -228,34 +228,6 @@ class PageController extends Controller
             ->where('articles.id', $id)
             ->first();
 
-                        
-        // $getArticleFilters = DB::table('article_filters')
-        //                 ->where('article_id', 335)
-        //                 ->first();
-
-
-        // $articleFilters = [];
-        // count((array) $getArticleFilters->groups) > 0 ? $articleFilters['groups'] = [
-        //     "name" => "Grupos",
-        //     "data" => $getArticleFilters->groups
-        // ] : true;
-        // count((array) $getArticleFilters->quartiles) > 0 ? $articleFilters['quartiles'] = [
-        //     "name" => "Cuartiles",
-        //     "data" => $getArticleFilters->quartiles
-        // ] : true;
-        // count((array) $getArticleFilters->delegations) > 0 ? $articleFilters['delegations'] = [
-        //     "name" => "Delegaciones",
-        //     "data" => $getArticleFilters->delegations
-        // ] : true;
-        // count((array) $getArticleFilters->roles) > 0 ? $articleFilters['roles'] = [
-        //     "name" => "Codigo de rol",
-        //     "data" => $getArticleFilters->roles
-        // ] : true;
-        // count((array) $getArticleFilters->users) > 0 ? $articleFilters['users'] = [
-        //     "name" => "Usuarios",
-        //     "data" => $getArticleFilters->users
-        // ] : true;
-
         $data = contentParameters();
         $sections = sectionParameters('Home');
         $data['sections'] = $sections;
