@@ -98,7 +98,7 @@ Route::controller(ArticleController::class)->group(function () {
 Route::prefix('/posts')->group(function () {
     Route::prefix('/home')->group(function () {
         Route::controller(PageController::class)->group(function () {
-            Route::get('/list', 'homeList')->name('home.get.list');
+            
         });
         Route::controller(ArticleController::class)->group(function() {
             Route::get('/article-filters/{id}', 'articleFilters')->name('home.get.article.filters');

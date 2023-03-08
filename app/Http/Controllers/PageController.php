@@ -214,7 +214,7 @@ class PageController extends Controller
             ->orderBy('sections.title', 'asc')
             ->orderBy('articles.id', 'desc')
             ->get();
-        return json_encode($articles);
+        return view('pages.content.home.list', ["articles" => $articles]);
     }
 
     public function getPost($id)

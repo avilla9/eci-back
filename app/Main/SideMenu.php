@@ -197,7 +197,7 @@ class SideMenu {
                     'homes-list' => [
                         'title' => 'Ver contenido',
                         'icon' => '',
-                        'route_name' => 'homes-list',
+                        'route_name' => 'home.get.list',
                         'params' => [
                             'layout' => 'side-menu'
                         ],

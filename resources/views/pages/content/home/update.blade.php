@@ -145,7 +145,7 @@
         <div class="flex flex-col sm:flex-row items-center pb-4 border-b border-slate-200/60 dark:border-darkmode-400">
           <label class="form-check-label" for="show-example-2">Visible para todos</label>
           <input name="select-all" id="show-example-2" data-target="#boxed-accordion"
-            class="show-code form-check-input mr-0 ml-3" type="checkbox" {{ $article->unrestricted == 0 ? 'checked' : '' }}>
+            class="show-code form-check-input mr-0 ml-3" type="checkbox" {{ $article->unrestricted == 1 ? 'checked' : '' }}>
         </div>
 
         <div id="filters" class="mt-2 {{ $article->unrestricted == 1 ? 'hidden' : '' }}">

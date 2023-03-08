@@ -10,8 +10,7 @@
         <h2 class="text-lg font-medium mr-auto">Lista de posts de Home</h2>
     </div>
     <!-- BEGIN: Table Head Options -->
-    <div id="home-tabulator" class="mt-5 table-report table-report--tabulator"></div>
-    {{-- <div class="intro-y box">
+    <div class="intro-y box">
         <div class="p-5" id="head-options-table">
             <div class="preview">
                 <div class="overflow-x-auto">
@@ -30,12 +29,13 @@
                                     <td>{{ $article->title }}</td>
                                     <td>{{ $article->section_title }}</td>
                                     <td>{{ $article->created_at }}</td>
-                                    <td class="flex gap-4"><button article_id="{{ $article->id }}"
-                                            class="delete flex items-center text-danger flex">
+                                    <td>
+                                        <a class="edit flex items-center mr-3" href="{{ route('home.get.post', $article->id) }}">
+                                            <i data-feather="check-square" class="w-4 h-4 mr-1 my-4"></i> Editar
+                                        </a>
+                                        <button article_id="{{ $article->id }}"
+                                            class="delete flex items-center text-danger">
                                             <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
-                                        </button>
-                                        <button article_id="{{ $article->id }}" class="edit flex items-center mr-3">
-                                            <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
                                         </button>
                                     </td>
                                 </tr>
@@ -45,12 +45,12 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
     <!-- END: Table Head Options -->
 
     <!-- END: HTML Table Data -->
 
-    <div id="edit-home" class="modal" tabindex="-1" aria-hidden="true" data-modal-backdrop="static">
+    {{-- <div id="edit-home" class="modal" tabindex="-1" aria-hidden="true" data-modal-backdrop="static">
         <div class="modal-dialog modal-xl" style="overflow-y: initial !important;">
             <div class="modal-content">
                 <div class="modal-body" style="max-height: calc(100vh - 130px); overflow-y: auto;">
@@ -212,7 +212,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     {{-- <a data-tw-target="#edit-user" data-tw-toggle="modal" data-backdrop="static" data-keyboard="false" class="edit flex items-center mr-3" href="javascript:;">
         <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
     </a> --}}
