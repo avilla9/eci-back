@@ -49,9 +49,8 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-													<input itemId= "${
-                                                        cell.getData().id
-                                                    }" type="checkbox" class="checkElement form-check-input"></
+													<input itemId= "${cell.getData().id
+                            }" type="checkbox" class="checkElement form-check-input"></
 											</div>`;
                     },
                 },
@@ -65,8 +64,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().user_code
+                            <div class="font-medium whitespace-nowrap">${cell.getData().user_code
                             }</div>
                         </div>`;
                     },
@@ -81,8 +79,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().name
+                            <div class="font-medium whitespace-nowrap">${cell.getData().name
                             }</div>
                         </div>`;
                     },
@@ -97,8 +94,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().email
+                            <div class="font-medium whitespace-nowrap">${cell.getData().email
                             }</div>
                         </div>`;
                     },
@@ -113,8 +109,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().role_name
+                            <div class="font-medium whitespace-nowrap">${cell.getData().role_name
                             }</div>
                         </div>`;
                     },
@@ -146,39 +141,28 @@ import Swal from 'sweetalert2';
                             .on("click", function () {
                                 $("#table-content").html("");
                                 table = "";
-                                table += `<tr class="whitespace-nowrap"><th>Activo</th><td>${
-                                    cell.getData().active == 1 ? "Si" : "No"
-                                }</td></tr>`;
-                                let table = `<tr class="whitespace-nowrap"><th>Código de usuario</th><td>${
-                                    cell.getData().user_code
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Nombre</th><td>${
-                                    cell.getData().name
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Apellido</th><td>${
-                                    cell.getData().last_name
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Email</th><td>${
-                                    cell.getData().email
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>SECI Coins</th><td>${
-                                    cell.getData().secicoins
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Rol</th><td>${
-                                    cell.getData().role_name
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Cuartil</th><td>${
-                                    cell.getData().quartile
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Grupo</th><td>${
-                                    cell.getData().group
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Delegación</th><td>${
-                                    cell.getData().delegation_name
-                                }</td></tr>`;
-                                table += `<tr class="whitespace-nowrap"><th>Código Delegación</th><td>${
-                                    cell.getData().delegation_code
-                                }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Activo</th><td>${cell.getData().active == 1 ? "Si" : "No"
+                                    }</td></tr>`;
+                                let table = `<tr class="whitespace-nowrap"><th>Código de usuario</th><td>${cell.getData().user_code
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Nombre</th><td>${cell.getData().name
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Apellido</th><td>${cell.getData().last_name
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Email</th><td>${cell.getData().email
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>SECI Coins</th><td>${cell.getData().secicoins
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Rol</th><td>${cell.getData().role_name
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Cuartil</th><td>${cell.getData().quartile
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Grupo</th><td>${cell.getData().group
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Delegación</th><td>${cell.getData().delegation_name
+                                    }</td></tr>`;
+                                table += `<tr class="whitespace-nowrap"><th>Código Delegación</th><td>${cell.getData().delegation_code
+                                    }</td></tr>`;
                                 $("#table-content").html(table);
                             });
 
@@ -288,59 +272,59 @@ import Swal from 'sweetalert2';
 
                 // For print format
                 /* {
-						title: "PRODUCT NAME",
-						field: "name",
-						visible: false,
-						print: true,
-						download: true,
-				},
-				{
-						title: "CATEGORY",
-						field: "category",
-						visible: false,
-						print: true,
-						download: true,
-				},
-				{
-						title: "Estatus",
-						field: "status",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue() ? "Active" : "Inactive";
-						},
-				},
-				{
-						title: "IMAGE 1",
-						field: "images",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue()[0];
-						},
-				},
-				{
-						title: "IMAGE 2",
-						field: "images",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue()[1];
-						},
-				},
-				{
-						title: "IMAGE 3",
-						field: "images",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue()[2];
-						},
-				}, */
+                        title: "PRODUCT NAME",
+                        field: "name",
+                        visible: false,
+                        print: true,
+                        download: true,
+                },
+                {
+                        title: "CATEGORY",
+                        field: "category",
+                        visible: false,
+                        print: true,
+                        download: true,
+                },
+                {
+                        title: "Estatus",
+                        field: "status",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue() ? "Active" : "Inactive";
+                        },
+                },
+                {
+                        title: "IMAGE 1",
+                        field: "images",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue()[0];
+                        },
+                },
+                {
+                        title: "IMAGE 2",
+                        field: "images",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue()[1];
+                        },
+                },
+                {
+                        title: "IMAGE 3",
+                        field: "images",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue()[2];
+                        },
+                }, */
             ],
             renderComplete() {
                 feather.replace({
@@ -417,35 +401,35 @@ import Swal from 'sweetalert2';
             table.print();
         });
 
-		$('#deleteUserId').on("click", function () {
-			if ($('.checkElement:checkbox:checked').length) {
-				Swal.fire({
-					title: '¿Desea eliminar esta seleccion?',
-					text: "¡Esta accion es irreversible!",
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Si, seguro',
-					cancelButtonText: 'No, cancelar'
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$('.checkElement:checkbox:checked').map(function () {
-							console.log($(this).attr("itemid"));
-							$.ajax({
-								type: "POST",
-								url: '/api/users/delete',
-								data: { "id": $(this).attr("itemid") },
-								success: function (data) {
-									console.log("response", data);
-								}
-							});
-						});
-						table.replaceData();
-					};
-				});
-			}
-		});
+        $('#deleteUserId').on("click", function () {
+            if ($('.checkElement:checkbox:checked').length) {
+                Swal.fire({
+                    title: '¿Desea eliminar esta seleccion?',
+                    text: "¡Esta accion es irreversible!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, seguro',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('.checkElement:checkbox:checked').map(function () {
+                            console.log($(this).attr("itemid"));
+                            $.ajax({
+                                type: "POST",
+                                url: '/api/users/delete',
+                                data: { "id": $(this).attr("itemid") },
+                                success: function (data) {
+                                    console.log("response", data);
+                                }
+                            });
+                        });
+                        table.replaceData();
+                    };
+                });
+            }
+        });
         function updateUser(data) {
             $.ajax({
                 type: "PUT",
@@ -569,9 +553,8 @@ import Swal from 'sweetalert2';
                     print: false,
                     download: false,
                     formatter(cell, formatterParams) {
-                        return `<div><div class="font-medium whitespace-nowrap">${
-                            cell.getData().name
-                        }</div></div > `;
+                        return `<div><div class="font-medium whitespace-nowrap">${cell.getData().name
+                            }</div></div > `;
                     },
                 },
                 {
@@ -583,9 +566,8 @@ import Swal from 'sweetalert2';
                     print: false,
                     download: false,
                     formatter(cell, formatterParams) {
-                        return `<div><div class="font-medium whitespace-nowrap">${
-                            cell.getData().description
-                        }</div></div > `;
+                        return `<div><div class="font-medium whitespace-nowrap">${cell.getData().description
+                            }</div></div > `;
                     },
                 },
                 {
@@ -787,8 +769,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().title
+                            <div class="font-medium whitespace-nowrap">${cell.getData().title
                             }</div>
                         </div>`;
                     },
@@ -803,8 +784,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().section_title
+                            <div class="font-medium whitespace-nowrap">${cell.getData().section_title
                             }</div>
                         </div>`;
                     },
@@ -819,8 +799,7 @@ import Swal from 'sweetalert2';
                     download: false,
                     formatter(cell, formatterParams) {
                         return `<div>
-                            <div class="font-medium whitespace-nowrap">${
-                                cell.getData().created_at
+                            <div class="font-medium whitespace-nowrap">${cell.getData().created_at
                             }</div>
                         </div>`;
                     },
@@ -837,7 +816,7 @@ import Swal from 'sweetalert2';
                     formatter(cell, formatterParams) {
                         let a =
                             $(`<div class="flex lg:justify-center items-center">
-                    <a href="/posts/home/get-post/`+ cell.getData().id +`" class="edit flex items-center mr-3" href="javascript:;">
+                    <a href="/posts/home/get-post/`+ cell.getData().id + `" class="edit flex items-center mr-3" href="javascript:;">
                         <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Editar
                     </a>
                     <a class="delete flex items-center text-danger" href="javascript:;">
@@ -866,16 +845,16 @@ import Swal from 'sweetalert2';
                         $(a)
                             .find(".edit")
                             .on("click", function () {
-							// 	const data = {
-							// 		id: cell.getData().id
-							// 	}
-                            //    $.ajax({
-							// 	type: "GET",
-							// 	url: "/posts/home/get-post/" + cell.getData().id,
-							// 	success: function (response) {
-							// 		console.log("🚀 ~ file: tabulator.js:851 ~ response", response);
-							// 	}
-							//    });
+                                // 	const data = {
+                                // 		id: cell.getData().id
+                                // 	}
+                                //    $.ajax({
+                                // 	type: "GET",
+                                // 	url: "/posts/home/get-post/" + cell.getData().id,
+                                // 	success: function (response) {
+                                // 		console.log("🚀 ~ file: tabulator.js:851 ~ response", response);
+                                // 	}
+                                //    });
                                 // $('.title').val(cell.getData().title);
                                 // $('.short_description').attr('value',cell.getData().short_description);
                                 // $('#section').val(cell.getData().section_id);
@@ -936,59 +915,59 @@ import Swal from 'sweetalert2';
 
                 // For print format
                 /* {
-						title: "PRODUCT NAME",
-						field: "name",
-						visible: false,
-						print: true,
-						download: true,
-				},
-				{
-						title: "CATEGORY",
-						field: "category",
-						visible: false,
-						print: true,
-						download: true,
-				},
-				{
-						title: "Estatus",
-						field: "status",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue() ? "Active" : "Inactive";
-						},
-				},
-				{
-						title: "IMAGE 1",
-						field: "images",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue()[0];
-						},
-				},
-				{
-						title: "IMAGE 2",
-						field: "images",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue()[1];
-						},
-				},
-				{
-						title: "IMAGE 3",
-						field: "images",
-						visible: false,
-						print: true,
-						download: true,
-						formatterPrint(cell) {
-								return cell.getValue()[2];
-						},
-				}, */
+                        title: "PRODUCT NAME",
+                        field: "name",
+                        visible: false,
+                        print: true,
+                        download: true,
+                },
+                {
+                        title: "CATEGORY",
+                        field: "category",
+                        visible: false,
+                        print: true,
+                        download: true,
+                },
+                {
+                        title: "Estatus",
+                        field: "status",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue() ? "Active" : "Inactive";
+                        },
+                },
+                {
+                        title: "IMAGE 1",
+                        field: "images",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue()[0];
+                        },
+                },
+                {
+                        title: "IMAGE 2",
+                        field: "images",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue()[1];
+                        },
+                },
+                {
+                        title: "IMAGE 3",
+                        field: "images",
+                        visible: false,
+                        print: true,
+                        download: true,
+                        formatterPrint(cell) {
+                                return cell.getValue()[2];
+                        },
+                }, */
             ],
             renderComplete() {
                 feather.replace({
