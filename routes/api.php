@@ -11,6 +11,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\UserController;
+use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,31 @@ Route::prefix('/posts')->group(function () {
             Route::post('/', 'showStories')->name('stories.list');
             Route::post('/view', 'viewStories')->name('viewStories');
         });
+        Route::prefix('/rooms')->group(function() {
+            Route::get('filter/{id}', 'roomFilters')->name('content.room.filters');
+            Route::put('/update', 'roomUpdate');
+        });
+
+        Route::prefix('/reward')->group(function() {
+            Route::get('filters/{id}', 'contentRewardFilters');
+            Route::put('update', 'contentRewardUpdate');
+        });
+        Route::prefix('/access')->group(function() {
+            Route::get('filters/{id}', 'contentAccessFilters');
+            Route::put('/update', 'contentAccessUpdate');
+        });
+        Route::prefix('/adoption')->group(function() {
+            Route::get('filters/{id}', 'contentAdoptionFilters');
+            Route::put('update', 'contentAdoptionUpdate');
+        });
+        Route::prefix('knowledge')->group(function() {
+            Route::get('filters/{id}', 'contentKnowledgeFilters');
+            Route::put('/update', 'contentKnowledgeUpdate');
+        });
+        Route::prefix('story')->group(function() {
+            Route::get('filters/{id}', 'contentStoryFilters');
+            Route::put('update', 'contentStoryUpdate');
+        });
     });
 });
 
@@ -64,6 +90,22 @@ Route::controller(ArticleController::class)->group(function () {
     Route::post('/like', 'like');
     Route::post('/view', 'view');
     Route::post('/sendmail', 'sendMail');
+    Route::prefix('campaign')->group(function() {
+        Route::put('update', 'campaignUpdate')->name('campaign.update');
+    });
+});
+
+Route::prefix('/posts')->group(function () {
+    Route::prefix('/home')->group(function () {
+        Route::controller(PageController::class)->group(function () {
+            
+        });
+        Route::controller(ArticleController::class)->group(function() {
+            Route::get('/article-filters/{id}', 'articleFilters')->name('home.get.article.filters');
+            Route::put('/article-update', 'homeUpdate')->name('home.update.article');
+            Route::post('/article-delete', 'homeDelete')->name('home.delete.article');
+        });
+    });
 });
 
 Route::prefix('/users')->group(function () {
@@ -82,6 +124,7 @@ Route::prefix('/campaign')->group(function () {
     Route::controller(CampaignController::class)->group(function () {
         Route::post('/list', 'campaignList');
         Route::post('/data', 'campaignData');
+        Route::get('/filters/{id}', 'campaignFilters')->name('get.campaign.filters');
     });
 });
 

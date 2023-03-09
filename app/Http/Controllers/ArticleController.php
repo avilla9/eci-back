@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MailController;
 use App\Models\ArticleFilter;
+use App\Models\File;
 use App\Models\Section;
 use App\Models\User;
 use Dotenv\Validator;
@@ -80,6 +81,82 @@ class ArticleController extends Controller {
 			}
 
 			return $users;
+		}
+	}
+
+	public function contentStoryFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+		return [
+			"articleFilters" => $articleFilters
+		];
+	}
+
+	public function contentStoryUpdate(Request $request) {
+		$data = [
+			'title' => 'story',
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => 'story',
+		];
+
+		$articleid = DB::table('articles')->where('id', $request->id)->update($data);
+		$articleUpdate = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $articleUpdate;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			// $filters['article_id'] = $articleUpdate;
+			ArticleFilter::updateOrCreate(
+				[
+					"article_id" => $articleUpdate->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],	
+				]
+			);
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+			$delete = Access::where('article_id', $articleUpdate->id)->delete();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleUpdate->id,
+					]);
+			}
+
+			return [
+				"articleUpdate" => $articleUpdate,
+				"delete" => $delete,
+				"users" => $users,
+			];
 		}
 	}
 
@@ -197,6 +274,87 @@ class ArticleController extends Controller {
 		}
 	}
 
+	public function homeUpdate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => $request->post_type,
+		];
+
+		$articleid = DB::table('articles')->where('id', $request->id)->update($data);
+		$article = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return [
+				"article" => $articleid,
+				'message' => "Por aquí pasó"
+			];
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			
+			ArticleFilter::updateOrCreate(
+				[
+					"article_id" => $request->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],	
+				]
+			);
+			$articleFilters = ArticleFilter::where('article_id', $request->id)->first();
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+				->where('article_id', $request->id)
+				->update([
+					"user_id" => $user->id
+				]);
+			}
+
+			return [
+				'users' => $users,
+				'article' => $article,
+				'articleFilters' => $articleFilters
+			];
+		}
+	}
+
+	public function homeDelete(Request $request) {
+		Article::where('id', $request->id)->delete();
+		ArticleFilter::where('article_id', $request->id)->delete();
+		Access::where('article_id', $request->id)->delete();
+	}
+
 	public function campaignCreate(Request $request) {
 		$data = [
 			'title' => $request->title,
@@ -210,9 +368,10 @@ class ArticleController extends Controller {
 			'unrestricted' => $request->grant_all,
 			'file_id' => $request->image,
 			'section_id' => $request->section,
-			'campaign_id' => $request->campaign,
+			'campaign_id' => $request->image,
 			'post_type' => $request->post_type,
 		];
+
 
 		$articleid = DB::table('articles')->insertGetId($data);
 
@@ -252,6 +411,79 @@ class ArticleController extends Controller {
 			return $users;
 		}
 	}
+
+	public function campaignUpdate(Request $request) {
+        $data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'campaign_id' => $request->campaign,
+			'post_type' => $request->post_type,
+		];
+
+		$article = DB::table('articles')->where('id', $request->id)->update($data);
+		$updateArticle = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $article;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			ArticleFilter::updateOrCreate(
+				[
+					'article_id' => $updateArticle->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],
+				]
+			);
+			
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+			$delete = Access::where('article_id', $updateArticle->id)->delete();
+
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $updateArticle->id,
+					]);
+			}
+
+			return [
+				'users' => $users,
+				'deleted' => $delete,
+				'updateArticle' => $updateArticle
+			];
+		}
+    }
 
 	function knowledgeCreate(Request $request) {
 		$data = [
@@ -304,6 +536,85 @@ class ArticleController extends Controller {
 			}
 
 			return $users;
+		}
+	}
+
+	public function contentKnowledgeFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+		return [
+			"articleFilters" => $articleFilters
+		];
+	}
+
+	public function contentKnowledgeUpdate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => $request->post_type,
+		];
+
+		$article = DB::table('articles')->where('id', $request->id)->update($data);
+		$articleUpdate = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $articleUpdate;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			// $filters['article_id'] = $articleUpdate;
+			ArticleFilter::updateOrCreate(
+				[
+					"article_id" => $articleUpdate->id
+				], 
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],	
+				]
+			);
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+				$delete = Access::where('article_id', $articleUpdate->id)->delete();
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleUpdate->id,
+					]);
+			}
+
+			return [
+				"articleUpdate" => $articleUpdate,
+				"delete" => $delete,
+				"users" => $users,
+			];
 		}
 	}
 
@@ -361,6 +672,83 @@ class ArticleController extends Controller {
 		}
 	}
 
+	public function contentRewardFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+		return [
+			'articleFilters' => $articleFilters
+		];
+	}
+
+	public function contentRewardUpdate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => $request->post_type,
+		];
+
+		$article = DB::table('articles')->where('id', $request->id)->update($data);
+		$articleUpdate = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $articleUpdate;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			// $filters['article_id'] = $articleUpdate;
+			ArticleFilter::updateOrCreate(
+				[
+					'article_id' => $articleUpdate->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],
+				]
+			);
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+			$delete = Access::where('article_id', $articleUpdate->id)->delete();
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleUpdate->id,
+					]);
+			}
+
+			return [
+				"articleUpdate" => $articleUpdate,
+				"users" => $users,
+				"delete" => $delete,
+			];
+		}
+	}
 
 	function roomCreate(Request $request) {
 		$data = [
@@ -415,6 +803,86 @@ class ArticleController extends Controller {
 			return $users;
 		}
 	}
+
+	public function roomFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+		return [
+			'articleFilters' => $articleFilters
+		];
+	}
+
+	public function roomUpdate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => $request->post_type,
+		];
+
+		$articleid = DB::table('articles')->where('id', $request->id)->update($data);
+		$article = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $article;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			// $filters['article_id'] = $article;
+			ArticleFilter::updateOrCreate(
+				[
+					'article_id' => $article->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],
+				]
+			);
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+			$delete = Access::where('article_id', $article->id)->delete();
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $article->id,
+					]);
+			}
+
+			return [
+				"update" => $article,
+				"users" => $users,
+				"delete" => $delete
+			];
+		}
+	}
+
 	function sectionCreate(Request $request) {
 		$data = [
 			'title' => $request->title,
@@ -566,6 +1034,166 @@ class ArticleController extends Controller {
 			}
 
 			return $users;
+		}
+	}
+
+	public function contentAccessFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+		return [
+			"articleFilters" => $articleFilters
+		];
+	}
+
+	public function contentAccessUpdate(Request $request) {
+		$data = [
+			'title' => $request->title,
+			'description' => $request->description,
+			'short_description' => $request->short_description,
+			'button_name' => $request->button_name,
+			'button_link' => $request->button_link,
+			'internal_link' => $request->internal_link,
+			'external_link' => $request->external_link,
+			'created_at' => $request->date,
+			'unrestricted' => $request->grant_all,
+			'file_id' => $request->image,
+			'section_id' => $request->section,
+			'post_type' => $request->post_type,
+		];
+
+		$article = DB::table('articles')->where('id', $request->id)->update($data);
+		$articleUpdate = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $articleUpdate;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			// $filters['article_id'] = $articleUpdate;
+			ArticleFilter::updateOrCreate(
+				[
+					"article_id" => $articleUpdate->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],
+				]
+			);
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+			$delete = Access::where('article_id', $articleUpdate->id)->delete();
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleUpdate->id,
+					]);
+			}
+
+			return [
+				"articleUpdate" => $articleUpdate,
+				"delete" => $delete,
+				"users" => $users
+			];
+		}
+	}
+
+	public function contentAdoptionFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+		return [
+			"articleFilters" => $articleFilters
+		];
+	}
+
+	public function contentAdoptionUpdate(Request $request) {
+			$data = [
+				'title' => $request->title,
+				'description' => $request->description,
+				'short_description' => $request->short_description,
+				'button_name' => $request->button_name,
+				'button_link' => $request->button_link,
+				'internal_link' => $request->internal_link,
+				'external_link' => $request->external_link,
+				'created_at' => $request->date,
+				'unrestricted' => $request->grant_all,
+				'file_id' => $request->image,
+				'section_id' => $request->section,
+				'campaign_id' => $request->campaign,
+				'post_type' => $request->post_type,
+			];
+
+		$articleid = DB::table('articles')->where('id', $request->id)->update($data);
+		$articleUpdate = DB::table('articles')->where('id', $request->id)->first();
+
+		if ($data['unrestricted']) {
+			return $articleUpdate;
+		} else {
+			$filters = [
+				'groups' => !is_null($request->groups) ? $request->groups : [0],
+				'quartiles' => !is_null($request->quartiles) ? $request->quartiles : [0],
+				'delegations' => !is_null($request->delegations) ? $request->delegations : [0],
+				'roles' => !is_null($request->roles) ? $request->roles : [0],
+				'users' => !is_null($request->users) ? $request->users : [0],
+			];
+
+			// $filters['article_id'] = $articleUpdate;
+			ArticleFilter::updateOrCreate(
+				[
+					"article_id" => $articleUpdate->id
+				],
+				[
+					'groups' => $filters['groups'],
+					'quartiles' => $filters['quartiles'],
+					'delegations' => $filters['delegations'],
+					'roles' => $filters['roles'],
+					'users' => $filters['users'],
+				]
+			);
+
+			$users = DB::table('users')
+				->select('users.*')
+				->join('delegations', 'delegations.code', '=', 'users.delegation_code')
+				->whereIn('delegations.id', $filters['delegations'])
+				->orWhereIn('users.role_id', $filters['roles'])
+				->orWhereIn('users.quartile_id', $filters['quartiles'])
+				->orWhereIn('users.group_id', $filters['groups'])
+				->orWhereIn('users.id', $filters['users'])
+				->get();
+
+			$delete = Access::where('article_id', $articleUpdate->id)->delete();
+
+			foreach ($users as $key => $user) {
+				DB::table('accesses')
+					->insert([
+						'user_id' => $user->id,
+						'article_id' => $articleUpdate->id,
+					]);
+			}
+
+			return [
+				"articleUpdate" => $articleUpdate,
+				"delete" => $delete,
+				"users" => $users,
+			];
 		}
 	}
 
@@ -919,5 +1547,14 @@ class ArticleController extends Controller {
 		];
 		new MailController($data);
 		return true;
+	}
+
+	// CON ESTA FUNCIÓN OBTENGO LOS FILTROS DE MI ARTICULO
+	public function articleFilters($id) {
+		$articleFilters = ArticleFilter::where('article_id', $id)->get();
+
+		return [
+			'articleFilters' =>	$articleFilters
+		];
 	}
 }

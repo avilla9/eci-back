@@ -91,7 +91,6 @@ Route::middleware('auth')->group(function () {
 
         Route::controller(CampaignController::class)->group(function () {
             Route::post('/store', 'store')->name('campaign.store');
-            Route::put('/update', 'update')->name('campaign.update');
             Route::post('/delete', 'delete')->name('campaign.delete');
         });
     });
@@ -105,6 +104,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'storieCreate')->name('create-storie');
                 Route::get('/lista', 'storieList')->name('stories-list');
+                Route::get('/details/{id}', 'contentStoryDetails')->name('content.story.details');
             });
 
             Route::controller(ArticleController::class)->group(function () {
@@ -114,7 +114,9 @@ Route::middleware('auth')->group(function () {
         Route::prefix('/home')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'homeCreate')->name('home-create');
-                Route::get('/lista', 'homeList')->name('homes-list');
+                // Route::get('/lista', 'homeArticlesView')->name('homes-list');
+                Route::get('/list', 'homeList')->name('home.get.list');
+                Route::get('/get-post/{id}', 'getPost')->name('home.get.post');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'homeCreate')->name('home.create');
@@ -124,6 +126,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentCampaignCreate')->name('content-campaign-create');
                 Route::get('/lista', 'contentCampaignList')->name('content-campaign-list');
+                Route::get('/details/{id}', 'contentCampaignDetails')->name('content.campaign.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'campaignCreate')->name('campaign.create');
@@ -134,6 +137,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentadoptionCreate')->name('content-adoption-create');
                 Route::get('/lista', 'contentadoptionList')->name('content-adoption-list');
+                Route::get('/details/{id}', 'contentAdoptionDetails')->name('content.adoption.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'adoptionCreate')->name('adoption.create');
@@ -144,6 +148,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentknowledgeCreate')->name('content-knowledge-create');
                 Route::get('/lista', 'contentknowledgeList')->name('content-knowledge-list');
+                Route::get('/details/{id}', 'contentKnowledgeDetails')->name('content.knowledge.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'knowledgeCreate')->name('knowledge.create');
@@ -154,6 +159,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentrewardCreate')->name('content-reward-create');
                 Route::get('/lista', 'contentrewardList')->name('content-reward-list');
+                Route::get('details/{id}', 'contentRewardDetails')->name('content.reward.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'rewardCreate')->name('reward.create');
@@ -165,6 +171,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/crear', 'contentroomCreate')->name('content-room-create');
                 Route::get('/lista', 'contentroomList')->name('content-room-list');
                 Route::get('/secciones', 'contentroomSections')->name('section-room-create');
+                Route::get('details/{id}', 'contentRoomDetails')->name('content.room.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'roomCreate')->name('room.create');
@@ -178,6 +185,7 @@ Route::middleware('auth')->group(function () {
             Route::controller(PageController::class)->group(function () {
                 Route::get('/crear', 'contentaccessCreate')->name('content-access-create');
                 Route::get('/lista', 'contentaccessList')->name('content-access-list');
+                Route::get('/details/{id}', 'contentAccessDetails')->name('content.access.details');
             });
             Route::controller(ArticleController::class)->group(function () {
                 Route::post('/create', 'accessCreate')->name('access.create');

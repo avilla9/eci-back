@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\ArticleFilter;
 use App\Models\Campaign;
 use App\Models\Delegation;
 use App\Models\File;
@@ -12,9 +13,11 @@ use App\Models\Page;
 use App\Models\Quartile;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PageController extends Controller {
+class PageController extends Controller
+{
 
     /**
      * Show specified view.
@@ -22,7 +25,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function userList() {
+    public function userList()
+    {
         $users = User::all();
         $roles = Role::all();
         $groups = Group::all();
@@ -33,7 +37,8 @@ class PageController extends Controller {
         ]));
     }
 
-    public function productionData() {
+    public function productionData()
+    {
         $users = User::select(
             'users.id as id',
             'users.dni as dni',
@@ -88,7 +93,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function userCreate() {
+    public function userCreate()
+    {
         $roles = Role::all();
         $groups = Group::all();
         $quartiles = Quartile::all();
@@ -104,7 +110,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function roleCreate() {
+    public function roleCreate()
+    {
         return view('pages/roles/create', []);
     }
 
@@ -114,7 +121,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function userUpload() {
+    public function userUpload()
+    {
         return view('pages/users/upload', []);
     }
 
@@ -124,7 +132,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function deleteUserUpload() {
+    public function deleteUserUpload()
+    {
         return view('pages/users/upload-delete', [
             // Specify the base layout.
             // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
@@ -143,9 +152,17 @@ class PageController extends Controller {
         return view('pages/stories/list');
     } */
 
-    public function storieCreate() {
+    public function storieCreate()
+    {
         $data = contentParameters();
         return view('pages/content/stories/create', $data);
+    }
+
+    public function contentStoryDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $data['article'] = $article;
+        return view('pages/content/stories/update', $data);
     }
 
     public function storieList() {
@@ -154,8 +171,8 @@ class PageController extends Controller {
             ->join('files', 'files.id', '=', 'articles.file_id')
             ->where('articles.post_type', 'story')
             ->whereRaw('DATEDIFF(CURDATE(), articles.created_at) <= 1')
-            ->orderBy('articles.created_at', 'desc')
             ->orderBy('articles.id', 'desc')
+            ->orderBy('articles.updated_at', 'asc')
             ->get();
 
         return view('pages/content/stories/list', [
@@ -163,24 +180,63 @@ class PageController extends Controller {
         ]);
     }
 
-    public function home() {
+    public function home()
+    {
         return view('pages/users/list');
     }
 
-    public function homeCreate() {
+    public function homeCreate()
+    {
         $data = contentParameters();
         $sections = sectionParameters('Home');
         $data['sections'] = $sections;
         return view('pages/content/home/create', $data);
     }
 
-    public function homeList() {
-        return view('pages/content/home/list', [
-            'articles'  => articlesByPage('Home')
-        ]);
+    public function homeArticlesView()
+    {
+        $data = contentParameters();
+        $sections = sectionParameters('Home');
+        $data['sections'] = $sections;
+        return view('pages.content.home.list', $data);
     }
 
-    public function contentCampaignCreate() {
+    public function homeList()
+    {
+        $articles = DB::table('articles')
+            ->select('articles.*', 'sections.title as section_title', 'files.media_path')
+            ->join('sections', 'sections.id', '=', 'articles.section_id')
+            ->join('pages', 'pages.id', '=', 'sections.page_id')
+
+            ->join('files', 'files.id', '=', 'articles.file_id')
+
+            ->where('pages.title', 'Home')
+            ->orderBy('sections.title', 'asc')
+            ->orderBy('articles.id', 'desc')
+            ->get();
+        return view('pages.content.home.list', ["articles" => $articles]);
+    }
+
+    public function getPost($id)
+    {
+        $article = DB::table('articles')
+            ->select('articles.*', 'sections.title as section_title', 'files.media_path')
+            ->join('sections', 'sections.id', '=', 'articles.section_id')
+            ->join('pages', 'pages.id', '=', 'sections.page_id')
+            ->join('files', 'files.id', '=', 'articles.file_id')
+
+            ->where('articles.id', $id)
+            ->first();
+
+        $data = contentParameters();
+        $sections = sectionParameters('Home');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages.content.home.update', $data);
+    }
+
+    public function contentCampaignCreate()
+    {
         $data = contentParameters();
         $sections = sectionParameters('Campaña');
         $data['sections'] = $sections;
@@ -200,10 +256,33 @@ class PageController extends Controller {
         return view('pages/content/campaign/create', $data);
     }
 
-    public function contentCampaignList() {
+    public function contentCampaignList()
+    {
         return view('pages/content/campaign/list', [
             'articles'  => articlesByPage('Campaña')
         ]);
+    }
+
+    public function contentCampaignDetails($id) {
+        $data = contentParameters();
+        $sections = sectionParameters('Campaña');
+        $data['sections'] = $sections;
+        $data['campaigns'] = DB::table('campaigns')
+            ->select(
+                'campaigns.id as id',
+                'campaigns.title as title',
+                'campaigns.description as description',
+                'campaigns.created_at as created_at',
+                'pages.id as page_id',
+                'pages.title as page_title',
+            )
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->where('pages.title', 'Campaña')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $data['article'] = DB::table('articles')->where('id', $id)->first();
+
+        return view('pages/content/campaign/update', $data);
     }
 
     public function contentAdoptionCreate() {
@@ -226,13 +305,36 @@ class PageController extends Controller {
         return view('pages/content/adoption/create', $data);
     }
 
+    public function contentAdoptionDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Adopción');
+        $data['sections'] = $sections;
+        $data['campaigns'] = DB::table('campaigns')
+            ->select(
+                'campaigns.id as id',
+                'campaigns.title as title',
+                'campaigns.description as description',
+                'campaigns.created_at as created_at',
+                'pages.id as page_id',
+                'pages.title as page_title',
+            )
+            ->join('pages', 'pages.id', '=', 'campaigns.page_id')
+            ->where('pages.title', 'Adopción')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $data['article'] = $article;
+        return view('pages/content/adoption/update', $data);
+    }
+
     public function contentAdoptionList() {
         return view('pages/content/adoption/list', [
             'articles'  => articlesByPage('Adopción')
         ]);
     }
 
-    public function campaignCreate() {
+    public function campaignCreate()
+    {
         $pages = DB::table('pages')
             ->where('title', 'Campaña')
             ->orWhere('title', 'Adopción')
@@ -240,7 +342,8 @@ class PageController extends Controller {
 
         return view('pages/campaigns/create', compact(['pages']));
     }
-    public function campaignList() {
+    public function campaignList()
+    {
         $campaigns = DB::table('campaigns')
             ->select('campaigns.id as id', 'campaigns.title as title', 'campaigns.description as description', 'campaigns.created_at as created_at', 'pages.id as page_id', 'pages.title as page_title')
             ->join('pages', 'pages.id', '=', 'campaigns.page_id')
@@ -249,11 +352,21 @@ class PageController extends Controller {
         return view('pages/campaigns/list', compact(['campaigns']));
     }
 
-    public function contentknowledgeCreate() {
+    public function contentknowledgeCreate()
+    {
         $data = contentParameters();
         $sections = sectionParameters('Conocimiento');
         $data['sections'] = $sections;
         return view('pages/content/knowledge/create', $data);
+    }
+
+    public function contentKnowledgeDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Conocimiento');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/knowledge/update', $data);
     }
 
     function contentknowledgeList() {
@@ -262,17 +375,28 @@ class PageController extends Controller {
         ]);
     }
 
-    public function contentrewardCreate() {
+    public function contentrewardCreate()
+    {
         $data = contentParameters();
         $sections = sectionParameters('Recompensas');
         $data['sections'] = $sections;
         return view('pages/content/reward/create', $data);
     }
 
-    function contentrewardList() {
+    function contentrewardList()
+    {
         return view('pages/content/reward/list', [
             'articles'  => articlesByPage('Recompensas')
         ]);
+    }
+
+    public function contentRewardDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Recompensas');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/reward/update', $data);
     }
 
     public function contentroomCreate() {
@@ -280,6 +404,15 @@ class PageController extends Controller {
         $sections = sectionParameters('Salas');
         $data['sections'] = $sections;
         return view('pages/content/room/create', $data);
+    }
+
+    public function contentRoomDetails($id) {
+        $article = Article::where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Salas');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/room/update', $data);
     }
 
     function contentroomList() {
@@ -305,7 +438,7 @@ class PageController extends Controller {
             ->leftJoin('files', 'files.id', '=', 'sections.file_id')
             ->where('pages.title', 'Salas')
             ->get();
-            
+
         $files = File::where('media_type', 'like', '%image%')->latest()->get();
         $filters = [];
             count($groups) > 0 ? $filters['groups'] = [
@@ -338,17 +471,28 @@ class PageController extends Controller {
         ]);
     }
 
-    public function contentaccessCreate() {
+    public function contentaccessCreate()
+    {
         $data = contentParameters();
         $sections = sectionParameters('Accesos');
         $data['sections'] = $sections;
         return view('pages/content/access/create', $data);
     }
 
-    function contentaccessList() {
+    function contentaccessList()
+    {
         return view('pages/content/access/list', [
             'articles'  => articlesByPage('Accesos')
         ]);
+    }
+
+    public function contentAccessDetails($id) {
+        $article = DB::table('articles')->where('id', $id)->first();
+        $data = contentParameters();
+        $sections = sectionParameters('Accesos');
+        $data['sections'] = $sections;
+        $data['article'] = $article;
+        return view('pages/content/access/update', $data);
     }
 
     public function filesList() {
@@ -361,7 +505,8 @@ class PageController extends Controller {
         ]);
     }
 
-    public function filesUp() {
+    public function filesUp()
+    {
         return view('pages/files/upload');
     }
 
@@ -373,7 +518,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dashboardOverview1() {
+    public function dashboardOverview1()
+    {
         return view('pages/dashboard-overview-1', [
             // Specify the base layout.
             // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
@@ -389,7 +535,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dashboardOverview2() {
+    public function dashboardOverview2()
+    {
         return view('pages/dashboard-overview-2');
     }
 
@@ -399,7 +546,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dashboardOverview3() {
+    public function dashboardOverview3()
+    {
         return view('pages/dashboard-overview-3');
     }
 
@@ -409,7 +557,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function inbox() {
+    public function inbox()
+    {
         return view('pages/inbox');
     }
 
@@ -419,7 +568,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function fileManager() {
+    public function fileManager()
+    {
         return view('pages/file-manager');
     }
 
@@ -429,7 +579,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function pointOfSale() {
+    public function pointOfSale()
+    {
         return view('pages/point-of-sale');
     }
 
@@ -439,7 +590,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function chat() {
+    public function chat()
+    {
         return view('pages/chat');
     }
 
@@ -449,7 +601,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function post() {
+    public function post()
+    {
         return view('pages/post');
     }
 
@@ -459,7 +612,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function calendar() {
+    public function calendar()
+    {
         return view('pages/calendar');
     }
 
@@ -469,7 +623,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function crudDataList() {
+    public function crudDataList()
+    {
         return view('pages/crud-data-list');
     }
 
@@ -479,7 +634,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function crudForm() {
+    public function crudForm()
+    {
         return view('pages/crud-form');
     }
 
@@ -489,7 +645,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function usersLayout1() {
+    public function usersLayout1()
+    {
         return view('pages/users-layout-1');
     }
 
@@ -499,7 +656,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function usersLayout2() {
+    public function usersLayout2()
+    {
         return view('pages/users-layout-2');
     }
 
@@ -509,7 +667,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function usersLayout3() {
+    public function usersLayout3()
+    {
         return view('pages/users-layout-3');
     }
 
@@ -519,7 +678,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function profileOverview1() {
+    public function profileOverview1()
+    {
         return view('pages/profile-overview-1');
     }
 
@@ -529,7 +689,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function profileOverview2() {
+    public function profileOverview2()
+    {
         return view('pages/profile-overview-2');
     }
 
@@ -539,7 +700,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function profileOverview3() {
+    public function profileOverview3()
+    {
         return view('pages/profile-overview-3');
     }
 
@@ -549,7 +711,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wizardLayout1() {
+    public function wizardLayout1()
+    {
         return view('pages/wizard-layout-1');
     }
 
@@ -559,7 +722,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wizardLayout2() {
+    public function wizardLayout2()
+    {
         return view('pages/wizard-layout-2');
     }
 
@@ -569,7 +733,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wizardLayout3() {
+    public function wizardLayout3()
+    {
         return view('pages/wizard-layout-3');
     }
 
@@ -579,7 +744,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function blogLayout1() {
+    public function blogLayout1()
+    {
         return view('pages/blog-layout-1');
     }
 
@@ -589,7 +755,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function blogLayout2() {
+    public function blogLayout2()
+    {
         return view('pages/blog-layout-2');
     }
 
@@ -599,7 +766,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function blogLayout3() {
+    public function blogLayout3()
+    {
         return view('pages/blog-layout-3');
     }
 
@@ -609,7 +777,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function pricingLayout1() {
+    public function pricingLayout1()
+    {
         return view('pages/pricing-layout-1');
     }
 
@@ -619,7 +788,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function pricingLayout2() {
+    public function pricingLayout2()
+    {
         return view('pages/pricing-layout-2');
     }
 
@@ -629,7 +799,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function invoiceLayout1() {
+    public function invoiceLayout1()
+    {
         return view('pages/invoice-layout-1');
     }
 
@@ -639,7 +810,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function invoiceLayout2() {
+    public function invoiceLayout2()
+    {
         return view('pages/invoice-layout-2');
     }
 
@@ -649,7 +821,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function faqLayout1() {
+    public function faqLayout1()
+    {
         return view('pages/faq-layout-1');
     }
 
@@ -659,7 +832,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function faqLayout2() {
+    public function faqLayout2()
+    {
         return view('pages/faq-layout-2');
     }
 
@@ -669,7 +843,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function faqLayout3() {
+    public function faqLayout3()
+    {
         return view('pages/faq-layout-3');
     }
 
@@ -679,7 +854,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login() {
+    public function login()
+    {
         return view('pages/login');
     }
 
@@ -689,7 +865,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register() {
+    public function register()
+    {
         return view('pages/register');
     }
 
@@ -699,7 +876,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function errorPage() {
+    public function errorPage()
+    {
         return view('pages/error-page');
     }
 
@@ -709,7 +887,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function updateProfile() {
+    public function updateProfile()
+    {
         return view('pages/update-profile');
     }
 
@@ -719,7 +898,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function changePassword() {
+    public function changePassword()
+    {
         return view('pages/change-password');
     }
 
@@ -729,7 +909,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function regularTable() {
+    public function regularTable()
+    {
         return view('pages/regular-table');
     }
 
@@ -739,7 +920,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function tabulator() {
+    public function tabulator()
+    {
         return view('pages/tabulator');
     }
 
@@ -749,7 +931,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function modal() {
+    public function modal()
+    {
         return view('pages/modal');
     }
 
@@ -759,7 +942,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function slideOver() {
+    public function slideOver()
+    {
         return view('pages/slide-over');
     }
 
@@ -769,7 +953,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function notification() {
+    public function notification()
+    {
         return view('pages/notification');
     }
 
@@ -779,7 +964,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function accordion() {
+    public function accordion()
+    {
         return view('pages/accordion');
     }
 
@@ -789,7 +975,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function button() {
+    public function button()
+    {
         return view('pages/button');
     }
 
@@ -799,7 +986,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function alert() {
+    public function alert()
+    {
         return view('pages/alert');
     }
 
@@ -809,7 +997,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function progressBar() {
+    public function progressBar()
+    {
         return view('pages/progress-bar');
     }
 
@@ -819,7 +1008,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function tooltip() {
+    public function tooltip()
+    {
         return view('pages/tooltip');
     }
 
@@ -829,7 +1019,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function dropdown() {
+    public function dropdown()
+    {
         return view('pages/dropdown');
     }
 
@@ -839,7 +1030,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function typography() {
+    public function typography()
+    {
         return view('pages/typography');
     }
 
@@ -849,7 +1041,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function icon() {
+    public function icon()
+    {
         return view('pages/icon');
     }
 
@@ -859,7 +1052,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function loadingIcon() {
+    public function loadingIcon()
+    {
         return view('pages/loading-icon');
     }
 
@@ -869,7 +1063,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function regularForm() {
+    public function regularForm()
+    {
         return view('pages/regular-form');
     }
 
@@ -879,7 +1074,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function datepicker() {
+    public function datepicker()
+    {
         return view('pages/datepicker');
     }
 
@@ -889,7 +1085,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function tomSelect() {
+    public function tomSelect()
+    {
         return view('pages/tom-select');
     }
 
@@ -899,7 +1096,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function fileUpload() {
+    public function fileUpload()
+    {
         return view('pages/file-upload');
     }
 
@@ -909,7 +1107,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wysiwygEditorClassic() {
+    public function wysiwygEditorClassic()
+    {
         return view('pages/wysiwyg-editor-classic');
     }
 
@@ -919,7 +1118,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wysiwygEditorInline() {
+    public function wysiwygEditorInline()
+    {
         return view('pages/wysiwyg-editor-inline');
     }
 
@@ -929,7 +1129,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wysiwygEditorBalloon() {
+    public function wysiwygEditorBalloon()
+    {
         return view('pages/wysiwyg-editor-balloon');
     }
 
@@ -939,7 +1140,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wysiwygEditorBalloonBlock() {
+    public function wysiwygEditorBalloonBlock()
+    {
         return view('pages/wysiwyg-editor-balloon-block');
     }
 
@@ -949,7 +1151,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function wysiwygEditorDocument() {
+    public function wysiwygEditorDocument()
+    {
         return view('pages/wysiwyg-editor-document');
     }
 
@@ -959,7 +1162,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function validation() {
+    public function validation()
+    {
         return view('pages/validation');
     }
 
@@ -969,7 +1173,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function chart() {
+    public function chart()
+    {
         return view('pages/chart');
     }
 
@@ -979,7 +1184,8 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function slider() {
+    public function slider()
+    {
         return view('pages/slider');
     }
 
@@ -989,16 +1195,19 @@ class PageController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function imageZoom() {
+    public function imageZoom()
+    {
         return view('pages/image-zoom');
     }
 
-    public function getEmail() {
+    public function getEmail()
+    {
         return view('pages.users.get_email', ['layout' => 'login']);
     }
 }
 
-function contentParameters() {
+function contentParameters()
+{
     $groups = Group::all();
     $quartiles = Quartile::all();
     $delegations = Delegation::all();
@@ -1036,7 +1245,8 @@ function contentParameters() {
     ];
 }
 
-function sectionParameters($pageName) {
+function sectionParameters($pageName)
+{
     return DB::table('pages')
         ->select('sections.*')
         ->join('sections', 'sections.page_id', '=', 'pages.id')
@@ -1044,9 +1254,11 @@ function sectionParameters($pageName) {
         ->get();
 }
 
-function articlesByPage($pageName) {
+function articlesByPage($pageName)
+{
     return DB::table('articles')
-        ->select('articles.*', 'sections.title as section_title')
+        ->select('articles.*', 'sections.title as section_title', 'files.media_path')
+        ->join('files', 'files.id', '=', 'articles.file_id')
         ->join('sections', 'sections.id', '=', 'articles.section_id')
         ->join('pages', 'pages.id', '=', 'sections.page_id')
         ->where('pages.title', $pageName)
