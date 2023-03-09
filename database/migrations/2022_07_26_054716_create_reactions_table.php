@@ -19,7 +19,7 @@ class CreateReactionsTable extends Migration {
             $table->integer('clicks')->nullable()->default(0);
             $table->boolean('active')->nullable()->default(false);
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

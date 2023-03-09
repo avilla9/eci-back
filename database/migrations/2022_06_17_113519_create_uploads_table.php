@@ -17,7 +17,7 @@ class CreateUploadsTable extends Migration {
             $table->string('filename');
             $table->softDeletes();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

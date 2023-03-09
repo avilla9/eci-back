@@ -17,7 +17,7 @@ class CreateRolesTable extends Migration {
             $table->string('description')->nullable();
             $table->integer('level')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

@@ -20,7 +20,7 @@ class CreateSectionsTable extends Migration
             $table->string('description')->nullable();
             $table->string('custom_class')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
             $table->integer('file_id')->nullable();
             $table->integer('campaign_id')->nullable();
             $table->integer('page_id')->nullable();

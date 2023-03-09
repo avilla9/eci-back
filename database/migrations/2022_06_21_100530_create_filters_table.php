@@ -16,7 +16,7 @@ class CreateFiltersTable extends Migration {
             $table->string('code');
             $table->integer('user_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

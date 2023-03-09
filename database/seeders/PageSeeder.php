@@ -64,7 +64,7 @@ class PageSeeder extends Seeder {
                 'title' => 'Conocimiento',
                 'sections' => [
                     [
-                        'title' => 'El Cliente',
+                        'title' => 'El Asegurado',
                         'subtitle' => 'Hábitos de compra, tendencias, curiosidades',
                     ],
                     [

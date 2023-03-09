@@ -22,7 +22,7 @@ class CreateArticlesTable extends Migration {
             $table->string('internal_link')->nullable();
             $table->string('external_link')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
             $table->boolean('unrestricted')->default(0);
             $table->boolean('active')->default(1);
             $table->string('post_type')->nullable();

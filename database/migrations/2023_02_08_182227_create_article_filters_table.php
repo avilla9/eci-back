@@ -16,11 +16,11 @@ class CreateArticleFiltersTable extends Migration
         Schema::create('article_filters', function (Blueprint $table) {
             $table->id();
             $table->integer('article_id');
-            $table->json('groups');
-            $table->json('quartiles');
-            $table->json('delegations');
-            $table->json('roles');
-            $table->json('users');
+            $table->text('groups');
+            $table->text('quartiles');
+            $table->text('delegations');
+            $table->text('roles');
+            $table->text('users');
             $table->timestamps();
         });
     }

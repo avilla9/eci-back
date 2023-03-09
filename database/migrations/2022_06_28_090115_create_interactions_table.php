@@ -17,7 +17,7 @@ class CreateInteractionsTable extends Migration {
             $table->integer('article_id')->nullable();
             $table->integer('action_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
