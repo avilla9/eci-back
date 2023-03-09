@@ -365,7 +365,6 @@
           // PARA ESTE CASO MANDE EL ID EN LA RUTA
           url: "/api/posts/home/article-filters/" + id,
           success: function (response) {
-            console.log("🚀 ~ file: update.blade.php:222 ~ haveFilters ~ response:", response)
             // A CADA SELECT LE PONES UNA CLASE PARA IDENTIFICAR SUS OPCIONES Y APLICAS UN FOREACH POR CADA SELECT QUE TENGAS
             if(response.articleFilters[0].groups) {
               $.each(response.articleFilters[0].groups, function (index, value) { 

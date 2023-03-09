@@ -74,7 +74,7 @@
         <div class="modal-dialog modal-xl">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="font-medium text-base mr-auto">Lista de usuarios con acceso a la story</h2>
+              <h2 class="font-medium text-base mr-auto">Lista de usuarios con acceso a los posts de Recompensas</h2>
               <button type="button" class="btn btn-outline-secondary mr-1 mb-2" data-tw-dismiss="modal">X</button>
             </div>
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
