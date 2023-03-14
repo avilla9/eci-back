@@ -35,33 +35,33 @@ class UsersImport implements
      */
     public function model(array $row)
     {
-        $delegationComposition = explode(' - ', $row['delegation']);
+        $delegationComposition = explode(' - ', $row['sucursal']);
         $delegation = validateDelegation([
             'name' => ucwords(strtolower($delegationComposition[0])),
             'code' => $delegationComposition[1]
         ]);
 
         $role = validateRole([
-            'name' => ucwords(strtolower($row['role']))
+            'name' => ucwords(strtolower($row['rol']))
         ]);
 
-        if (strlen($row['quartile'])) {
-            $quartile = validateQuartile($row['quartile']);
+        if (strlen($row['figura'])) {
+            $quartile = validateQuartile($row['figura']);
         } else {
             $quartile = NULL;
         }
 
-        if (strlen($row['group'])) {
+        if (strlen($row['grupo'])) {
             $group = validateGroup([
                 'quartile' => $quartile,
-                'group' => $row['group'],
+                'group' => $row['grupo'],
             ]);
         } else {
             $group = NULL;
         }
 
-        if (strlen($row['secicoins'])) {
-            $seci = $row['secicoins'];
+        if (strlen($row['soles'])) {
+            $seci = $row['soles'];
         } else {
             $seci = 0;
         }
@@ -71,17 +71,17 @@ class UsersImport implements
 
         return User::updateOrCreate(
             [
-                'email' => $row['email']
+                'email' => $row['correo']
             ],
             [
                 'dni' => '000000',
-                'email', $row['email'],
-                'user_code' => $row['code'],
-                'name' => $row['name'],
-                'last_name' => $row['last_name'],
+                'email', $row['correo'],
+                'user_code' => $row['codigo'],
+                'name' => $row['nombre'],
+                'last_name' => $row['apellido'],
                 'role_id' => $role,
-                'territorial' => $row['territorial'],
-                'password' => Hash::make($row['password']),
+                'territorial' => $row['regional'],
+                'password' => Hash::make($row['contrasena']),
                 'active' => 1,
                 'secicoins' => $seci,
                 'delegation_code' => $delegation,
@@ -132,8 +132,8 @@ class UsersImport implements
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => [
+            'correo' => 'required|email',
+            'contrasena' => [
                 'required',
                 Password::min(8)
                     ->letters()
@@ -142,23 +142,23 @@ class UsersImport implements
                     ->symbols()
                     ->uncompromised()
             ],
-            'name' => 'required',
-            'last_name' => 'required',
-            'role' => 'required',
-            'territorial' => 'required',
-            'secicoins' => 'required',
-            'group' => 'required',
-            'quartile' => 'required',
-            'delegation' => 'required',
-            'code' => 'required',
+            'nombre' => 'required',
+            'apellido' => 'required',
+            'rol' => 'required',
+            'regional' => 'required',
+            'soles' => 'required',
+            'grupo' => 'required',
+            'figura' => 'required',
+            'sucursal' => 'required',
+            'codigo' => 'required',
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            'email.required' => 'El campo email es requerido',
-            'email.email' => 'El valor ingresado no corresponde a un formato de email válido',
+            'correo.required' => 'El campo email es requerido',
+            'correo.email' => 'El valor ingresado no corresponde a un formato de email válido',
             // 'email.unique' => 'El email ingresado ya se encuentra asignado a otro usuario',
         ];
     }
