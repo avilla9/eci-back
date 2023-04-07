@@ -6,15 +6,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use App\Models\User;
 
-class UserSeeder extends Seeder
-{
+class UserSeeder extends Seeder {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
+    public function run() {
         // Default credentials
         User::insert([
             [
@@ -42,7 +40,7 @@ class UserSeeder extends Seeder
                 'delegation_code' => 'DE00001113',
                 'remember_token' => Str::random(10),
                 'role_id' => 13
-            ],            
+            ],
             [
                 'dni' => '00002',
                 'name' => 'Goldjack',
@@ -55,10 +53,10 @@ class UserSeeder extends Seeder
                 'delegation_code' => 'DE00001113',
                 'remember_token' => Str::random(10),
                 'role_id' => 13
-            ],            
+            ],
         ]);
 
         // Fake users
-        User::factory()->times(9)->create();
+        // User::factory()->times(9)->create();
     }
 }
