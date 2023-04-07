@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
                 'user_code' => '00002',
                 'name' => 'Goldjack',
                 'last_name' => 'Anderson',
-                'email' => 'armandojvilla9@gmail.com',
+                'email' => 'goldjackanderson@gmail.com',
                 'email_verified_at' => now(),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
                 'delegation_code' => 'DE00001113',
