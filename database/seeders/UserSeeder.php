@@ -17,7 +17,8 @@ class UserSeeder extends Seeder
     {
         // Default credentials
         User::insert([
-            [ 
+            [
+                'dni'  => '00001',
                 'user_code' => '00001',
                 'name' => 'Carlota',
                 'last_name' => 'Flores',
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
                 'role_id' => 13
             ],
             [
+                'dni' => '00000',
                 'user_code' => '00000',
                 'name' => 'Armando',
                 'last_name' => 'Villanueva',
@@ -44,6 +46,7 @@ class UserSeeder extends Seeder
                 'role_id' => 13
             ],            
             [
+                'dni' => '00002',
                 'user_code' => '00002',
                 'name' => 'Goldjack',
                 'last_name' => 'Anderson',
