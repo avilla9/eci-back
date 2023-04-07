@@ -37,6 +37,8 @@ class UserSeeder extends Seeder
                 'email' => 'armandojvilla9@gmail.com',
                 'email_verified_at' => now(),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'gender' => 'm',
+                'active' => 1,
                 'delegation_code' => 'DE00001113',
                 'remember_token' => Str::random(10),
                 'role_id' => 13
@@ -48,6 +50,8 @@ class UserSeeder extends Seeder
                 'email' => 'goldjackanderson@gmail.com',
                 'email_verified_at' => now(),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'gender' => 'f',
+                'active' => 1,
                 'delegation_code' => 'DE00001113',
                 'remember_token' => Str::random(10),
                 'role_id' => 13
