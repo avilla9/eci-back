@@ -19,7 +19,6 @@ class UserSeeder extends Seeder
         User::insert([
             [
                 'dni'  => '00001',
-                'user_code' => '00001',
                 'name' => 'Carlota',
                 'last_name' => 'Flores',
                 'email' => 'clopez@thevaluescorner.com',
@@ -33,7 +32,6 @@ class UserSeeder extends Seeder
             ],
             [
                 'dni' => '00000',
-                'user_code' => '00000',
                 'name' => 'Armando',
                 'last_name' => 'Villanueva',
                 'email' => 'armandojvilla9@gmail.com',
@@ -47,7 +45,6 @@ class UserSeeder extends Seeder
             ],            
             [
                 'dni' => '00002',
-                'user_code' => '00002',
                 'name' => 'Goldjack',
                 'last_name' => 'Anderson',
                 'email' => 'goldjackanderson@gmail.com',

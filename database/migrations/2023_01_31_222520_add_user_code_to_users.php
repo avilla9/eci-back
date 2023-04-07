@@ -14,7 +14,7 @@ class AddUserCodeToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('user_code')->after('dni');
+            $table->string('user_code')->default('0000000')->after('dni');
         });
     }
 
