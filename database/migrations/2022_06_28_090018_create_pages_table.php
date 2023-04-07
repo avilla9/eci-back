@@ -19,7 +19,7 @@ class CreatePagesTable extends Migration
             $table->string('description')->nullable();
             $table->string('url')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

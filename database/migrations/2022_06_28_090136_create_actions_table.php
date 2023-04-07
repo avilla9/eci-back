@@ -18,7 +18,7 @@ class CreateActionsTable extends Migration
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

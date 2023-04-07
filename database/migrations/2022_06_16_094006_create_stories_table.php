@@ -21,7 +21,7 @@ class CreateStoriesTable extends Migration {
             $table->timestamp('publish_at')->nullable();
             $table->timestamp('unpublished')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

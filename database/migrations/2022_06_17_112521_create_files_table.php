@@ -17,7 +17,7 @@ class CreateFilesTable extends Migration {
             $table->string('title');
             $table->text('overview')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
             $table->string('media_name')->nullable();
             $table->string('media_size')->nullable();
             $table->string('media_type')->nullable();

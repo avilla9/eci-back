@@ -16,7 +16,7 @@ class CreateGroupsTable extends Migration {
             $table->string('name', 50)->unique();
             $table->integer('quartile_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

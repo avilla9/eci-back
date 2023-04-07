@@ -16,7 +16,7 @@ class CreateAccessesTable extends Migration {
             $table->integer('user_id')->nullable();
             $table->integer('article_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
