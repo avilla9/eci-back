@@ -97,7 +97,7 @@
                           <div class="intro-y grid grid-cols-6 gap-3 sm:gap-6">
                             @foreach ($files as $file)
                             <div class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-                              <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+                              <div class="file box rounded-md px-5 pt-8 pb-5 sm:px-5 relative zoom-in">
                                 <div class="absolute left-0 top-0 mt-3 ml-3">
                                   <input id="image" class="form-check-input" type="radio" name="image" value="{{$file['id']}}">
                                 </div>
@@ -201,7 +201,7 @@
                           <div class="intro-y grid grid-cols-6 gap-3 sm:gap-6">
                             @foreach ($files as $file)
                             <div class="intro-y col-span-6 sm:col-span-4 md:col-span-3 2xl:col-span-2">
-                              <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
+                              <div class="file box rounded-md px-5 pt-8 pb-5 sm:px-5 relative zoom-in">
                                 <div class="absolute left-0 top-0 mt-3 ml-3">
                                   <input id="image" class="form-check-input" type="radio" name="image" value="{{$file['id']}}">
                                 </div>
@@ -258,6 +258,8 @@
 @section('script')
 {{-- <script src="{{ asset('dist/js/articles/room.js') }}"></script> --}}
 
+
+
 <script>
   const myModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#edit-section"));
   const modalEdit = async(e) => {
@@ -267,28 +269,35 @@
         type: "GET",
         url: "/api/posts/sections-filters/" + id,
         success: function(response) {
-          // console.log(response.sectionsFilters);
+          console.log(response.sectionsFilters);
           if (response.sectionsFilters[0]) {
-            // console.log(response.sectionsFilters[0].groups);
-            $.each(response.sectionsFilters[0].groups, function(index, value) {
-              document.querySelector(".selector-groups").tomselect.addItem(value)
-            });
-            $.each(response.sectionsFilters[0].delegations, function(index, value) {
-              document.querySelector(".selector-delegations").tomselect.addItem(value)
-            });
-            $.each(response.sectionsFilters[0].roles, function(index, value) {
-                document.querySelector(".selector-roles").tomselect.addItem(value)
-            });
-            $.each(response.sectionsFilters[0].users, function(index, value) {
-                document.querySelector(".selector-users").tomselect.addItem(value)
-            });
-            $.each(response.sectionsFilters[0].quartiles, function(index, value) {
-                document.querySelector(".selector-quartiles").tomselect.addItem(value)
-            });
-            myModal.show()
-          } else {
-            myModal.show()
-            console.log("no filters");
+            if (response.sectionsFilters[0].groups || response.sectionsFilters[0].delegations || response.sectionsFilters[0].roles || response.sectionsFilters[0].quartiles == null) {
+              return Swal.fire({
+                icon: 'error',
+                title: '¡ERROR!',
+                text: 'Ha ocurrido un error al consultar los filtros, por favor intente de nuevo mas tarde',
+              });
+            } else {
+              $.each(response.sectionsFilters[0].groups, function(index, value) {
+                document.querySelector(".selector-groups").tomselect.addItem(value)
+              });
+              $.each(response.sectionsFilters[0].delegations, function(index, value) {
+                document.querySelector(".selector-delegations").tomselect.addItem(value)
+              });
+              $.each(response.sectionsFilters[0].roles, function(index, value) {
+                  document.querySelector(".selector-roles").tomselect.addItem(value)
+              });
+              $.each(response.sectionsFilters[0].users, function(index, value) {
+                  document.querySelector(".selector-users").tomselect.addItem(value)
+              });
+              $.each(response.sectionsFilters[0].quartiles, function(index, value) {
+                  document.querySelector(".selector-quartiles").tomselect.addItem(value)
+              });
+              myModal.show()
+            }
+            } else {
+              myModal.show()
+              console.log("no filters");
             
           }
         },
