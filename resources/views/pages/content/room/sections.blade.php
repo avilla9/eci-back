@@ -271,7 +271,7 @@
         success: function(response) {
           console.log(response.sectionsFilters);
           if (response.sectionsFilters[0]) {
-            if (response.sectionsFilters[0].groups || response.sectionsFilters[0].delegations || response.sectionsFilters[0].roles || response.sectionsFilters[0].quartiles == null) {
+            if (response.sectionsFilters[0].groups == null || response.sectionsFilters[0].delegations == null || response.sectionsFilters[0].roles == null || response.sectionsFilters[0].quartiles == null) {
               return Swal.fire({
                 icon: 'error',
                 title: '¡ERROR!',
